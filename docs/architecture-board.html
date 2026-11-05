@@ -118,7 +118,7 @@
       <div class="tile"><b>288</b><span>知识库条目（中英双语）</span></div>
       <div class="tile"><b>352</b><span>可查找的界面标签</span></div>
       <div class="tile"><b>6</b><span>课程包（49 步）</span></div>
-      <div class="tile"><b>289</b><span>自动化测试</span></div>
+      <div class="tile"><b>298</b><span>自动化测试</span></div>
       <div class="tile"><b>312 ms</b><span>悬停到出卡片（实测中位数）</span></div>
       <div class="tile"><b>5.5 %</b><span>空闲时的 CPU 占用</span></div>
       <div class="tile"><b>6.4.12</b><span>实测通过的 Praat 版本</span></div>
@@ -219,6 +219,19 @@
           <li>打包成单个可执行文件（PyInstaller，无控制台）</li>
           <li>Praat 没开就开它并置前</li>
           <li>托盘图标里放侧栏、设置、退出</li>
+          <li>zip 发在 GitHub Release 上：不用装 Python，不用装 Praat</li>
+        </ul>
+      </div>
+      <div class="card mod">
+        <h3>反馈回路</h3>
+        <div class="file">praatao/feedback.py · praatao/ui/qt/feedback.py</div>
+        <p>学生遇到问题，写几句话就能提一个 GitHub issue：我们看得到，也能回。</p>
+        <ul>
+          <li>侧栏与托盘里都有「报告问题」</li>
+          <li>可以留邮箱，这样能回复到人</li>
+          <li>按下后打开 GitHub 的新问题页面，内容已填好，学生自己决定发不发</li>
+          <li>正文末尾有一段标记过的键值行，机器读得懂，后面才好分诊</li>
+          <li>本机也留一份，浏览器没开也不丢</li>
         </ul>
       </div>
       <div class="card mod">
@@ -365,8 +378,9 @@ python prototypes\v1\acceptance_capture.py</div>
   </section>
 
   <footer>
-    Praatao · 架构看板 · 2026-11-05 · 数字都来自这台机器上的实测<br>
-    离线知识库 288 条 · 课程包 6 个 · 自动化测试 289 项 · 代码在 GitHub：neurosciencetao/praatao
+    Praatao · 架构看板 · 2026-11-06 · 数字都来自这台机器上的实测<br>
+    离线知识库 288 条 · 课程包 6 个 · 自动化测试 298 项 · 代码在 GitHub：neurosciencetao/praatao<br>
+    下载即用：<a href="https://github.com/neurosciencetao/praatao/releases/latest">GitHub Release</a> 里的 zip，解压双击即可，不用装 Python，也不用装 Praat
   </footer>
 </div>
 </body>
