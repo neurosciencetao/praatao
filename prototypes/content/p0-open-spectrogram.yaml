@@ -1,0 +1,85 @@
+# Example P0 lesson: open sound → spectrogram
+
+id: p0-open-spectrogram
+title: Open a sound and show the spectrogram
+locale: en
+version: 0.1.0
+objective: >
+  Load a WAV into Praat, open View & Edit, and display the spectrogram.
+prerequisites: []
+
+steps:
+  - id: launch
+    tip_short: Start Praat (Objects + Picture windows should appear).
+    tip_long: |
+      Praat usually shows two windows: **Objects** (your data) and **Picture**
+      (for drawing figures). Beginners live mostly in Objects and editors.
+    detect:
+      any_window_title_contains: "Praat"
+    highlight: null
+    confirm: auto  # advance when Praat detected
+
+  - id: read-file
+    tip_short: Open → Read from file… and choose a WAV.
+    tip_long: |
+      **Read from file…** creates a **Sound** object for typical lab recordings.
+
+      Use **Open long sound file…** only for very long files you do not want
+      fully in RAM. For student labs, prefer ordinary Sound objects.
+    detect:
+      objects_contain_type: Sound
+    highlight:
+      strategy: relative
+      window: Objects
+      # placeholders — calibrate in Spike B/C
+      norm_rect: { x: 0.02, y: 0.02, w: 0.25, h: 0.08 }
+    confirm: auto
+
+  - id: select-sound
+    tip_short: Click the Sound in the Objects list so it is selected.
+    tip_long: |
+      Dynamic buttons on the right depend on the selection. If nothing useful
+      appears, you probably have no object selected (or the wrong type).
+    detect:
+      selected_type: Sound
+    highlight:
+      strategy: relative
+      window: Objects
+      norm_rect: { x: 0.05, y: 0.15, w: 0.45, h: 0.2 }
+    confirm: auto
+
+  - id: view-edit
+    tip_short: Click **View & Edit**.
+    tip_long: |
+      This opens the Sound editor: waveform (and later spectrogram, pitch, etc.).
+      Many analysis settings live in the editor menus, not in Objects.
+    detect:
+      editor_open: Sound
+    highlight:
+      strategy: uia_name
+      name: View & Edit
+      fallback_relative:
+        window: Objects
+        norm_rect: { x: 0.55, y: 0.35, w: 0.4, h: 0.08 }
+    confirm: auto
+
+  - id: show-spectrogram
+    tip_short: Turn on the spectrogram (Spectrum menu, or learn the shortcut).
+    tip_long: |
+      A spectrogram shows **time (x) × frequency (y) × energy (darkness)**.
+
+      If it looks blank or smeared, check **Spectrum → Spectrogram settings…**
+      (window length is a common culprit).
+    detect:
+      # v1 may require manual confirm — spectrogram state is hard to probe
+      manual: true
+    highlight:
+      strategy: relative
+      window: Editor
+      norm_rect: { x: 0.0, y: 0.35, w: 1.0, h: 0.5 }
+    confirm: user_button
+    user_button_label: Spectrogram is visible
+
+completion:
+  message: Nice — you reached a spectrogram. Next pack: cursors & duration.
+  next_lesson: p0-measure-duration

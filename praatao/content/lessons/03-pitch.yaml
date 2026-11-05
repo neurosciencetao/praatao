@@ -1,0 +1,94 @@
+# Praatao lesson pack 3 — the pitch track: F0 range, voicing, flat lines
+
+version: 1
+id: 03-pitch
+file: 03-pitch.yaml
+title: {en: "Reading the pitch track", zh: "读基频曲线"}
+summary:
+  en: "Show a pitch contour, set the F0 range for the speaker, and diagnose flat lines and octave errors."
+  zh: "显示基频曲线、为说话者设定 F0 范围，并诊断平线与八度跳错。"
+prerequisites: [01-first-sound]
+
+steps:
+  - id: show-pitch
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: true
+    highlight: {kind: menu, path: ["Pitch", "Show pitch"]}
+    tip: {en: "Pitch → Show pitch", zh: "Pitch → Show pitch（显示基频）"}
+    detail:
+      en: "The pitch contour is drawn as a green line, with gaps wherever the sound is unvoiced. A gap does not mean zero pitch: it means the algorithm found no reliable period there, and the frame is marked undefined. The numbers at the right edge of the window are the floor, the ceiling and the value at the cursor, so you can read the scale of the contour instead of guessing it."
+      zh: "基频曲线画成绿色线条，无声的地方会断开。断开不代表音高是零，而是演算法在那里找不到可靠的周期，该格被标为未定义。窗口右缘的数字分别是下限、上限与游标处的数值，所以你不必靠猜就能读出曲线的刻度。"
+
+  - id: open-pitch-settings
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: true
+    highlight: {kind: menu, path: ["Pitch", "Pitch settings..."]}
+    tip: {en: "Set the floor and the ceiling for this speaker", zh: "为这位说话者设定下限与上限"}
+    detail:
+      en: "**Pitch settings…** gives you the pitch **floor**, the pitch **ceiling** and the time step. The default pair, 75–600 Hz, suits a typical adult speaker. These two numbers are not cosmetic: they define the range of periodicity the tracker is allowed to accept, so a wrong range does not give you a slightly wrong number, it gives you a qualitatively wrong picture."
+      zh: "**Pitch settings…** 提供基频**下限**、**上限**与时间步长。预设的 75–600 Hz 适合一般成人说话者。这两个数字不是装饰：它们界定了追踪器可以接受的周期范围，所以范围设错不会让你得到「稍微有点错」的数值，而是得到一张性质上就错的图。"
+
+  - id: match-the-speaker
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: true
+    highlight: {kind: menu, path: ["Pitch", "Pitch settings..."]}
+    tip: {en: "Children need 60–800 Hz", zh: "儿童语音需要 60–800 Hz"}
+    detail:
+      en: "A floor of 75 Hz is too high for a child's or a high-pitched adult's voice, and the tracker will then either refuse the real F0 or settle on a harmonic half of it. Set the floor near **60 Hz** and the ceiling near **800 Hz** for children, and lower the ceiling to about 300 Hz for a low male voice. Judge the range from the contour itself: if the peaks sit hard against a limit, that limit is wrong."
+      zh: "下限 75 Hz 对儿童或高音声线来说太高，追踪器会拒绝真实的 F0，或者锁到它的泛音折半值上。儿童语音把下限设到约 **60 Hz**、上限设到约 **800 Hz**；低沉的男声则把上限压到约 300 Hz。判断范围要由曲线本身来：如果峰值紧贴着某个上限贴边，那个上限就是错的。"
+
+  - id: diagnose-a-flat-line
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: true
+    highlight: {kind: menu, path: ["Pitch", "Show pitch"]}
+    tip: {en: "A flat line is a settings problem, not flat intonation", zh: "平线是设定问题，不是语调真的平"}
+    detail:
+      en: "A contour that is a perfectly flat line sitting on the floor is the classic symptom of a floor that is too high: the tracker is refusing every candidate period and reporting the boundary value instead. A flat line on the ceiling means the opposite. Before concluding that a speaker has monotone intonation, always check where the line sits relative to the floor and the ceiling printed at the right of the window."
+      zh: "曲线完全平贴在下限上，是「下限设得太高」的经典症状：追踪器拒绝了所有候选周期，直接报出边界值。平贴在上限则相反。在断定说话者语调单调之前，请先看那条线与窗口右侧印出的上下限是什么关系。"
+
+  - id: diagnose-octave-errors
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: true
+    highlight: {kind: menu, path: ["Pitch", "Pitch settings..."]}
+    tip: {en: "Halved or doubled F0 = octave error", zh: "F0 减半或加倍就是八度跳错"}
+    detail:
+      en: "An octave error is a value exactly half or exactly twice the true F0, and it happens when the tracker locks onto the second harmonic instead of the fundamental. It is not a random glitch: it is systematic, and it often happens in exactly the same place in the token. Widening the range or lowering the floor usually removes it. Because it is systematic, averaging over frames will not help, so check the contour visually rather than trusting a mean value."
+      zh: "八度跳错是指数值刚好是真实 F0 的一半或两倍，发生在追踪器锁到第二泛音而不是基频时。它不是随机杂讯，而是系统性的，而且常常就在同一个位置反复发生。放宽范围或降低下限通常就能解决。因为它是系统性的，用多帧平均没有帮助，所以要目视检查曲线，不要只信平均值。"
+
+  - id: read-the-value
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: true
+    highlight: {kind: menu, path: ["Pitch", "Get pitch"]}
+    tip: {en: "Put the cursor, then Get pitch (F5)", zh: "游标放好，再按 Get pitch（F5）"}
+    detail:
+      en: "Click in a voiced region, then use **Get pitch** (F5) to read the value at the cursor in Hz. The reading is only as good as the contour it comes from, so if the contour shows a gap or a suspicious jump at that moment, the number is a number about the analysis and not about the speaker. Record the cursor time with the value, and note whether the frame was voiced."
+      zh: "在有声区点一下，再用 **Get pitch**（F5）读出游标处的数值（Hz）。这个读数的品质完全取决于它所在的曲线，所以如果那一格正好是断口或可疑的跳变，这个数字讲的是演算法而不是说话者。请连同游标时间一起记录，并注明该格是否为有声。"
+
+  - id: export-the-contour
+    detect:
+      object_types_present: ["Pitch", "Sound"]
+      selected_types: ["Pitch"]
+      editor_open: false
+    highlight: {kind: button, name: "Plot"}
+    tip: {en: "Turn the Pitch object into a figure", zh: "把 Pitch 物件变成一张图"}
+    detail:
+      en: "A Pitch object is data, not a picture: select it in the Objects list and click **Plot** to draw the contour into the Picture window, where you can add axes, units and labels. The same object can be queried frame by frame or converted to a table, so make the Pitch object rather than tracing the green line off the screen."
+      zh: "Pitch 物件是资料而不是图：在清单里选中它，点 **Plot** 把曲线画进 Picture 窗口，再加坐标轴、单位与标签。同一个物件也可以逐格查询或转成表格，所以请做出 Pitch 物件，而不是用画笔从屏幕上描下那条绿线。"
+
+completion:
+  message:
+    en: "You can set an F0 range and diagnose pitch problems. Next pack: annotation with a TextGrid."
+    zh: "你已经会设定 F0 范围、也会诊断基频问题了。下一包：用 TextGrid 做标注。"
+  next_lesson: 04-textgrid

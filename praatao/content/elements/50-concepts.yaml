@@ -1,0 +1,661 @@
+# Praatao — concepts pack: Praat's data objects and the ideas behind them
+#
+# This fragment explains the object types that appear in the Objects list
+# (for example "1. Sound demo_vowel") and the acoustic ideas behind them.
+#
+# Matching contract (see docs/CONTRACTS.md and docs/13-content-guide.md):
+#   * `aliases` hold the label text Praat shows. Where that exact label is
+#     already taken (by praatao/content/elements.yaml or by another fragment
+#     in this folder), the script form of the command is used instead, since
+#     Praat scripts drop the trailing three dots.
+#   * `keywords` carry the search words, in English and Chinese.
+#
+# Labels were verified against Praat 6.4.12: the online manual (New menu,
+# Open menu, Types of objects, TextGrid, DurationTier, FormantGrid, Strings,
+# TableOfReal) and the praat/praat source at tag v6.4.12 (fon/Corpus.cpp,
+# fon/TextGrid.cpp).
+
+version: 1
+
+entries:
+  # ------------------------------------------------------------------
+  # A. The object types you meet in the Objects list
+  # ------------------------------------------------------------------
+  - id: type-sound
+    aliases: ["Sound type"]
+    title: {en: "The Sound type", zh: "Sound 类型"}
+    what:
+      en: "The type name of a sampled waveform in the Objects list, where it appears as 1. Sound demo_vowel: a start time, a duration, a sampling frequency and the samples themselves."
+      zh: "清单里取样波形的类型名，显示为「1. Sound demo_vowel」：装着起始时间、长度、采样率与样本本身。"
+    how:
+      en: "Read one with Open → Read from file..., record one with New → Record mono Sound..., or synthesise one with New → Sound → Create Sound from formula.... Select it and click View & Edit to see the waveform."
+      zh: "用 Open → Read from file... 读入，用 New → Record mono Sound... 录音，或用 New → Sound → Create Sound from formula... 合成。选中后点 View & Edit 就看得到波形。"
+    concept:
+      en: "A Sound is the only object that carries the recording itself. Every Pitch, Formant, Intensity and Spectrogram object is an interpretation of it, computed from the same samples."
+      zh: "Sound 是唯一承载录音本身的物件，Pitch、Formant、Intensity 与 Spectrogram 都是从同一批样本算出来的解释。"
+    pitfalls:
+      - {en: "The number in front of the type is the object index, so 2. Sound demo_vowel is the second object, not a second channel.", zh: "类型前面的数字是物件编号，「2. Sound demo_vowel」表示第二个物件，不是第二个声道。"}
+      - {en: "A Sound read from disk is a copy in memory; the file on disk only changes when you save it.", zh: "从磁盘读进来的 Sound 是记忆体里的副本，硬盘上的档案要存过才会改变。"}
+      - {en: "Renaming the object does not rename the file.", zh: "改物件名称不会改到硬盘上的档名。"}
+    keywords: [sound, type, 声音, 类型, 对象, 物件, 波形, 采样率]
+
+  - id: type-pitch
+    aliases: ["Pitch type"]
+    title: {en: "The Pitch type", zh: "Pitch 类型"}
+    what:
+      en: "The type name of a fundamental frequency track in the Objects list: one F0 estimate per analysis frame, plus a voiced or unvoiced decision for every frame."
+      zh: "基频轨迹的类型名：每个分析窗一个 F0 估计值，每一格还标出有声或无声。"
+    how:
+      en: "Create it from a Sound with Analyse periodicity → To Pitch.... In the list it shows as 3. Pitch; Plot draws the contour and Query reads the value at the cursor."
+      zh: "由 Sound 用 Analyse periodicity → To Pitch... 产生。清单里显示为「3. Pitch」，Plot 画曲线，Query 读游标处的数值。"
+    concept:
+      en: "Pitch is an estimate, not a truth: the algorithm searches for repetitions between the pitch floor and ceiling you set, so a wrong range gives octave errors rather than a plausible wrong number."
+      zh: "基频是估计值而不是真相：演算法只在你设定的上下限之间找重复周期，所以范围设错会得到八度跳错，而不是看似合理的错值。"
+    pitfalls:
+      - {en: "A gap in the contour means an unvoiced frame, not zero hertz.", zh: "曲线上的空缺代表无声格，不是 0 Hz。"}
+      - {en: "The pitch contour drawn in the editor uses its own settings and can differ from the Pitch object in the list.", zh: "编辑窗口里画出的基频曲线用自己的设定，可能与清单里的 Pitch 物件不一致。"}
+      - {en: "A Pitch object is data you can query frame by frame, not a picture.", zh: "Pitch 物件是可以逐格查询的资料，不是图。"}
+    keywords: [pitch, 基频, f0, 类型, object, 物件, voiced, 有声, octave, 八度]
+
+  - id: type-intensity
+    aliases: ["Intensity type"]
+    title: {en: "The Intensity type", zh: "Intensity 类型"}
+    what:
+      en: "The type name of an intensity contour in the Objects list: the short-time energy of the sound in dB, one value per analysis frame."
+      zh: "强度曲线的类型名：声音短时能量的 dB 值，每个分析窗一个。"
+    how:
+      en: "Make it with the To Intensity... command on a selected Sound, then click Plot to draw the contour. The dialog asks for the pitch floor you want to resolve."
+      zh: "在选中的 Sound 上用 To Intensity... 产生，再点 Plot 画出曲线。对话框会问你希望分辨的最低基频。"
+    concept:
+      en: "Intensity is an energy measure, so it follows syllabic peaks and stress rather than fine structure, and its dB reference is the hearing threshold, the same for every file."
+      zh: "强度是能量量，所以跟着音节峰值与重音走而不反映精细结构，它的 dB 基准是听觉阈值，每个档案都一样。"
+    pitfalls:
+      - {en: "Higher on the contour does not automatically mean louder speech; the scale is absolute, so an uncalibrated recording is not a true SPL.", zh: "曲线较高不一定代表说得更响；刻度是绝对的，所以未校正的录音不是真正的声压级。"}
+      - {en: "With a pitch floor above the speaker's own F0 the curve ripples at the pitch period on a high voice.", zh: "最低基频（Pitch floor）设得比说话者自己的基频还高时，高音声线的曲线上会出现音高周期的波纹。"}
+    keywords: [intensity, 强度, 类型, energy, 能量, db, contour, 曲线]
+
+  - id: type-textgrid
+    aliases: ["TextGrid type"]
+    title: {en: "The TextGrid type", zh: "TextGrid 类型"}
+    what:
+      en: "The type name of an annotation grid in the Objects list: labelled intervals and points that all share one time axis."
+      zh: "标注网格的类型名：共用同一时间轴的标注区间与点。"
+    how:
+      en: "Create it from a Sound with Annotate → To TextGrid..., or from scratch with New → Create TextGrid.... Select it together with its Sound and click View & Edit to annotate."
+      zh: "由 Sound 用 Annotate → To TextGrid... 产生，或用 New → Create TextGrid... 从头建立。选中它连同 Sound 再点 View & Edit 就能标注。"
+    concept:
+      en: "A TextGrid is your hypothesis about the utterance, not evidence. It shares the sound's time axis, which is what lets a segment boundary be read against a formant value."
+      zh: "TextGrid 是你对这段语流的假设而不是证据。它与声音共用时间轴，所以音段边界才能对着共振峰数值来读。"
+    pitfalls:
+      - {en: "A TextGrid knows nothing about acoustics: the labels are yours and they can be wrong.", zh: "TextGrid 不含任何声学资讯，标签是你自己打的，可能是错的。"}
+      - {en: "TextGrid and Sound are separate objects, so removing the sound leaves the annotation behind, but the annotation then means nothing.", zh: "TextGrid 与 Sound 是两个独立物件，移除声音会留下标注，只是那标注从此失去意义。"}
+    keywords: [textgrid, 文本网格, 类型, annotation, 标注, tier, 层级]
+
+  - id: type-formant
+    aliases: ["Formant"]
+    title: {en: "The Formant type", zh: "Formant 类型"}
+    what:
+      en: "The type name of a formant track in the Objects list: formant frequencies and bandwidths estimated for each analysis frame."
+      zh: "共振峰轨迹的类型名：每个分析窗估计出的共振峰频率与频宽。"
+    how:
+      en: "Make it with Analyse spectrum → To Formant (burg)..., then Plot to draw F1, F2 and F3 over time, or Query to read a single value."
+      zh: "用 Analyse spectrum → To Formant (burg)... 产生，再用 Plot 画出 F1、F2、F3 曲线，或用 Query 读取单值。"
+    concept:
+      en: "A formant is a resonance of the vocal tract, that is a peak of the spectral envelope. The tract filters the glottal source, so vowel quality is largely the shape of these peaks."
+      zh: "共振峰是声道的共振，也就是频谱包络上的峰。声道替声门音源滤波，所以元音音色大致就是这些峰的形状。"
+    pitfalls:
+      - {en: "Formants are meaningful only for vowels and voiced sonorants, although Praat happily returns numbers for fricatives.", zh: "共振峰只对元音与有声响音有意义，Praat 却照样会给擦音返回数值。"}
+      - {en: "A formant that jumps by a factor of two between frames is usually a tracking failure, not a real acoustic event.", zh: "共振峰在相邻两格之间跳了一倍，多半是追踪失败，不是真实的声学事件。"}
+    keywords: [formant, 共振峰, f1, f2, f3, 类型, lpc, 频宽, bandwidth]
+
+  - id: type-formantgrid
+    aliases: ["FormantGrid"]
+    title: {en: "The FormantGrid type", zh: "FormantGrid 类型"}
+    what:
+      en: "The type name of a formant grid in the Objects list: formant and bandwidth targets stored as points in time, not as evenly spaced frames."
+      zh: "共振峰网格的类型名：共振峰与频宽以时间上的点（目标值）储存，而不是等距的分析窗。"
+    how:
+      en: "Create one with New → Tiers → Create FormantGrid..., add points to its formant and bandwidth tiers, and use Sound & FormantGrid: Filter to synthesise a sound from it."
+      zh: "用 New → Tiers → Create FormantGrid... 建立，在共振峰层与频宽层加点，再用 Sound & FormantGrid: Filter 由它合成声音。"
+    concept:
+      en: "A FormantGrid is a target model of the vocal tract filter, so you can change the formants and hear the result. That is how source-filter experiments are built."
+      zh: "FormantGrid 是声道滤波器的目标模型，你可以改变共振峰再听结果，音源滤波实验就是这样搭出来的。"
+    pitfalls:
+      - {en: "It is not the Formant object: FormantGrid holds editable targets, Formant holds measured frames.", zh: "它不是 Formant 物件：FormantGrid 放可编辑的目标，Formant 放量测到的分析窗。"}
+      - {en: "Values are interpolated between points, so two far apart points describe a smooth slide rather than a constant.", zh: "点与点之间是内插的，两个相距很远的点描述的是平滑滑动而不是固定值。"}
+    keywords: [formantgrid, 共振峰网格, 目标, target, 合成, synthesis, 类型]
+
+  - id: type-spectrogram
+    aliases: ["Spectrogram type"]
+    title: {en: "The Spectrogram type", zh: "Spectrogram 类型"}
+    what:
+      en: "The type name of a spectrogram in the Objects list: a time-by-frequency array of energy densities computed from a sound."
+      zh: "频谱图的类型名：由声音算出的时间乘以频率的能量密度阵列。"
+    how:
+      en: "Make it with Analyse spectrum → To Spectrogram..., then View & Edit to display it. The window length, frequency range and dynamic range you chose are fixed inside the object."
+      zh: "用 Analyse spectrum → To Spectrogram... 产生，再用 View & Edit 显示。你选的窗长、频率范围与动态范围已经固定在物件里。"
+    concept:
+      en: "A spectrogram is a stack of spectra over time, so it trades time resolution against frequency resolution, and the window length decides both."
+      zh: "频谱图是时间上的一叠频谱，因此要在时间解析度与频率解析度之间取舍，而窗长同时决定这两者。"
+    pitfalls:
+      - {en: "Changing the display settings later does not recompute the object.", zh: "之后改显示设定并不会重新计算这个物件。"}
+      - {en: "A window that is too long smears the transitions you are trying to label.", zh: "窗太长会把你要标注的过渡抹平。"}
+    keywords: [spectrogram, 频谱图, 类型, 窗长, window, 能量, energy]
+
+  - id: type-table
+    aliases: ["Table"]
+    title: {en: "The Table type", zh: "Table 类型"}
+    what:
+      en: "The type name of a spreadsheet in the Objects list: named columns that hold numbers or text, one row per observation."
+      zh: "试算表的类型名：有名称的栏位，可以放数字或文字，一列一个观察值。"
+    how:
+      en: "Create one with New → Tables → New Table..., read one with Open → Read Table from tab-separated file..., and edit it in the Table editor."
+      zh: "用 New → Tables → New Table... 建立，或用 Open → Read Table from tab-separated file... 读入，再在 Table 编辑窗口里修改。"
+    concept:
+      en: "The Table is where per-token measurements live: duration, mean F0, F1 and F2 in one row per token, which is the format every statistics package can read."
+      zh: "Table 是逐语流量测结果的归属地：时长、平均 F0、F1 与 F2，一列一个语流，任何统计软体都读得懂。"
+    pitfalls:
+      - {en: "Mixing text and numbers in one column turns the whole column into text and blocks arithmetic on it.", zh: "同一栏混放文字与数字会让整栏变成文字，之后无法对这一栏做算术。"}
+      - {en: "A Table has no time axis, so keep the time step or the token times somewhere else.", zh: "Table 没有时间轴，时间步长或语流时间要记在别处。"}
+    keywords: [table, 表格, 试算表, 类型, column, 栏位, measurement, 量测]
+
+  - id: type-tableofreal
+    aliases: ["TableOfReal"]
+    title: {en: "The TableOfReal type", zh: "TableOfReal 类型"}
+    what:
+      en: "The type name of a numeric table in the Objects list: rows and columns of real numbers, where every row and column may carry a title."
+      zh: "数值表的类型名：实数构成的行列，每一行与每一列都可以带标题。"
+    how:
+      en: "Read one with Open → Read TableOfReal from headerless spreadsheet file..., or create one with Create TableOfReal... in the New → Tables submenu, and label rows and columns with the Change row labels... and Set column label commands."
+      zh: "用 Open → Read TableOfReal from headerless spreadsheet file... 读入，或用 New → Tables 里的 Create TableOfReal... 建立，再用 Change row labels... 与 Set column label 等指令加标签。"
+    concept:
+      en: "A TableOfReal is the input format of Praat's statistics: correlation, principal component analysis and covariance all take labelled numeric tables rather than free spreadsheets."
+      zh: "TableOfReal 是 Praat 统计功能的输入格式：相关分析、主成分分析与协方差都吃带标签的数值表，而不是随意的试算表。"
+    pitfalls:
+      - {en: "All values are numbers, so a missing cell cannot be typed as a dash or as NA.", zh: "所有格都是数字，缺失值不能写成破折号或 NA。"}
+      - {en: "Row labels carry the grouping variable, so a table read without headers has to be labelled by hand.", zh: "列标签带着分组变数，所以读进来没有标题的表要自己补标签。"}
+    keywords: [tableofreal, 数值表, 类型, 统计, statistics, row label, 列标签]
+
+  - id: type-matrix
+    aliases: ["Matrix"]
+    title: {en: "The Matrix type", zh: "Matrix 类型"}
+    what:
+      en: "The type name of a plain two-dimensional array of numbers in the Objects list, without row or column labels."
+      zh: "二维数字阵列的类型名，没有行列标签。"
+    how:
+      en: "Create one with New → Tables → New Matrix... or read one with Open → Read Matrix from raw text file...; the Table editor shows it as a grid of numbers."
+      zh: "用 New → Tables → New Matrix... 建立，或用 Open → Read Matrix from raw text file... 读入，Table 编辑窗口会把它显示成数字网格。"
+    concept:
+      en: "A Matrix is what you get when the labels are dropped: a rectangular array of numbers, which suits surfaces such as a frequency-by-time energy map."
+      zh: "Matrix 就是去掉标签之后的表：规则的数值阵列，适合放频率乘以时间的能量表面这类资料。"
+    pitfalls:
+      - {en: "Rows and columns are easy to swap, and a transposed matrix still looks plausible with every value in the wrong place.", zh: "列与行很容易不小心对调，转置后的矩阵看起来仍然合理，但每个数值都错位了。"}
+      - {en: "Use Convert → Down to Matrix to get the raw numbers out of a Pitch or Intensity object.", zh: "用 Convert → Down to Matrix 可以把 Pitch 或 Intensity 物件变成原始数字。"}
+    keywords: [matrix, 矩阵, 类型, 二维, 阵列, numbers, 数字, grid, 网格]
+
+  - id: type-strings
+    aliases: ["Strings"]
+    title: {en: "The Strings type", zh: "Strings 类型"}
+    what:
+      en: "The type name of a list of strings in the Objects list: an ordered sequence of text items, such as a list of file names."
+      zh: "字串清单的类型名：一串有顺序的文字项目，例如一串档名。"
+    how:
+      en: "Read one with Open → Read Strings from raw text file..., which takes one string per line. The New menu can also build a Strings object from a folder listing."
+      zh: "用 Open → Read Strings from raw text file... 读入，一行一个字串。New 菜单也可以由资料夹清单建立一个 Strings 物件。"
+    concept:
+      en: "Strings is Praat's simplest data structure: text only, no numbers and no time, which makes it the natural index for a set of recordings."
+      zh: "Strings 是 Praat 最简单的资料结构：只装文字，没有数字也没有时间，因此很适合当一组录音的索引。"
+    pitfalls:
+      - {en: "Every line becomes one string, so a trailing empty line adds an empty item.", zh: "每一行都会变成一个字串，结尾多一行空行就会多出一个空项目。"}
+      - {en: "A Strings object cannot hold the numbers of a measurement; use a Table for that.", zh: "Strings 装不下量测数值，那种资料要用 Table。"}
+    keywords: [strings, 字串, 类型, 清单, list, 档名, filename, 文字]
+
+  - id: type-corpus
+    aliases: ["Corpus"]
+    title: {en: "The Corpus type", zh: "Corpus 类型"}
+    what:
+      en: "The type name of a corpus in the Objects list: a table whose two columns, Sound and Annotation, pair each sound file in a folder with the annotation file of the same name."
+      zh: "语料库的类型名：一个两栏的表格，Sound 与 Annotation 两栏把资料夹里的每个声音档与同名标注档配成一对。"
+    how:
+      en: "Make it with New → Create Corpus..., choosing the folder with sound files, the sound file extension, the annotation folder and the annotation extension. One row appears per sound file."
+      zh: "用 New → Create Corpus... 建立，指定声音档资料夹、音档副档名、标注资料夹与标注副档名，每个声音档会出现一列。"
+    concept:
+      en: "A Corpus is a Table in Praat's technical sense, but its meaning is fixed: one row per recording, with the two file names that belong together, which is a complete but compact description of one."
+      zh: "在 Praat 的技术意义上 Corpus 就是 Table，但它的意义是固定的：一列一个录音，配上属于同一笔的两个档名，这是简明却完整的描述。"
+    pitfalls:
+      - {en: "The Corpus only stores file names, so nothing is read into memory and the table stays small.", zh: "Corpus 只存档名，不会把任何东西读进记忆体，所以表格一直很小。"}
+      - {en: "Both extensions must match the files on disk, otherwise the table comes out empty or half filled.", zh: "两个副档名都要和硬盘上的档案吻合，否则表格会全空或只有一半。"}
+      - {en: "The Annotation column is filled only for the recordings whose annotation file actually exists.", zh: "只有标注档确实存在的录音，Annotation 那一栏才会填上档名。"}
+    keywords: [corpus, 语料库, 类型, 资料夹, folder, 标注, annotation, 配对]
+
+  - id: type-texttier
+    aliases: ["TextTier"]
+    title: {en: "The TextTier type", zh: "TextTier 类型"}
+    what:
+      en: "The type name of a point tier in Praat 6.4: a tier of labelled points, each with a time and a mark, inside a TextGrid."
+      zh: "Praat 6.4 点层的类型名：一层带标签的点，每点有时间与标记，属于 TextGrid 之中。"
+    how:
+      en: "Create one with Annotate → To TextTier, or add it in the TextGrid editor with Tier → Add point tier.... The label of a point is typed in the white text window at the top."
+      zh: "用 Annotate → To TextTier 建立，或在 TextGrid 编辑窗口用 Tier → Add point tier... 加入。点的标签打在顶部的白色文字窗里。"
+    concept:
+      en: "A point tier records events that happen at an instant rather than over an interval: a fricative release burst, a glottal stop, a word boundary."
+      zh: "点层用来记发生在某一瞬间而不是延续一段时间的事件：擦音的释爆点、喉塞闭合、词界。"
+    pitfalls:
+      - {en: "A point has no duration, so a phone label in a point tier loses the timing of the phone.", zh: "点没有时长，把音素标签放进点层会丢掉音素的起止时间。"}
+      - {en: "Older manuals call this type PointTier; Praat 6.4 names it TextTier.", zh: "旧手册把这个类型写成 PointTier，Praat 6.4 的名称是 TextTier。"}
+    keywords: [texttier, 点层, 层级, tier, point, 点, 类型, 事件, event]
+
+  - id: type-intervaltier
+    aliases: ["IntervalTier"]
+    title: {en: "The IntervalTier type", zh: "IntervalTier 类型"}
+    what:
+      en: "The type name of an interval tier: a sequence of labelled intervals that follow one another and cover the whole time domain."
+      zh: "区间层的类型名：一串首尾相接、覆盖整个时间范围的带标签区间。"
+    how:
+      en: "Create one with Annotate → To IntervalTier, or add it in the TextGrid editor with Tier → Add interval tier.... Each boundary splits the tier, and each interval carries a label."
+      zh: "用 Annotate → To IntervalTier 建立，或在 TextGrid 编辑窗口用 Tier → Add interval tier... 加入。每个边界把该层分开，每个区间带一个标签。"
+    concept:
+      en: "An interval tier has the shape of a phonetic transcription: every instant of the recording belongs to exactly one labelled segment."
+      zh: "区间层正是语音转写的形状：录音的每一瞬间都恰好属于一个有标签的音段。"
+    pitfalls:
+      - {en: "The tier covers the whole time domain, so there is always one interval even where you have typed nothing.", zh: "这一层覆盖整个时间范围，所以即使没打字也总有一个区间。"}
+      - {en: "Adding a boundary in one tier does not move the boundaries of the other tiers.", zh: "在一层里加边界不会移动其他层的边界。"}
+    keywords: [intervaltier, 区间层, 层级, tier, 音段, segment, 类型]
+
+  - id: type-pointtier
+    aliases: ["PointTier"]
+    title: {en: "PointTier, the older name for a point tier", zh: "PointTier，点层的旧名称"}
+    what:
+      en: "The older name for a point tier. In Praat 6.4 the type is called TextTier and the command is To TextTier, but PointTier is still what many manuals and scripts use."
+      zh: "点层的旧名称。Praat 6.4 的类型名称是 TextTier、指令是 To TextTier，但许多手册与脚本仍写 PointTier。"
+    how:
+      en: "If a script or a tutorial says PointTier, read it in Praat 6.4 as the point tier you create with Annotate → To TextTier."
+      zh: "如果脚本或教学写 PointTier，在 Praat 6.4 里就把它当作用 Annotate → To TextTier 建立的点层。"
+    concept:
+      en: "The rename is only a name change: the data structure, the way a point is stored and the way you edit it have not changed."
+      zh: "这只是改了个名字：资料结构、点的储存方式与编辑方式都没有变。"
+    pitfalls:
+      - {en: "Mixing the two names in one set of notes confuses students, because it is the same thing either way.", zh: "在同一份讲义里混用两个名字会让学生困惑，因为指的都是同一个东西。"}
+    keywords: [pointtier, 点层, 旧名称, 层级, texttier, tier, point, 改名]
+
+  - id: type-durationtier
+    aliases: ["DurationTier"]
+    title: {en: "The DurationTier type", zh: "DurationTier 类型"}
+    what:
+      en: "The type name of a duration tier: points that carry a relative duration, used to stretch or compress a recording in time."
+      zh: "时长层的类型名：带着相对时长的点，用来把录音在时间上拉长或压短。"
+    how:
+      en: "Create one with New → Tiers → Create DurationTier..., or extract it from a Manipulation object with Manipulate: Extract duration tier."
+      zh: "用 New → Tiers → Create DurationTier... 建立，或用 Manipulate: Extract duration tier 从 Manipulation 物件取出。"
+    concept:
+      en: "The duration value is relative: a point with duration 1.5 at 0.5 s means everything before that moment is played 1.5 times as slowly, with linear interpolation between points."
+      zh: "这里的时长是相对值：在 0.5 秒处放一个时长 1.5 的点，表示那一刻之前的音都按 1.5 倍速度播放，点与点之间做线性内插。"
+    pitfalls:
+      - {en: "The tier says how time should change; it contains no audio of its own.", zh: "这一层描述时间该怎么改变，本身不含声音。"}
+      - {en: "The values are relative, so 1.0 means the original speed and not one second.", zh: "数值是相对值，1.0 表示原速，不是一秒。"}
+    keywords: [durationtier, 时长层, 层级, 相对时长, duration, manipulation, 类型]
+
+  - id: concept-sound-file-formats
+    aliases: ["Sound files"]
+    title: {en: "Sound files on disk", zh: "硬盘上的音档"}
+    what:
+      en: "The files Praat reads as Sound or LongSound objects: WAV, AIFF, FLAC, MP3, Ogg and others, each with a header that declares its sampling frequency and its channels."
+      zh: "Praat 读成 Sound 或 LongSound 物件的硬盘档案：WAV、AIFF、FLAC、MP3、Ogg 等，每个档头都声明采样率与声道数。"
+    how:
+      en: "Open → Read from file... opens such a file into memory and Open → Open long sound file... keeps it on disk; the Save menu writes the same formats back."
+      zh: "Open → Read from file... 把档案读进记忆体，Open → Open long sound file... 让它留在硬盘上，Save 菜单可以写回同样的格式。"
+    concept:
+      en: "Sampling frequency and channel count are properties of the file, and they decide what can be measured afterwards, because the Nyquist limit is half the sampling frequency."
+      zh: "采样率与声道数是档案的属性，它们决定之后能量什么，因为奈奎斯特上限就是采样率的一半。"
+    pitfalls:
+      - {en: "A compressed format such as MP3 is fine for listening but has already thrown information away.", zh: "MP3 这类压缩格式可以听，但资讯早就被丢掉了。"}
+      - {en: "The file header can disagree with the recording, so check the sampling frequency with Info before you measure.", zh: "档头可能和实际录音不一致，量测前先用 Info 查看采样率。"}
+      - {en: "There is no 'Sound files' object in the Objects list: the list holds the objects Praat has already read, and a Corpus holds the file names of a whole folder.", zh: "Objects 清单里并没有「Sound files」这种物件：清单装的是 Praat 已经读进来的物件，而 Corpus 装的才是整个资料夹的档名。"}
+    keywords: [sound files, 音档, wav, aiff, flac, mp3, 档案, file, 采样率, 声道]
+
+  # ------------------------------------------------------------------
+  # B. The commands that create these objects
+  # ------------------------------------------------------------------
+  - id: cmd-create-textgrid
+    aliases: ["Create TextGrid"]
+    title: {en: "Create TextGrid...", zh: "Create TextGrid...（建立文本网格）"}
+    what:
+      en: "A New-menu command that creates an empty TextGrid over a time domain you type in, with the tier names you give and a choice of which tiers are point tiers."
+      zh: "New 菜单里的指令，在你自己输入的时间范围上建立一个空 TextGrid，并指定各层名称以及哪些是点层。"
+    how:
+      en: "New → Create TextGrid..., then give the start and end time in seconds and the tier names; the object appears in the list, ready for labelling."
+      zh: "New → Create TextGrid...，填入起讫秒数与各层名称，物件就会出现在清单里等着你标注。"
+    concept:
+      en: "Making the grid by hand is right when there is no recording yet, for instance when you plan the tier design of a corpus; making it from a Sound guarantees that both time domains coincide."
+      zh: "没有录音时手工建立网格是对的，例如你要先规划整批语料的层级设计；由 Sound 生成则保证两者的时间范围完全重合。"
+    pitfalls:
+      - {en: "The grid starts empty: nothing is transcribed for you.", zh: "网格一开始是空的，不会帮你转写。"}
+      - {en: "The time domain must match the sound you will annotate later, or the tiers will not line up with the audio.", zh: "时间范围要和之后要标注的声音一致，否则层级与音讯对不上。"}
+      - {en: "A tier with an empty name is legal but impossible to recognise later.", zh: "层级名称留空虽然合法，但之后完全认不出来。"}
+    keywords: [create textgrid, 建立, 文本网格, textgrid, tier, 层级, 新建, new]
+
+  - id: cmd-create-corpus
+    aliases: ["Create Corpus"]
+    title: {en: "Create Corpus...", zh: "Create Corpus...（建立语料库）"}
+    what:
+      en: "A New-menu command that builds a Corpus object by listing the sound files in a folder and pairing them with the annotation files of the same name."
+      zh: "New 菜单里的指令，列出某个资料夹里的声音档，并与同名标注档配对，建立一个 Corpus 物件。"
+    how:
+      en: "New → Create Corpus..., then give the folder with sound files, the sound file extension, the annotation folder and the annotation extension. One row appears per sound file."
+      zh: "New → Create Corpus...，填入声音档资料夹、音档副档名、标注资料夹与标注副档名，每个声音档会出现一列。"
+    concept:
+      en: "It is the fastest way to organise a corpus for batch processing, because the Corpus is the index that says which sound goes with which annotation."
+      zh: "这是为批次处理整理语料最快的做法，因为 Corpus 就是那份索引，说明哪个声音配哪个标注。"
+    pitfalls:
+      - {en: "Nothing is read into memory: the Corpus only stores file names, so it stays small even for thousands of recordings.", zh: "不会把任何东西读进记忆体：Corpus 只存档名，所以即使上千笔录音也很小。"}
+      - {en: "A wrong extension gives an empty corpus rather than an error message.", zh: "副档名写错会得到空的语料库，而不是错误讯息。"}
+    keywords: [create corpus, 建立, 语料库, corpus, 资料夹, folder, annotation, 标注]
+
+  - id: cmd-record-mono-sound
+    aliases: ["Record mono Sound"]
+    title: {en: "Record mono Sound...", zh: "Record mono Sound...（录单声道声音）"}
+    what:
+      en: "A New-menu command that opens the Sound recorder and captures your voice or any input as a single-channel Sound object."
+      zh: "New 菜单里的指令，打开录音窗口，把你的声音或任何输入录成单声道的 Sound 物件。"
+    how:
+      en: "New → Record mono Sound..., press Record in the SoundRecorder window, then Stop and Save. The new Sound appears in the Objects list."
+      zh: "New → Record mono Sound...，在 SoundRecorder 窗口按 Record 录音，结束后按 Stop 与 Save，新 Sound 会出现在清单里。"
+    concept:
+      en: "The recording is sampled at the sampling frequency the recorder is set to, and everything you measure afterwards is limited by it, so a 16 kHz recording cannot show the fine structure of a fricative."
+      zh: "录音会以设定的采样率取样，之后所有量测都受它限制，16 kHz 的录音显示不出擦音的精细结构。"
+    pitfalls:
+      - {en: "On a laptop with no input device the recorder opens but records silence.", zh: "没有输入装置的笔电上，录音窗口照开，却录到一片静音。"}
+      - {en: "Check the input level before recording an hour of speech.", zh: "录一小时的语音之前，先检查输入电平。"}
+    keywords: [record mono sound, 录音, 麦克风, microphone, 单声道, mono, new, 采样率]
+
+  - id: cmd-record-stereo-sound
+    aliases: ["Record stereo Sound"]
+    title: {en: "Record stereo Sound...", zh: "Record stereo Sound...（录立体声声音）"}
+    what:
+      en: "A New-menu command that opens the Sound recorder with two channels, so that your input is captured as a stereo Sound object."
+      zh: "New 菜单里的指令，打开双声道的录音窗口，把输入录成立体声的 Sound 物件。"
+    how:
+      en: "New → Record stereo Sound...; in the SoundRecorder window both channels are drawn, so you can check that the left and right inputs really differ."
+      zh: "New → Record stereo Sound...，SoundRecorder 窗口里会画出两个声道，可以检查左右输入是否真的不同。"
+    concept:
+      en: "Two channels give two views of the same event, which is useful when a lavalier and a headset microphone are worn at the same time."
+      zh: "两个声道给你同一事件的两份视角，同时戴领夹麦与头戴麦时特别有用。"
+    pitfalls:
+      - {en: "Two channels are not automatically a stereo recording: they may be two microphones in different places.", zh: "两个声道不自动等于真正的立体声录音，可能是两支放在不同位置的麦克风。"}
+      - {en: "Analyses such as To Pitch... work on one channel, so extract one channel first if you need a contour.", zh: "To Pitch... 之类的分析只用一个声道，要做曲线就先取出一个声道。"}
+    keywords: [record stereo sound, 录音, 立体声, stereo, 双声道, microphone, 麦克风]
+
+  - id: cmd-read-from-file
+    aliases: ["Read from file"]
+    title: {en: "Read from file...", zh: "Read from file...（从档案读入）"}
+    what:
+      en: "The Open-menu command that reads an audio file into memory and puts a Sound object in the Objects list."
+      zh: "Open 菜单里的指令，把音档读进记忆体，并在清单里放一个 Sound 物件。"
+    how:
+      en: "Open → Read from file... (Ctrl-O), choose the file, and Praat asks for the name of the new object. The three dots in the label mean that a dialog follows."
+      zh: "Open → Read from file...（Ctrl-O），选择档案，Praat 会问新物件要叫什么名字。标签末尾的三个点是表示后面会开对话框。"
+    concept:
+      en: "Praat converts every format it reads into the same internal representation, a sampled waveform with a declared sampling frequency, so the format on disk stops mattering once the file is loaded."
+      zh: "Praat 读进来的各种格式都会转成同一种内部表示，也就是带采样率的取样波形，所以档案一旦载入，原始格式就不再重要。"
+    pitfalls:
+      - {en: "It reads one file at a time; for a stereo file use Read separate channels from sound file... to get one Sound per channel.", zh: "一次只读一个档案，立体声档要用 Read separate channels from sound file... 才会左右声道各得到一个 Sound。"}
+      - {en: "A very long file is loaded completely into memory and can freeze Praat; use Open long sound file... instead.", zh: "很长的档案会整个载入记忆体，可能让 Praat 当机，要改用 Open long sound file...。"}
+    keywords: [read from file, 读取, 读档, 音档, wav, aiff, 声音, sound, ctrl-o]
+
+  - id: cmd-read-table-tab-separated
+    aliases: ["Read Table from tab-separated file"]
+    title: {en: "Read Table from tab-separated file...", zh: "Read Table from tab-separated file...（读表格型文字档）"}
+    what:
+      en: "An Open-menu command that reads a plain text file whose columns are separated by tab characters into a Table object with real numeric columns."
+      zh: "Open 菜单里的指令，把以定位字元分栏的纯文字档读成 Table 物件，每一栏都是真正的数值栏位。"
+    how:
+      en: "Open → Read Table from tab-separated file..., choose the file; the first line is read as the column names unless the file starts with a special marker."
+      zh: "Open → Read Table from tab-separated file...，选择档案；除非档案开头有特殊标记，第一行会被当作栏位名称。"
+    concept:
+      en: "Tab-separated text is the format that survives everything: Praat, R, Python and Excel all read it, so it is the safe way to hand measurements to a statistician."
+      zh: "定位字元分隔的文字是最稳的交换格式：Praat、R、Python 与 Excel 都读得，所以把量测交给统计学者时用它最安全。"
+    pitfalls:
+      - {en: "If the file uses spaces or commas instead of tabs, the whole row lands in a single column.", zh: "档案若用空白或逗号而非定位字元分栏，整列会被塞进同一栏。"}
+      - {en: "A spreadsheet exported with a Chinese locale may put the decimal comma in the wrong place.", zh: "中文语系的试算表汇出时可能把小数逗号放错位置。"}
+    keywords: [read table, tab separated, 读取, 表格, 定位字元, csv, 量测, 栏位]
+
+  - id: cmd-read-tableofreal-headerless
+    aliases: ["Read TableOfReal from headerless spreadsheet file"]
+    title: {en: "Read TableOfReal from headerless spreadsheet file...", zh: "Read TableOfReal from headerless spreadsheet file...（读无标题的数值表）"}
+    what:
+      en: "An Open-menu command that reads a spreadsheet file without a header line into a TableOfReal object, that is a grid of numbers."
+      zh: "Open 菜单里的指令，把没有标题列的试算表档案读成 TableOfReal 物件，也就是一片数字网格。"
+    how:
+      en: "Open → Read TableOfReal from headerless spreadsheet file..., choose the file; the numbers are read row by row and you add the labels afterwards if you need them."
+      zh: "Open → Read TableOfReal from headerless spreadsheet file...，选择档案，数字会逐列读入，需要标签的话之后再补上。"
+    concept:
+      en: "This is the way to bring a bare data file into Praat's statistics, which need labelled numbers rather than a spreadsheet with formatting."
+      zh: "这是把纯数据档带进 Praat 统计功能的途径，因为统计需要的是带标签的数字，而不是有格式的试算表。"
+    pitfalls:
+      - {en: "Because the file has no header, nothing tells you which column is which; label them yourself.", zh: "档案没有标题，没有任何东西告诉你哪一栏是哪一栏，标签要自己加。"}
+      - {en: "Text cells break the reading, because this format accepts numbers only.", zh: "文字格会让读取失败，因为这个格式只接受数字。"}
+    keywords: [read tableofreal, headerless, 读取, 数值表, 统计, spreadsheet, 无标题]
+
+  - id: cmd-read-matrix-raw-text
+    aliases: ["Read Matrix from raw text file"]
+    title: {en: "Read Matrix from raw text file...", zh: "Read Matrix from raw text file...（读矩阵文字档）"}
+    what:
+      en: "An Open-menu command that reads a plain text file of numbers into a Matrix object, one matrix row for every line of the file."
+      zh: "Open 菜单里的指令，把纯数字文字档读成 Matrix 物件，档案每一行对应矩阵的一列（横列）。"
+    how:
+      en: "Open → Read Matrix from raw text file..., choose the file. A file with a text header is not accepted; read that one as a Table instead."
+      zh: "Open → Read Matrix from raw text file...，选择档案。带文字抬头的档案不能这样读，请改读成 Table。"
+    concept:
+      en: "A Matrix is the simplest numeric container: the values keep their order but lose every label, which is exactly what a raw data file offers."
+      zh: "Matrix 是最简单的数值容器：数值保留顺序却丢掉所有标签，正好对应一个纯数据档。"
+    pitfalls:
+      - {en: "No labels means you must keep a note of what the rows and the columns were.", zh: "没有标签，你就必须自己记下每一行每一列是什么。"}
+      - {en: "Rows and columns can end up transposed without any warning.", zh: "列与行可能在没有任何提示的情况下被对调。"}
+    keywords: [read matrix, raw text, 读取, 矩阵, matrix, 数字, numbers]
+
+  - id: cmd-read-strings-raw-text
+    aliases: ["Read Strings from raw text file"]
+    title: {en: "Read Strings from raw text file...", zh: "Read Strings from raw text file...（读字串文字档）"}
+    what:
+      en: "An Open-menu command that reads a simple text file into a Strings object, one string per line."
+      zh: "Open 菜单里的指令，把简单文字档读成 Strings 物件，一行一个字串。"
+    how:
+      en: "Open → Read Strings from raw text file..., choose the file. It is the easy alternative to the generic Read from file..., which needs Praat's own text format."
+      zh: "Open → Read Strings from raw text file...，选择档案。它是一般性的 Read from file... 之外的方便做法，后者需要 Praat 自己的文字格式。"
+    concept:
+      en: "Strings is Praat's text-only data structure, so a file of names, labels or words comes in without any conversion."
+      zh: "Strings 是 Praat 只装文字的资料结构，所以一档案名、标签或词语进来时不需要任何转换。"
+    pitfalls:
+      - {en: "Every line becomes one string, including empty lines.", zh: "每一行都会变成一个字串，空行也算。"}
+      - {en: "A file with a header line gives you that header line as your first string.", zh: "档案若有抬头行，第一个字串就是这个抬头。"}
+    keywords: [read strings, raw text, 读取, 字串, strings, 清单, list]
+
+  - id: cmd-read-special-tier-file
+    aliases: ["Read from special tier file"]
+    title: {en: "Read from special tier file...", zh: "Read from special tier file...（读取特殊层级的档案）"}
+    what:
+      en: "An Open-menu command that reads tier (annotation) data from a file in one of the special formats Praat understands, instead of reading an audio file."
+      zh: "Open 菜单里的指令，从 Praat 能读的某种特殊格式读取层级（标注）资料，而不是读音档。"
+    how:
+      en: "Open → Read from special tier file..., choose the file; Praat recognises the format and builds a TextGrid or a tier object from the labels it finds."
+      zh: "Open → Read from special tier file...，选择档案，Praat 会认出格式，并从标签建立一个 TextGrid 或层级物件。"
+    concept:
+      en: "Annotation does not always begin life as a Praat file, and this command is the bridge for the formats that other tools write."
+      zh: "标注不一定一开始就是 Praat 的档案，这条指令就是为其他工具写出来的格式搭的桥。"
+    pitfalls:
+      - {en: "It reads labels only: the sound is a separate object that you still have to open.", zh: "它只读标签，声音是另一个物件，你还是得另外打开。"}
+      - {en: "For your own annotation use Save TextGrid as text file...; this command is for foreign formats.", zh: "自己的标注请用 Save TextGrid as text file...，这条指令是给外来格式用的。"}
+    keywords: [read from special tier file, 读取, 层级, tier, 标注, annotation, 格式]
+
+  # ------------------------------------------------------------------
+  # C. The concepts behind the objects
+  # ------------------------------------------------------------------
+  - id: concept-time-axis
+    aliases: ["Time axis"]
+    title: {en: "The time axis", zh: "时间轴"}
+    what:
+      en: "The common scale, in seconds, on which a Sound, its analyses and its annotation are all placed, so that a measurement and a label can be compared."
+      zh: "声音、各项分析与标注共同放置的秒数刻度，让量测与标签可以直接对照。"
+    how:
+      en: "Every analysis object has a time step and a start time, and in the editor the cursor and the selection are positions on this axis. Read the cursor position with Query → Get (time) of cursor...."
+      zh: "每个分析物件都有时间步长与起始时间；在编辑窗口里游标与选区就是这条轴上的位置，可用 Query → Get (time) of cursor... 读取。"
+    concept:
+      en: "Praat's shared time axis is what makes annotation and measurement interchangeable: the formant value at 1.234 s and the segment labelled at 1.234 s refer to the same instant."
+      zh: "Praat 共用的时间轴让标注与量测可以互换：1.234 秒处的共振峰数值与同一时刻的音段标签指的是同一个瞬间。"
+    pitfalls:
+      - {en: "Time in seconds and time in samples are different, and the sampling frequency converts between them.", zh: "秒与样本数是两种时间，要靠采样率换算。"}
+      - {en: "Extract part... starts the new object at zero unless you ask it to preserve the times.", zh: "Extract part... 默认让新物件从 0 开始，除非你要求保留时间。"}
+    keywords: [time axis, 时间轴, 时间, seconds, 秒, 对齐, alignment, cursor, 游标]
+
+  - id: concept-sampling-frequency
+    aliases: ["Sampling frequency"]
+    title: {en: "Sampling frequency", zh: "采样率"}
+    what:
+      en: "The number of waveform samples stored per second, written as for example 44100 Hz; together with the duration it fixes how much of the recording you have."
+      zh: "每秒储存多少个波形样本，例如 44100 Hz；它与长度一起决定你手上拥有多少录音资料。"
+    how:
+      en: "Read it with Query → Get sampling frequency, or look at the sampling frequency line in Info. Convert → Resample... changes it."
+      zh: "用 Query → Get sampling frequency 读取，或看 Info 里的采样率那一行，Convert → Resample... 可以改变它。"
+    concept:
+      en: "The sampling frequency is not a quality setting but a measurement grid: it decides the finest time structure you can see and, through the Nyquist limit, the highest frequency you can analyse."
+      zh: "采样率不是品质设定，而是量测的网格：它决定你能看到多细的时间结构，也通过奈奎斯特上限决定你能分析多高的频率。"
+    pitfalls:
+      - {en: "A microphone may record at 48 kHz while the file header says 44100 Hz, and then the pitch comes out wrong.", zh: "麦克风可能以 48 kHz 录制，档头却写 44100 Hz，这时算出来的音高会不对。"}
+      - {en: "Resampling downwards loses frequency information that cannot be recovered.", zh: "向下重取样丢掉的频率资讯无法找回。"}
+    keywords: [sampling frequency, 采样率, 取样频率, hertz, sample rate, 网格, nyquist]
+
+  - id: concept-nyquist-limit
+    aliases: ["Nyquist limit"]
+    title: {en: "The Nyquist limit", zh: "奈奎斯特上限"}
+    what:
+      en: "The highest frequency that can be represented in a sampled signal, equal to half the sampling frequency; 44100 Hz therefore allows analysis up to 22050 Hz."
+      zh: "取样讯号所能表示的最高频率，等于采样率的一半，所以 44100 Hz 最多只能分析到 22050 Hz。"
+    how:
+      en: "Keep the limit in mind when you choose a formant range or a spectrogram view range, because a request above the limit cannot return anything useful."
+      zh: "选择共振峰范围或频谱图的检视范围时要记住这个上限，超过上限的要求得不到有用的结果。"
+    concept:
+      en: "The sampling theorem says that a signal must be band-limited to half the sampling frequency, otherwise the frequencies above the limit fold back into the audible range as aliasing."
+      zh: "取样定理要求讯号的频宽不超过采样率的一半，否则超过上限的频率会折叠回可听范围，形成混叠。"
+    pitfalls:
+      - {en: "At 16 kHz the limit is 8 kHz, where the second formant of many vowels has already gone.", zh: "16 kHz 时上限是 8 kHz，许多元音的第二共振峰已经不见了。"}
+      - {en: "Raising the sampling frequency in the recorder does not bring back detail the microphone never captured.", zh: "把录音的采样率调高，不会带回麦克风本来就没收到的细节。"}
+    keywords: [nyquist, 奈奎斯特, 上限, limit, 混叠, aliasing, 采样率, 频率上限]
+
+  - id: concept-formant
+    aliases: ["What is a formant"]
+    title: {en: "What is a formant?", zh: "什么是共振峰？"}
+    what:
+      en: "A resonance of the vocal tract: a peak in the spectral envelope of a vowel, reported as a frequency (F1, F2, F3) and a bandwidth."
+      zh: "声道的共振，也就是元音频谱包络上的峰，以频率（F1、F2、F3）与频宽来报告。"
+    how:
+      en: "Estimate them with Analyse spectrum → To Formant (burg)..., then read the values with Plot or Query, and choose the formant range to match the speaker."
+      zh: "用 Analyse spectrum → To Formant (burg)... 估计，再用 Plot 或 Query 读数值；共振峰范围要配合说话者来选。"
+    concept:
+      en: "The vocal tract filters the glottal source, so the spectrum of a vowel is the source spectrum shaped by the tract: F1 relates mostly to mouth opening, F2 mostly to tongue position and lip rounding."
+      zh: "声道替声门音源滤波，所以元音的频谱是被声道塑形后的音源频谱：F1 主要关系到口腔开度，F2 主要关系到舌位与圆唇。"
+    pitfalls:
+      - {en: "Tracking formants on a male voice with the female standard of 5500 Hz can lose formants in the low region; Praat's own FAQ says to set the maximum formant down to 5000 Hz.", zh: "用女声的预设 5500 Hz 上限追踪成年男声，低频区的共振峰会消失；Praat 自己的问答说这时要把上限降到 5000 Hz。"}
+      - {en: "A single frame of a formant is meaningful only if the vowel is steady at that moment.", zh: "共振峰的单帧数值只有在那个位置的元音是稳定时才有意义。"}
+    keywords: [formant, 共振峰, 定义, definition, f1, f2, 频谱包络, 声道]
+
+  - id: concept-fundamental-frequency
+    aliases: ["Fundamental frequency"]
+    title: {en: "Fundamental frequency", zh: "基频"}
+    what:
+      en: "The rate at which the vocal folds vibrate, in hertz. For a voiced sound it is the spacing between the harmonics in the spectrum and the period of the waveform."
+      zh: "声带每秒振动的次数，以赫兹表示；对有声语音来说，它是频谱中泛音的间距，也是波形的周期。"
+    how:
+      en: "Estimate it with Analyse periodicity → To Pitch..., set the floor and the ceiling to the range of the speaker, and read the values from the Pitch object or from the contour."
+      zh: "用 Analyse periodicity → To Pitch... 估计，把上下限设成说话者的范围，再从 Pitch 物件或曲线读数值。"
+    concept:
+      en: "Praat estimates periodicity by autocorrelation or cross-correlation: it looks for how often the waveform repeats inside the analysis window, which needs at least two pitch periods to be reliable."
+      zh: "Praat 用自相关或跨相关估计周期性：在分析窗内寻找波形多久重复一次，这至少需要两个基频周期才可靠。"
+    pitfalls:
+      - {en: "An F0 value that is exactly half or twice the true value is an octave error, and a badly chosen range causes it.", zh: "F0 数值正好是真实值的一半或两倍就是八度跳错，范围设不好就会发生。"}
+      - {en: "A missing value means an unvoiced frame, not a zero.", zh: "缺失值代表无声格，不是零。"}
+    keywords: [fundamental frequency, 基频, f0, 估计, estimate, 自相关, autocorrelation, 周期性]
+
+  - id: concept-sound-and-analysis
+    aliases: ["Sound and its analysis objects"]
+    title: {en: "A Sound and its analysis objects", zh: "Sound 与它的分析物件"}
+    what:
+      en: "The difference between the recording itself and the objects computed from it: a Sound holds samples, while Pitch, Formant, Intensity and Spectrogram hold derived numbers for the same time axis."
+      zh: "录音本身与由它算出的物件之间的分别：Sound 装着样本，Pitch、Formant、Intensity 与 Spectrogram 装着同一条时间轴上的衍生数值。"
+    how:
+      en: "You always analyse a Sound, and the result is a new object in the list while the Sound stays untouched. Removing the Sound also removes the objects that depend on it."
+      zh: "分析的对象永远是 Sound，结果是清单里的新物件，Sound 本身不受影响；移除 Sound 会连带移除依赖它的物件。"
+    concept:
+      en: "Because the analysis objects are separate, you can change the settings and recompute, or keep several versions of the same analysis side by side for comparison."
+      zh: "因为分析物件是独立的，你可以改设定重算，也可以把同一份分析的多个版本并排留着比较。"
+    pitfalls:
+      - {en: "Analysis objects are not pictures: they are numbers you can query, tabulate and plot.", zh: "分析物件不是图，而是可以查询、制表与绘图的数值。"}
+      - {en: "The analyses drawn inside the editor are computed on the fly and are not the same objects as the ones in the list.", zh: "编辑窗口里画出的分析是即时算的，与清单里的物件不是同一个东西。"}
+    keywords: [sound, analysis, 声音, 分析, 物件, object, 衍生, derived, pitch, formant]
+
+  - id: concept-tier-types
+    aliases: ["Interval tier, point tier and duration tier"]
+    title: {en: "Interval tier, point tier and duration tier", zh: "区间层、点层与时长层"}
+    what:
+      en: "The three kinds of tier in Praat: an interval tier holds labelled spans, a point tier holds labelled instants, and a duration tier holds relative durations."
+      zh: "Praat 里三种层级的分别：区间层放有标签的时段，点层放有标签的瞬间，时长层放相对时长。"
+    how:
+      en: "Choose the kind when you create the tier: Annotate → To IntervalTier or Annotate → To TextTier, and New → Tiers → Create DurationTier...."
+      zh: "建立层级时要选种类：Annotate → To IntervalTier 或 Annotate → To TextTier，以及 New → Tiers → Create DurationTier...."
+    concept:
+      en: "The choice follows the shape of what you describe: a phone lasts, an event happens at an instant, and a time-stretch factor is a property of a whole stretch of time."
+      zh: "选择依据是你所描述之物的形状：音素有延续，事件发生在某一瞬间，而时间伸缩因子是整段时间的属性。"
+    pitfalls:
+      - {en: "Only interval and point tiers live in a TextGrid; a duration tier is a separate object.", zh: "只有区间层与点层能放进 TextGrid，时长层是独立物件。"}
+      - {en: "Putting a phone in a point tier loses its duration, which is exactly what you wanted to measure.", zh: "把音素放进点层会丢掉它的时长，而那正是你要量的东西。"}
+    keywords: [interval tier, point tier, duration tier, 区间层, 点层, 时长层, 层级, tier]
+
+  - id: concept-corpus-and-table
+    aliases: ["Corpus versus Table"]
+    title: {en: "Corpus and Table", zh: "Corpus 与 Table 的分别"}
+    what:
+      en: "A Corpus is a Table with a fixed meaning: two columns, Sound and Annotation, one row per recording, whereas a Table is a general spreadsheet whose columns you choose."
+      zh: "Corpus 是有固定意义的 Table：两栏 Sound 与 Annotation，一列一个录音；Table 则是栏位由你决定的通用试算表。"
+    how:
+      en: "New → Create Corpus... builds a Corpus from a folder, and New → Tables → New Table... builds an empty Table. Open the Corpus with View & Edit to see the pairs of file names."
+      zh: "New → Create Corpus... 由资料夹建立 Corpus，New → Tables → New Table... 建立空 Table；用 View & Edit 打开 Corpus 就能看到成对的档名。"
+    concept:
+      en: "A corpus is a collection of recordings plus their annotations, so a table that pairs a sound file with its annotation file is a small but complete description of one."
+      zh: "语料库是录音加上它们的标注，所以一份把声音档与标注档配成对的表格，虽然小，却是对一笔语料的完整描述。"
+    pitfalls:
+      - {en: "Do not rename the columns of a Corpus: those two names are what the corpus commands expect.", zh: "不要改 Corpus 的栏名：这两个名称就是语料库指令所期待的。"}
+      - {en: "A Corpus does not check that the files exist, so its list can be out of date.", zh: "Corpus 不会检查档案是否存在，所以它的列表可能已经过时。"}
+    keywords: [corpus, table, 语料库, 表格, 配对, pair, 差异, difference]
+
+  - id: concept-object-based-design
+    aliases: ["Object-based design"]
+    title: {en: "What it means that Praat works with objects", zh: "Praat 以物件运作为何"}
+    what:
+      en: "The idea behind Praat: everything you work with is an object in the list, and each command says which type of object it acts on, so one sound can feed many analyses."
+      zh: "Praat 背后的观念：你处理的一切都是清单里的物件，每条指令都指明它作用在哪一种物件上，所以同一段声音可以喂给多种分析。"
+    how:
+      en: "Select an object and the buttons on the right of the Objects window change to the commands that make sense for it, which is how the interface follows the data."
+      zh: "选中物件后，Objects 窗口右边的按钮会变成对它有意义的那几条指令，介面就是这样跟着资料走的。"
+    concept:
+      en: "Object-based design is why Praat keeps your data in memory instead of in files: a Pitch object stays attached to the Sound it came from, and removing the Sound removes the Pitch with it."
+      zh: "以物件为中心的设计，正是 Praat 把资料留在记忆体而不是档案里的原因：Pitch 物件依附在它来源的 Sound 上，移除 Sound 就会连 Pitch 一起移除。"
+    pitfalls:
+      - {en: "Objects live in memory, so quitting Praat without saving loses them.", zh: "物件活在记忆体里，退出 Praat 前没有存档就全部消失。"}
+      - {en: "Two objects can carry the same name, so select them by their position in the list rather than by name.", zh: "两个物件可以同名，要靠清单里的位置而不是名称来分辨。"}
+    keywords: [object, 对象, 物件, 资料模型, data model, 设计, memory, 记忆体]
+
+  - id: concept-info-and-object-menu
+    aliases: ["Info button and object menu"]
+    title: {en: "The Info button and the object menu", zh: "Info 按钮与物件菜单"}
+    what:
+      en: "The two ways to find out what Praat holds: the Info button prints a short plain-text report about the selected object, and the object's own menu lists the commands that apply to it."
+      zh: "查知 Praat 手里有什么的两条路：Info 按钮印出选中物件的简短纯文字报告，而物件自己的菜单列出适用于它的指令。"
+    how:
+      en: "Select an object and click Info to see its type, name, duration and sampling frequency; for the manual page of that type use the object-specific help button or Help → Types of objects."
+      zh: "选中物件后点 Info，看它的类型、名称、长度与采样率；要读该类型的手册页，可以用物件专属的说明按钮或 Help → Types of objects。"
+    concept:
+      en: "Info is the cheapest check in Praat: before you measure, ask the object what it is, because most beginner errors come from measuring the wrong thing."
+      zh: "Info 是 Praat 里最便宜的检查：量测之前先问物件它是什么，因为初学者的错误大多出在量错了对象。"
+    pitfalls:
+      - {en: "Info describes the object in memory, not the file on disk, so a resampled copy still reports the rate you gave it.", zh: "Info 讲的是记忆体里的物件而不是硬盘上的档案，重取样的副本仍会报出你给的采样率。"}
+      - {en: "Inspect goes one level deeper and lists every field, which is slow on a long Sound.", zh: "Inspect 再往下一层，会列出每个栏位，对长声音很慢。"}
+    keywords: [info, object menu, 物件菜单, 查询物件, 摘要, report, 类型, type, 检查]

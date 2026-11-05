@@ -1,0 +1,98 @@
+# Praatao lesson pack 1 — read a file, meet the Objects window, open View & Edit
+#
+# Target: students who have never used Praat before.
+# Screen targets are given as {kind: menu|button|list, path|name}; the
+# "path" form walks a menu, the "name" form points at a single control.
+
+version: 1
+id: 01-first-sound
+file: 01-first-sound.yaml
+title: {en: "Your first sound", zh: "你的第一个声音"}
+summary:
+  en: "Open a WAV file, understand the Objects window, and read the waveform in View & Edit."
+  zh: "读入一个 WAV 档案、认识 Objects 窗口，并在 View & Edit 里看懂波形。"
+prerequisites: []
+
+steps:
+  - id: meet-objects-window
+    detect:
+      object_types_present: []
+      selected_types: []
+      editor_open: false
+    highlight: {kind: list, name: "Objects:"}
+    tip: {en: "Everything in Praat lives in this list", zh: "Praat 里的一切都在这个清单里"}
+    detail:
+      en: "Praat is not a waveform editor with a file menu; it is a list of **objects** plus buttons that act on whatever is selected. The panel on the left is the noun (your data) and the panel on the right is the verb (what you can do to it). Once you accept that split, the rest of the interface stops looking arbitrary."
+      zh: "Praat 不是一个「档案菜单加波形编辑」的软体，而是「一串物件清单」加上「对选中物件可以做的事」。左边这一栏是名词（你的资料），右边是动词（能对它做什么）。接受这个分工之后，整个介面就不再显得任性了。"
+
+  - id: read-a-file
+    detect:
+      object_types_present: []
+      selected_types: []
+      editor_open: false
+    highlight: {kind: menu, path: ["Open", "Read from file..."]}
+    tip: {en: "Open → Read from file… to load a WAV", zh: "Open → Read from file… 读入 WAV 档案"}
+    detail:
+      en: "Choose **Read from file…** (Ctrl-O) and pick a WAV file; Praat puts a **Sound** object into the list and asks what to call it. The file stays on disk and the Sound is Praat's in-memory copy of it. If your recording is very long, use **Open long sound file…** instead so that Praat does not have to hold all of it in memory."
+      zh: "选 **Read from file…**（Ctrl-O）挑一个 WAV 档案，Praat 会在清单里放一个 **Sound** 物件，并问你要怎么命名。档案留在硬盘上，Sound 是 Praat 记忆体里的副本。录音很长时请改用 **Open long sound file…**，这样 Praat 不必把整段都放进记忆体。"
+
+  - id: select-the-sound
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: []
+      editor_open: false
+    highlight: {kind: list, name: "Objects:"}
+    tip: {en: "Click the Sound row so the buttons change", zh: "点一下 Sound 那一列，右边的按钮才会变形"}
+    detail:
+      en: "The buttons on the right of the Objects window are **dynamic**: they are rebuilt from whatever is selected. With nothing selected you see only Rename, Copy, Inspect, Info and Remove, which looks like Praat is missing half of itself. Click the row `1. Sound …` and the full set of commands appears. This single click is the cause of most \"where did the button go?\" questions."
+      zh: "Objects 窗口右边的按钮是**动态**的，会依照你选中的东西重建。什么都没选时只看得到 Rename、Copy、Inspect、Info、Remove，看起来像 Praat 少了一半功能。点一下 `1. Sound …` 那一整排指令就出现了。大多数「那个按钮跑哪去了」的问题，根源都是少点了这一步。"
+
+  - id: view-and-edit
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: false
+    highlight: {kind: button, name: "View & Edit"}
+    tip: {en: "Open the Sound editor", zh: "打开声音编辑窗口"}
+    detail:
+      en: "**View & Edit** opens the Sound editor: the waveform on top, and below it the space where analyses such as the spectrogram and the pitch contour will be drawn. The title bar of the window is the object list label (`2. Sound …`), not just the object name, so the number tells you which object in the list you are looking at. Many display settings live in this window's menus, not in the Objects window."
+      zh: "**View & Edit** 打开声音编辑窗口：上面是波形，下面是将来画频谱图、基频曲线等分析的空间。窗口标题是清单里的标签（`2. Sound …`），不只是物件名称，所以那个数字告诉你现在看的是清单里的哪一个。很多显示设定在这个窗口的菜单里，而不在 Objects 窗口。"
+
+  - id: play-it
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: true
+    highlight: {kind: menu, path: ["Play", "Play or stop"]}
+    tip: {en: "Listen before you measure", zh: "先听，再量"}
+    detail:
+      en: "Press **Tab** to play the selection and **Shift+Tab** to play the visible window, or use the Play menu. Listening first is not politeness, it is measurement: if the audio sounds like a different word than the file name suggests, you want to know before you label anything. It also tells you whether the recording has noise, clipping or a very quiet voice."
+      zh: "按 **Tab** 播放选区，按 **Shift+Tab** 播放可见范围，也可以用 Play 菜单。先听不是礼貌，是测量：如果听到的内容跟档名暗示的不一样，你要在标注之前就知道。同时你也听出录音有没有杂讯、有没有削波、或者声音过小。"
+
+  - id: zoom-in
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: true
+    highlight: {kind: button, name: "in"}
+    tip: {en: "Zoom in on the interesting part", zh: "放大到有看头的部分"}
+    detail:
+      en: "The five small buttons at the top left of the editor are `all`, `in`, `out`, `sel` and `bak`: show everything, zoom in, zoom out, zoom to the selection, and go back one step. Zooming in is what makes a waveform readable and what stops Praat from refusing to draw the analyses over a long visible window."
+      zh: "编辑窗口左上角那五个小按钮是 `all`、`in`、`out`、`sel`、`bak`：显示全部、放大、缩小、缩放到选区、退回一步。放大能让波形变得可读，也能避免 Praat 因为可见范围太长而拒绝画分析。"
+
+  - id: check-the-numbers
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: false
+    highlight: {kind: button, name: "Info"}
+    tip: {en: "Read the sampling frequency and duration", zh: "读出取样频率与长度"}
+    detail:
+      en: "Click **Info** and note two numbers: the **sampling frequency** and the **duration**. Everything downstream depends on them. The sampling frequency fixes the highest frequency you can possibly analyse (half of it, the Nyquist limit), and the duration tells you whether 5 ms analysis windows give you enough frames to be meaningful. Write both numbers into your lab notes at this stage."
+      zh: "点 **Info**，记下两个数字：**取样频率**与**长度**。后面的一切都取决于它们。取样频率决定你最高能分析到多高（它的一半，奈奎斯特上限），长度则告诉你 5 毫秒的分析窗能切出多少格、够不够有意义。这两个数字现在就写进实验笔记。"
+
+completion:
+  message:
+    en: "You have a Sound, you can see it and hear it. Next pack: reading a spectrogram."
+    zh: "你已经载入声音，看得见也听得到了。下一包：怎么读频谱图。"
+  next_lesson: 02-spectrogram

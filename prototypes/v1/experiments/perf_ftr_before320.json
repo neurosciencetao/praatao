@@ -1,0 +1,92 @@
+{
+  "meta": {
+    "timestamp": "2026-11-05 10:30:03",
+    "machine": "Windows-11-10.0.26100-SP0",
+    "python": "3.12.0",
+    "runs": 25,
+    "rounds": 12,
+    "dwell_ms": 320,
+    "legacy": [
+      "dwell 320 ms",
+      "hit-test cache",
+      "dwell measured from the pointer's arrival",
+      "knowledge base index",
+      "objects-list cache",
+      "drawing-area lookup",
+      "menu check",
+      "menu item lookup"
+    ]
+  },
+  "sensors": {},
+  "pipeline": {},
+  "end_to_end": {},
+  "false_triggers": {
+    "sweeps": [
+      {
+        "dwell_per_control_ms": 20,
+        "controls_visited": 48,
+        "cards_shown": 0,
+        "false_trigger_rate": 0.0,
+        "disturbed_visits": 0
+      },
+      {
+        "dwell_per_control_ms": 40,
+        "controls_visited": 48,
+        "cards_shown": 0,
+        "false_trigger_rate": 0.0,
+        "disturbed_visits": 0
+      },
+      {
+        "dwell_per_control_ms": 60,
+        "controls_visited": 48,
+        "cards_shown": 0,
+        "false_trigger_rate": 0.0,
+        "disturbed_visits": 0
+      },
+      {
+        "dwell_per_control_ms": 100,
+        "controls_visited": 48,
+        "cards_shown": 0,
+        "false_trigger_rate": 0.0,
+        "disturbed_visits": 0
+      },
+      {
+        "dwell_per_control_ms": 150,
+        "controls_visited": 48,
+        "cards_shown": 0,
+        "false_trigger_rate": 0.0,
+        "disturbed_visits": 0
+      },
+      {
+        "dwell_per_control_ms": 200,
+        "controls_visited": 48,
+        "cards_shown": 0,
+        "false_trigger_rate": 0.0,
+        "disturbed_visits": 0
+      },
+      {
+        "dwell_per_control_ms": 240,
+        "controls_visited": 48,
+        "cards_shown": 0,
+        "false_trigger_rate": 0.0,
+        "disturbed_visits": 0
+      },
+      {
+        "dwell_per_control_ms": 280,
+        "controls_visited": 45,
+        "cards_shown": 2,
+        "false_trigger_rate": 0.0444,
+        "disturbed_visits": 3
+      },
+      {
+        "dwell_per_control_ms": 320,
+        "controls_visited": 44,
+        "cards_shown": 0,
+        "false_trigger_rate": 0.0,
+        "disturbed_visits": 4
+      }
+    ]
+  },
+  "cpu": {},
+  "deep_probe": {}
+}

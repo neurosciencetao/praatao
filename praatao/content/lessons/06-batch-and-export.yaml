@@ -1,0 +1,149 @@
+# Praatao lesson pack 6 - the researcher's workflow: a Corpus, a Table, a script, results out
+#
+# Labels were verified against Praat 6.4.12 (the binary at the project root):
+# a live UI Automation session for the menu bars and buttons, and the
+# praat/praat source at tag v6.4.12 for the command labels.
+
+version: 1
+id: 06-batch-and-export
+file: 06-batch-and-export.yaml
+title: {en: "Batch work and taking the results out of Praat", zh: "批次处理与把结果带出 Praat"}
+summary:
+  en: "Build a Corpus of many recordings, read and write Tables, script the loop, and hand the numbers to R or Python."
+  zh: "把一整批录音做成 Corpus，读写 Table，用脚本跑完循环，再把数字交给 R 或 Python。"
+prerequisites: [01-first-sound, 04-textgrid]
+
+steps:
+  - id: create-corpus
+    detect:
+      object_types_present: []
+      selected_types: []
+      editor_open: false
+    highlight: {kind: menu, path: ["New", "Create Corpus..."]}
+    tip: {en: "Point Praat at a folder of recordings", zh: "把整批录音的资料夹交给 Praat"}
+    detail:
+      en: "**New → Create Corpus...** opens a dialog with five fields: the **Name** of the object, the **Folder with sound files**, the **Sound file extension** (wav by default), and, if you want the annotations matched up, the **Folder with annotation files** plus the **Annotation file extension** (TextGrid by default), which pairs every .wav with the .TextGrid of the same name. What you get back is a Corpus: a list of file names, not the sounds themselves. No recording is opened at this point, so a folder of a thousand files costs you nothing."
+      zh: "**New → Create Corpus...** 会开出五个栏位的对话框：物件的**名称**、**Folder with sound files**（放音档的资料夹）、**Sound file extension**（副档名，设 wav）；如果还要把标注配对起来，再填 **Folder with annotation files** 与 **Annotation file extension**（预设 TextGrid），这样每个 .wav 就配上同名的 .TextGrid。拿回来的是一份 Corpus：一份档名清单，不是声音本身。这一步没有读进任何一段录音，所以放一千个档也不费什么。"
+
+  - id: corpus-in-the-objects-window
+    detect:
+      object_types_present: ["Corpus"]
+      selected_types: []
+      editor_open: false
+    highlight: {kind: list, name: "Objects:"}
+    tip: {en: "A Corpus is a list of sound-file names", zh: "Corpus 只是一份音档档名清单"}
+    detail:
+      en: "The Objects list now carries a row like `2. Corpus mycorpus`. Click that row and the buttons on the right rebuild themselves: for a Corpus they are Rename..., Copy..., Inspect, Info, Remove and View & Edit. There is no waveform and no Play button, because not one sample has been loaded. What you are holding is the sound-files list itself: names only, kept deliberately apart from the audio. In Praat 6.4.12 that list is an object of type **Corpus**."
+      zh: "Objects 清单里多了一个项目：`2. Corpus mycorpus`。点一下这一项，右边的按钮就会重新组合：对 Corpus 来说就是 Rename...、Copy...、Inspect、Info、Remove 与 View & Edit。这里没有波形，也没有 Play，因为一个样本都还没读进来。你手上拿着的其实就是那份音档清单：只有档名，而且刻意与音讯分开存放。在 Praat 6.4.12 里面，这个物件型态叫做 **Corpus**。"
+
+  - id: open-the-corpus-table
+    detect:
+      object_types_present: ["Corpus"]
+      selected_types: ["Corpus"]
+      editor_open: false
+    highlight: {kind: button, name: "View & Edit"}
+    tip: {en: "See the file names as a table", zh: "用表格看见档名"}
+    detail:
+      en: "**View & Edit** on a Corpus opens a small table editor (the window is titled `2. Corpus mycorpus`) with one row per file: a **Sound** column with the sound-file names and an **Annotation** column that names the matching annotation file when there is one. The File menu holds **Corpus info** if you want the same facts in text form. Notice what is *not* there: in Praat 6.4.12 a Corpus has no *Extract sound files* command, so it is a pointer list, not a converter. The files still have to be read, one by one or by a script."
+      zh: "对 Corpus 按 **View & Edit** 会开出一个小的表格编辑窗口（标题是 `2. Corpus mycorpus`），每个档案一列：**Sound** 栏放音档名，**Annotation** 栏在有对应标注档时填上它的名字。想看同样的资料，File 选单里有 **Corpus info**。也请注意**没有**的东西：Praat 6.4.12 的 Corpus 没有 *Extract sound files* 这种指令，所以它是一份指标清单，不是转换器；音档还是得读，一个一个读，或者交给脚本。"
+
+  - id: read-a-table
+    detect:
+      object_types_present: ["Corpus"]
+      selected_types: []
+      editor_open: false
+    highlight: {kind: menu, path: ["Open", "Read Table from tab-separated file..."]}
+    tip: {en: "Open → Read Table from tab-separated file...", zh: "Open → Read Table from tab-separated file... 读表格"}
+    detail:
+      en: "A Table is Praat's spreadsheet: named columns, one row per token. **Open → Read Table from tab-separated file...** brings in a text file whose columns are separated by tabs; the first line is taken as the column names unless the file starts with a special marker. Keep your results in that shape, one row per token and one column per variable, and every statistics package can read them."
+      zh: "Table 就是 Praat 的试算表：有名称的栏目，一列一个语流。**Open → Read Table from tab-separated file...** 读入以定位字元分栏的文字档；除非档案开头有特殊标记，第一行会被当作栏位名称。结果就整理成这个形状：一列一个语流，一栏一个变数，任何统计软体都读得懂。"
+
+  - id: read-a-table-of-real
+    detect:
+      object_types_present: ["Table"]
+      selected_types: []
+      editor_open: false
+    highlight: {kind: menu, path: ["Open", "Read TableOfReal from headerless spreadsheet file..."]}
+    tip: {en: "Numbers only, no header line", zh: "只有数字、没有表头"}
+    detail:
+      en: "When the sheet has no header line and nothing but numbers, use **Read TableOfReal from headerless spreadsheet file...** instead. It builds a TableOfReal: a matrix of numbers that can also carry row and column labels. The price is that a TableOfReal cannot hold text, so a cell that is not a number counts as zero. To turn it into an ordinary Table, use **To Table...**, and from there the usual Save → Save as tab-separated file..."
+      zh: "如果这份表没有表头、而且全部是数字，就改用 **Read TableOfReal from headerless spreadsheet file...**。它会建立一个 TableOfReal：一个数字矩阵，也可以带列标签与行标签。代价是 TableOfReal 放不了文字，不是数字的格子会被当成零。要变回一般的 Table，用 **To Table...**，之后就照常 Save → Save as tab-separated file...。"
+
+  - id: analysis-to-table
+    detect:
+      object_types_present: ["Formant"]
+      selected_types: ["Formant"]
+      editor_open: false
+    highlight: {kind: menu, path: ["Tabulate", "Down to Table..."]}
+    tip: {en: "Turn the analysis into numbers in a Table", zh: "把分析结果变成表格里的数字"}
+    detail:
+      en: "Select the Formant object (a TextGrid has the same button) and the Objects window grows a **Tabulate** button; its leaves include **List...** and **Down to Table...**, which writes the measured values into a new Table, one row per analysis frame and one column per formant. This is the bridge from Praat's pictures to the numbers your statistics need. Mind the Praat 6.4.12 name: the command is *Down to Table...*, and a Pitch object has no Table leaf at all, only **To Matrix...** and **Down to PitchTier**."
+      zh: "选中 Formant 物件（TextGrid 也有同一个按钮），Objects 窗口会多出一个 **Tabulate** 按钮；里面除了 **List...**，还有 **Down to Table...**，把量测到的数值写进一张新的 Table：每一列一个分析窗，一栏一个共振峰。这就是从 Praat 的图形走到统计数字的桥。请记住 6.4.12 的指令名是 *Down to Table...*；而 Pitch 物件根本没有这一项，它只有 **To Matrix...** 与 **Down to PitchTier**。"
+
+  - id: save-the-table
+    detect:
+      object_types_present: ["Table"]
+      selected_types: ["Table"]
+      editor_open: false
+    highlight: {kind: menu, path: ["Save", "Save as tab-separated file..."]}
+    tip: {en: "Save → Save as tab-separated file...", zh: "Save → Save as tab-separated file... 汇出"}
+    detail:
+      en: "With a Table selected, the Save menu grows three extra commands: **Save as tab-separated file...**, **Save as comma-separated file...** and **Save as semicolon-separated file...**. Choose the tab-separated one and you get a plain text file with one row per token and tabs between the columns, which is exactly what read.delim in R or pandas.read_csv with sep set to a tab expects. The numbers leave Praat through a text file, and nothing else in the program has to change."
+      zh: "选中 Table 之后，Save 选单会多出三个指令：**Save as tab-separated file...**、**Save as comma-separated file...** 与 **Save as semicolon-separated file...**。选定位字元分隔的那个，拿到的就是一个纯文字档：每一列一个语流，栏与栏之间是定位字元。这正是 R 的 read.delim 或 Python 的 pandas.read_csv（sep 设成定位字元）期待的样子。数字就是透过一个文字档离开 Praat 的，程式里其他东西都不用动。"
+
+  - id: new-praat-script
+    detect:
+      object_types_present: ["Table"]
+      selected_types: ["Table"]
+      editor_open: false
+    highlight: {kind: menu, path: ["Praat", "New Praat script"]}
+    tip: {en: "Praat → New Praat script", zh: "Praat → New Praat script（开一个脚本窗口）"}
+    detail:
+      en: "**Praat → New Praat script** opens a script editor window (titled *untitled script*) with the menus File, Edit, Search, Convert, Font, Run and Help. You type there the same commands you would otherwise click, one per line. Save it with **File → Save...** and give it the .praat extension; to come back to it later, use **Praat → Open Praat script...**, which asks for the file and loads it into a fresh script editor."
+      zh: "**Praat → New Praat script** 会开出一个脚本编辑窗口（标题是 *untitled script*），选单有 File、Edit、Search、Convert、Font、Run 与 Help。你把本来要点下去的动作写成一行一个指令打进去。用 **File → Save...** 存档，并加上 .praat 副档名；以后要再打开，就用 **Praat → Open Praat script...**，它会问你要档案，然后在一个新的脚本窗口里载进来。"
+
+  - id: run-the-script
+    detect:
+      object_types_present: []
+      selected_types: []
+      editor_open: true
+    highlight: {kind: menu, path: ["Run", "Run"]}
+    tip: {en: "Run → Run (Ctrl-R)", zh: "Run → Run（Ctrl-R）执行"}
+    detail:
+      en: "In the script editor, **Run → Run** (Ctrl-R) executes the script exactly as if you had clicked those commands, and **Run → Run selection** (Ctrl-T) runs only the selected lines. A script that stops halfway is normal and useful: Praat reports *Command ... not available for current selection*, which is how it tells you that the script has to select its object first."
+      zh: "在脚本窗口里，**Run → Run**（Ctrl-R）会把脚本当成你亲手点过那些指令来执行，**Run → Run selection**（Ctrl-T）则只执行你选中的那几行。脚本跑一半停住是正常的，而且很有用：Praat 会说 *Command ... not available for current selection*，这就是它在告诉你，脚本得先自己选中要处理的物件。"
+
+  - id: script-the-batch
+    detect:
+      object_types_present: []
+      selected_types: []
+      editor_open: true
+    highlight: {kind: list, name: "Objects:"}
+    tip: {en: "One Run for the whole corpus", zh: "整批资料，一次 Run"}
+    detail:
+      en: |
+        This is the whole difference between clicking and scripting: clicking analyses one file and leaves you with one object, while a script repeats the same steps for every file and leaves you with a table of hundreds of rows. Praat's own manual gives the idiom for a folder of recordings:
+
+            folder$ = "D:/data/2024"
+            fileNames$# = fileNames$# (folder$ + "/*.wav")
+            for ifile to size (fileNames$#)
+                Read from file: folder$ + "/" + fileNames$# [ifile]
+            endfor
+
+        fileNames$# is Praat's way of writing a list of file names, and the forward slash works on Windows too. Put the analysis and the table writing inside that loop and the whole corpus is finished with a single Run.
+      zh: |
+        这就是手动点与写脚本的全部差别：手动点只能分析一个档案，留给你一个物件；脚本则对每个档案重复同样的步骤，留给你一张几百列的表。Praat 自己的手册给了处理整个资料夹的写法：
+
+            folder$ = "D:/data/2024"
+            fileNames$# = fileNames$# (folder$ + "/*.wav")
+            for ifile to size (fileNames$#)
+                Read from file: folder$ + "/" + fileNames$# [ifile]
+            endfor
+
+        fileNames$# 是 Praat 表示档名清单的方式，正斜线在 Windows 上也能用。把分析与写表放进那个循环里，整批资料一次 Run 就做完了。
+
+completion:
+  message:
+    en: "You can point Praat at a whole corpus, turn the analysis into a Table, script the loop, and take the numbers out to R or Python."
+    zh: "你已经能让 Praat 指向一整批语料、把分析变成 Table、用脚本跑完循环，再把数字带出去交给 R 或 Python。"
+  next_lesson: null

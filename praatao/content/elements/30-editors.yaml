@@ -1,0 +1,550 @@
+# Praatao — UI element dictionary, fragment 30: the editor windows
+#
+# This fragment is merged with `praatao/content/elements.yaml` by
+# `praatao.tutor.kb.load_default()`. Rules that apply here too:
+#   * `id` is unique across the whole dictionary.
+#   * `aliases` are unique across the whole dictionary (after normalisation)
+#     and hold the label text exactly as Praat shows it, or the name of the
+#     window or panel the card is about.
+#   * Every user-facing string exists in English and Simplified Chinese.
+#   * Keep every string under about 300 characters.
+#
+# Window names, menu names and button names were checked against
+# Praat 6.4.12 on Windows (UI Automation probe of a live session, see
+# prototypes/v1/experiments/uia_probe_output.json) and against
+# docs/10-sensing-strategy.md. Labels that are already taken by
+# elements.yaml (File, Edit, Help, Time, Sound, Analyses, Spectrogram,
+# Pitch, Intensity, Formants, Pulses, Margins, World, Select, Pen, Font,
+# TextGrid, Tier, Interval, Boundary, Spell, drawingArea, PraatDrawingArea1
+# Praat, all, in, out, sel, bak, ...) are referred to in the text but are
+# not reused as aliases here.
+
+version: 1
+
+entries:
+  # ------------------------------------------------------------------
+  # A. The editor windows themselves
+  # ------------------------------------------------------------------
+  - id: sound-editor
+    aliases: ["Sound editor"]
+    title: {en: "The Sound editor", zh: "Sound 编辑窗口"}
+    what:
+      en: "The window Praat opens for a Sound: the waveform on top, the time axis underneath, and its own menu bar with File, Edit, Time, Play, Sound, Analyses, Spectrogram, Pitch, Intensity, Formants, Pulses and Help."
+      zh: "Praat 为声音（Sound）打开的窗口：上面是波形，下面是时间轴，窗口本身有专属菜单列 File、Edit、Time、Play、Sound、Analyses、Spectrogram、Pitch、Intensity、Formants、Pulses、Help。"
+    how:
+      en: "Select the Sound in the Objects list and click View & Edit. The analyses you switch on here (Show spectrogram, Show pitch, Show formants) are drawn live on the part of the sound that is visible."
+      zh: "在 Objects 清单里选中 Sound 后点 View & Edit。在这里打开的分析（Show spectrogram、Show pitch、Show formants）是针对可见范围即时绘制的。"
+    concept:
+      en: "The editor is a time-axis workbench: every view in it shares one horizontal axis, so the cursor, the selection and the zoom level are three readings of the same seconds."
+      zh: "编辑窗口是一张以时间为轴的工作台：里面每个视图共用同一条水平轴，游标、选区与缩放层级是同一组秒数的三种读法。"
+    pitfalls:
+      - {en: "The Sound editor has no TextGrid menu: the TextGrid command is a button, which is easy to mistake for a menu.", zh: "Sound 编辑窗口没有 TextGrid 菜单，开 TextGrid 的是一颗按钮，很容易被当成菜单。"}
+      - {en: "Closing the editor does not delete the Sound; the object stays in the Objects list.", zh: "关掉编辑窗口不会删除 Sound，物件仍然留在 Objects 清单里。"}
+      - {en: "A LongSound opens a window that looks the same but cannot be edited.", zh: "LongSound 开出来的窗口看起来一样，却不能编辑。"}
+    keywords: [sound editor, 声音编辑窗口, 编辑器, 波形, waveform, 时间轴, praat]
+
+  - id: textgrid-editor-window
+    aliases: ["TextGrid editor window"]
+    title: {en: "The TextGrid editor window", zh: "TextGrid 编辑窗口"}
+    what:
+      en: "The window where you type annotation: the tiers sit below the sound, and the white text field at the top receives whatever you type."
+      zh: "输入标注的窗口：层级在声音下方，最上方的白色文字栏位接收你打进去的字。"
+    how:
+      en: "Select the TextGrid in the Objects list and click View & Edit. Add the Sound to the selection with Ctrl+click if you want the waveform and the spectrogram above the tiers."
+      zh: "在 Objects 清单里选中 TextGrid 后点 View & Edit。若希望层级上方有波形与频谱图，按住 Ctrl 再点一下 Sound 一起选中。"
+    concept:
+      en: "Tiers are the bridge between the acoustic signal and linguistic categories: each tier holds one hypothesis about the same timeline, such as phones, syllables or words."
+      zh: "层级是声学讯号与语言类别之间的桥：每一层都对同一条时间线提出一个假设，例如音素、音节或词。"
+    pitfalls:
+      - {en: "Opening the TextGrid on its own gives tiers without a waveform, so you lose the acoustic reference.", zh: "只开 TextGrid 就没有波形，你会失去声学参照。"}
+      - {en: "Look for the red tier number to see which tier is active; only one tier takes your typing at a time.", zh: "要看红色显示的层级编号才知道哪一层在作用，同一时间只有一层接收你打的字。"}
+    keywords: [textgrid editor window, 文本网格窗口, 标注, tier, 层级, 编辑器]
+
+  - id: editor-window
+    aliases: ["Editor window"]
+    title: {en: "The editor window", zh: "编辑窗口"}
+    what:
+      en: "Any Praat window that shows one object for looking and editing: a Sound, a LongSound, a TextGrid, a Pitch, a Formant, an Intensity or a Table."
+      zh: "任何用来检视与编辑单一物件的 Praat 窗口：Sound、LongSound、TextGrid、Pitch、Formant、Intensity 或 Table 都可以。"
+    how:
+      en: "Every editor has the same shape: a menu bar, a drawing area and buttons around it. You can keep several open at once, and each one remembers its own zoom level."
+      zh: "每个编辑窗口的构造都一样：菜单列、绘图区，以及周围的按钮。可以同时开好几个，而且各自记得自己的缩放层级。"
+    concept:
+      en: "An editor shows a copy for you to work on. Changes made in the editor stay in that copy until you extract them or publish them as an object."
+      zh: "编辑窗口显示的是一份供你操作的副本。在窗口里做的更动会留在副本上，要经由取出或发布才回到物件。"
+    pitfalls:
+      - {en: "Each editor keeps its own zoom level, so two editors side by side can show the same sound at different scales.", zh: "每个编辑窗口有自己的缩放层级，两个窗口并排看同一段声音时比例可能不同。"}
+      - {en: "The Picture window is not an editor: it draws objects but shows no data you can select or measure.", zh: "Picture 窗口不是编辑窗口：它只画图，不显示可选取或可量测的资料。"}
+    keywords: [editor window, 编辑窗口, 编辑器, praat, 物件, object]
+
+  - id: editor-window-title
+    aliases: ["1. Sound demo_vowel"]
+    title: {en: "The editor window title", zh: "编辑窗口的标题"}
+    what:
+      en: "The title bar carries the object label exactly as the Objects list shows it, for example \"1. Sound demo_vowel\". The number in front is the object's index in that list."
+      zh: "标题列显示的正是物件在 Objects 清单里的标签，例如「1. Sound demo_vowel」，前面的数字是它在清单里的编号。"
+    how:
+      en: "Read the number to know which object is in front of you: a window titled \"2. ...\" is the second object you loaded, and the same number appears in the Objects list."
+      zh: "看编号就知道你面对的是哪一个物件：标题写着「2. ...」的窗口对应你载入的第二个物件，同样的编号也出现在 Objects 清单里。"
+    concept:
+      en: "The title is a link back to the Objects list. Since the drawing area carries no label of its own, the title is the only place where the editor says which object it is showing."
+      zh: "标题是回到 Objects 清单的线索。绘图区本身没有标签，所以标题是编辑窗口唯一会说明自己在显示哪一个物件的地方。"
+    pitfalls:
+      - {en: "The number changes when objects are removed, so it is not a permanent identifier.", zh: "物件被移除后编号会变，不要把它当成永久的识别码。"}
+      - {en: "The title is the object label, not the file name on disk; renaming the object changes the title.", zh: "标题是物件标签，不是硬盘上的档名，物件改名后标题就跟着变。"}
+    keywords: [window title, 窗口标题, 物件编号, object index, 标签, label]
+
+  - id: window-minimize
+    aliases: ["Minimize"]
+    control_types: [ButtonControl]
+    title: {en: "Minimize", zh: "Minimize（最小化）"}
+    what:
+      en: "The standard window button that shrinks the editor to the taskbar without closing it."
+      zh: "标准的窗口按钮，把编辑窗口缩到工作列，但窗口并没有关闭。"
+    how:
+      en: "Click it when the editor gets in the way. The object stays in the Objects list and the window comes back when you click its taskbar entry."
+      zh: "编辑窗口挡路时按它，物件仍留在 Objects 清单里，从工作列点回来就恢复。"
+    pitfalls:
+      - {en: "A minimized editor is still open, and the sound is still loaded; only the window is off screen.", zh: "最小化的编辑窗口仍然开着，声音也仍然载着，只是窗口不在画面上。"}
+    keywords: [minimize, 最小化, 窗口, window, 工作列, taskbar]
+
+  - id: window-maximize
+    aliases: ["Maximize"]
+    control_types: [ButtonControl]
+    title: {en: "Maximize", zh: "Maximize（最大化）"}
+    what:
+      en: "Expands the editor window to fill the screen, which gives the drawing area more pixels and therefore more detail on screen."
+      zh: "把编辑窗口展开到整个萤幕，绘图区会多出许多像素，萤幕上也就看得到更多细节。"
+    how:
+      en: "Click it, or double-click the title bar. Clicking it again (the button becomes Restore) puts the window back to its previous size."
+      zh: "按一下，或双击标题列；再按一次（按钮会变成 Restore）就回到原来的大小。"
+    pitfalls:
+      - {en: "A bigger window shows more of the sound, but no analysis setting changes: the zoom level is a separate thing.", zh: "窗口变大只是看得到更多声音，分析设定并没有跟着变，缩放层级是另一件事。"}
+      - {en: "The position of the canvas buttons is drawn by Praat itself and can differ between window sizes.", zh: "画布上的按钮位置由 Praat 自己绘制，窗口大小不同时位置也可能不同。"}
+    keywords: [maximize, 最大化, 窗口, 萤幕, screen, 编辑器]
+
+  - id: window-close
+    aliases: ["Close"]
+    control_types: [ButtonControl]
+    title: {en: "Close", zh: "Close（关闭）"}
+    what:
+      en: "Closes the editor window and throws away any unsaved changes made inside it."
+      zh: "关闭编辑窗口，并把窗口里尚未存档的更动丢掉。"
+    how:
+      en: "Click it when you are done. If the editor holds an edited Sound or a TextGrid with labels, Praat may ask whether to save first."
+      zh: "做完事就可以按。若窗口里的 Sound 被改过，或 TextGrid 已打了标签，Praat 可能先问你要不要存档。"
+    concept:
+      en: "Closing an editor never deletes an object. Praat's objects live in the Objects list, and only Remove takes them away from there."
+      zh: "关闭编辑窗口绝不会删除物件。Praat 的物件住在 Objects 清单里，只有 Remove 才会把它们拿走。"
+    pitfalls:
+      - {en: "Closing a TextGrid editor with unsaved labels loses the annotation; the Sound itself is still there.", zh: "带着没存档的标签关掉 TextGrid 编辑窗口，标注就没了，声音本身还在。"}
+      - {en: "This is the editor's close button, not the one that quits Praat; quitting is Praat → Quit.", zh: "这是编辑窗口的关闭按钮，不是离开 Praat 的按钮，离开程式要用 Praat → Quit。"}
+    keywords: [close, 关闭, 窗口, 离开, quit, 编辑器]
+
+  # ------------------------------------------------------------------
+  # B. How the windows are recognised
+  # ------------------------------------------------------------------
+  - id: praat-child-window-class
+    aliases: ["PraatChildWindow1 Praat"]
+    control_types: [WindowControl]
+    title: {en: "The Praat child window class", zh: "Praat 子窗口类别"}
+    what:
+      en: "The Windows class Praat gives to its own secondary windows: the Picture window and every editor. The Objects window has a different class, PraatShell1 Praat."
+      zh: "Praat 给自己次要窗口使用的 Windows 类别：Picture 窗口与每一个编辑窗口都是它；Objects 窗口则是另一个类别 PraatShell1 Praat。"
+    how:
+      en: "On Praat 6.4.12 in Windows this class is visible in the accessibility tree. The title is what tells the two apart: \"Praat Picture\" for the figure window, \"1. Sound demo_vowel\" for an editor."
+      zh: "在 Windows 上的 Praat 6.4.12，这个类别会出现在无障碍树里。真正区分两者的是标题：「Praat Picture」是图件窗口，「1. Sound demo_vowel」是编辑窗口。"
+    concept:
+      en: "The class tells you what kind of window you are in, the title tells you what it is showing. Both are needed, because the class alone would group the Picture window together with the editors."
+      zh: "类别告诉你这是哪一种窗口，标题告诉你它正在显示什么。两者都需要，因为只看类别会把 Picture 窗口与编辑窗口混在一起。"
+    pitfalls:
+      - {en: "The class name is a Windows implementation detail, not something Praat shows in its own menus.", zh: "这个类别名是 Windows 的实现细节，Praat 自己的菜单里看不到。"}
+      - {en: "A class-prefix rule on its own is not enough to identify an editor: the title check is what makes it safe.", zh: "只靠类别前缀无法认定编辑窗口，真正让人放心的是对标题的检查。"}
+    keywords: [window class, 窗口类别, PraatChildWindow1 Praat, 无障碍, accessibility, 编辑窗口, picture]
+
+  - id: praat-shell-window-class
+    aliases: ["PraatShell1 Praat"]
+    control_types: [WindowControl]
+    title: {en: "The Praat Objects window class", zh: "Praat Objects 窗口类别"}
+    what:
+      en: "The Windows class of the main Praat window, the one titled \"Praat Objects\" that holds the list of objects."
+      zh: "Praat 主窗口的 Windows 类别，也就是标题为「Praat Objects」、装着物件清单的那个窗口。"
+    how:
+      en: "It is the only Praat window that is not a child window, so it stays on screen while you work in the editors."
+      zh: "它是唯一不是子窗口的 Praat 窗口，所以你在编辑窗口里工作时会一直留在后面。"
+    concept:
+      en: "Everything Praat knows is reachable from this one window: reading files, choosing objects and opening the editors. The editors are views onto what this list holds."
+      zh: "Praat 知道的一切都从这个窗口出发：读档、选物件、打开编辑窗口。编辑窗口只是这个清单所持内容的视图。"
+    pitfalls:
+      - {en: "Do not close the Objects window while you work; it is the way back to the object list.", zh: "工作期间不要关掉 Objects 窗口，那是回到物件清单的入口。"}
+    keywords: [praat shell, PraatShell1 Praat, objects window, 物件清单, 主窗口]
+
+  - id: editor-drawing-area
+    aliases: ["Praat drawing area"]
+    control_types: [PaneControl]
+    title: {en: "The drawing area", zh: "绘图区"}
+    what:
+      en: "The large pane in an editor window where Praat itself paints the waveform, the spectrogram, the pitch track or the formant lines. In the accessibility tree it is the pane named \"drawingArea\"."
+      zh: "编辑窗口里那块大面板，Praat 在上面自行画出波形、频谱图、基频轨迹或共振峰线；在无障碍树里它的名称是「drawingArea」。"
+    how:
+      en: "Click inside it to place the time cursor and drag to select a range. Which view is shown is decided by the zoom buttons at the top left, not by the menu above."
+      zh: "在里面点击可放置时间游标，拖曳可选取一段范围。显示哪一个视图由左上角的缩放按钮决定，不是上方的菜单。"
+    concept:
+      en: "Praat draws the canvas itself, so the accessibility tree can give its position but not its content. What you see there is always a view of the same time axis."
+      zh: "Praat 自行绘制这块画布，所以无障碍树给得出它的位置，却给不出里面的内容。你在那里看到的，永远是同一条时间轴的某个视图。"
+    pitfalls:
+      - {en: "The rectangle reported for the drawing area is the scrollable extent, not the visible part, so it can look larger than the window.", zh: "绘图区报出来的矩形是卷动范围而不是可见范围，所以可能看起来比窗口还大。"}
+      - {en: "No control lives inside the drawing area: the buttons drawn there belong to Praat's own canvas, not to Windows.", zh: "绘图区里面没有任何独立控件，画在那里的按钮属于 Praat 自己的画布，不属于 Windows。"}
+    keywords: [drawing area, 绘图区, 画布, drawingArea, 波形, 频谱图, 编辑窗口]
+
+  # ------------------------------------------------------------------
+  # C. The scroll bars
+  # ------------------------------------------------------------------
+  - id: scroll-thumb-position
+    aliases: ["Position"]
+    control_types: [ThumbControl]
+    title: {en: "The scroll bar thumb (Position)", zh: "卷轴滑块（Position）"}
+    what:
+      en: "The draggable handle in a scroll bar. It shows how much of the content is visible and where that visible part sits in the whole."
+      zh: "卷轴上可拖曳的把手，显示目前看得到多少内容，以及这一段在整个内容里的位置。"
+    how:
+      en: "Drag it to jump to another stretch of the sound or of the picture. In an editor the horizontal bar moves along the time axis; in the Picture window it moves the figure itself."
+      zh: "拖动它可以跳到声音（或图件）的另一段。在编辑窗口里水平卷轴沿时间轴移动；在 Picture 窗口里移动的是整张图。"
+    concept:
+      en: "The thumb is a map of the whole: a thumb that fills the bar means you are seeing everything, a small thumb means you are zoomed in on a short stretch."
+      zh: "滑块就是整份内容的一张地图：滑块占满卷轴表示你看到全部，滑块很小表示你正放大看一小段。"
+    pitfalls:
+      - {en: "The scroll bar changes the view, never the data; the sound itself is unchanged.", zh: "卷轴只改变视图，绝不改变资料，声音本身没有变。"}
+      - {en: "There is one Position thumb per scroll bar, so a window with a horizontal and a vertical bar shows two of them.", zh: "每条卷轴各有一个 Position 滑块，所以同时有水平与垂直卷轴的窗口会出现两个。"}
+    keywords: [position, 卷轴, 滑块, thumb, scrollbar, 卷动, 时间轴]
+
+  - id: scroll-line-buttons
+    aliases: ["Line up", "Line down"]
+    control_types: [ButtonControl]
+    title: {en: "Line up and Line down", zh: "Line up 与 Line down（卷轴逐行）"}
+    what:
+      en: "The two small buttons at the ends of a vertical scroll bar. Each click scrolls by one line, the smallest step the scroll bar offers."
+      zh: "垂直卷轴两端的两颗小按钮，每按一次卷动一行，是卷轴最小的步进。"
+    how:
+      en: "Click Line up or Line down to nudge the view. In an editor they move the picture slightly up or down; in the Picture window they shift the figure itself."
+      zh: "按 Line up 或 Line down 可以小幅移动视图。在编辑窗口里是把画面微微上下移，在 Picture 窗口里移动的是整张图。"
+    pitfalls:
+      - {en: "One line is a very small step, so scrolling a long file this way takes many clicks; use the page buttons instead.", zh: "一行是很小的步进，用这种方式卷过一段长档案要按很多次，改用翻页按钮更快。"}
+    keywords: [line up, line down, 卷动, scrollbar, 逐行, 上下]
+
+  - id: scroll-page-buttons
+    aliases: ["Page up", "Page down", "Page right"]
+    control_types: [ButtonControl]
+    title: {en: "Page up, Page down and Page right", zh: "Page up、Page down 与 Page right（卷轴翻页）"}
+    what:
+      en: "The scroll bar buttons that move the view by one screenful at a time, in the vertical or in the horizontal direction."
+      zh: "一次移动一整个画面高度的卷轴按钮，方向有垂直也有水平。"
+    how:
+      en: "Page down and Page up step through the sound a screen at a time; Page right does the same horizontally. They are the quick way to skim a long recording."
+      zh: "Page down 与 Page up 逐屏浏览声音，Page right 则在水平方向做同样的事，这是快速浏览长录音的办法。"
+    concept:
+      en: "A page is defined by the window size, so the same click covers more time in a maximised window than in a small one. The samples themselves never move."
+      zh: "一页的长度由窗口大小决定，所以同一个按键在最大化窗口里覆盖的时间比在小窗口里更多，底下的样本不会移动。"
+    pitfalls:
+      - {en: "Which of these buttons a window shows varies with the window and the release; check the button you actually see.", zh: "这些按钮具体出现哪几个，会随窗口与版本而变，先看看画面上实际有哪一颗。"}
+      - {en: "A page is defined by the window size, so a section you scrolled past is not a measurement: measure it by number.", zh: "一页的长度由窗口大小决定，卷过去的那一段不等于一次量测，要用数字量。"}
+    keywords: [page up, page down, page right, 翻页, 卷动, scrollbar, 逐屏]
+
+  - id: scroll-column-buttons
+    aliases: ["Column left", "Column right"]
+    control_types: [ButtonControl]
+    title: {en: "Column left and Column right", zh: "Column left 与 Column right（卷轴逐栏）"}
+    what:
+      en: "The two small buttons at the ends of a horizontal scroll bar. Each click scrolls by one column, a small horizontal step."
+      zh: "水平卷轴两端的两颗小按钮，每按一次卷动一栏，是水平方向的小步进。"
+    how:
+      en: "In an editor they shift the visible stretch of the sound slightly to the left or to the right; the time axis under the cursor does not move."
+      zh: "在编辑窗口里它们把可见的声音片段微微左右移动，游标下的时间轴不会跟着动。"
+    pitfalls:
+      - {en: "The step is small and the sound is usually long, so these buttons are easy to overlook; most scrolling is done with the mouse wheel.", zh: "步进很小、声音通常很长，所以这两颗按钮常被忽略，多数卷动是用滑鼠滚轮完成的。"}
+    keywords: [column left, column right, 卷轴, scrollbar, 水平, 左右]
+
+  # ------------------------------------------------------------------
+  # D. The menu bars of the three windows
+  # ------------------------------------------------------------------
+  - id: picture-window-menu-bar
+    aliases: ["Picture window menu bar"]
+    control_types: [MenuItemControl]
+    title: {en: "The Picture window menu bar", zh: "Picture 窗口的菜单列"}
+    what:
+      en: "The eight menus of the Picture window: File, Edit, Margins, World, Select, Pen, Font and Help. All of them act on the figure, not on the sound."
+      zh: "Picture 窗口的八个菜单：File、Edit、Margins、World、Select、Pen、Font、Help，它们作用的对象是图件，不是声音。"
+    how:
+      en: "Margins sets the axes and the frame, World draws things in data coordinates, Select chooses which viewport the mouse acts on, Pen sets line style and width, Font sets the typeface, File exports the figure."
+      zh: "Margins 设定坐标轴与外框，World 以资料坐标绘图，Select 决定鼠标作用在哪个视窗，Pen 设定线型与线宽，Font 设定字型，File 负责汇出图件。"
+    concept:
+      en: "The Picture window is the typesetting half of Praat: the Objects window and the editors produce the data, this window turns it into a figure a journal will accept."
+      zh: "Picture 窗口是 Praat 的排版那一半：Objects 窗口与编辑窗口产出资料，这个窗口把资料变成期刊肯收的图。"
+    pitfalls:
+      - {en: "Only File, Edit and Help are shared with the editor windows; Margins, World, Select, Pen and Font exist only here.", zh: "八个菜单里只有 File、Edit、Help 也出现在编辑窗口，Margins、World、Select、Pen、Font 只在这里有。"}
+      - {en: "The Picture window starts empty, so the menus look unresponsive until something has been plotted into it.", zh: "Picture 窗口一开始是空的，在有东西 Plot 进去之前，菜单看起来像没反应。"}
+    keywords: [picture menu bar, 图片窗口菜单, margins, world, pen, font, 排版, picture]
+
+  - id: sound-editor-menu-bar
+    aliases: ["Sound editor menu bar"]
+    control_types: [MenuItemControl]
+    title: {en: "The Sound editor menu bar", zh: "Sound 编辑窗口的菜单列"}
+    what:
+      en: "The twelve menus of the Sound editor: File, Edit, Time, Play, Sound, Analyses, Spectrogram, Pitch, Intensity, Formants, Pulses and Help."
+      zh: "Sound 编辑窗口的十二个菜单：File、Edit、Time、Play、Sound、Analyses、Spectrogram、Pitch、Intensity、Formants、Pulses、Help。"
+    how:
+      en: "Time and Play deal with the time axis and with hearing the sound, Sound with the waveform, Analyses with what is drawn, and each analysis menu with one analysis: Spectrogram, Pitch, Intensity, Formants, Pulses."
+      zh: "Time 与 Play 处理时间轴与试听，Sound 处理波形，Analyses 决定画面上画什么，而每个分析菜单各管一种分析：Spectrogram、Pitch、Intensity、Formants、Pulses。"
+    concept:
+      en: "The menu names are the concepts of phonetics: a spectrogram is a time-frequency view, a pitch contour is F0 over time, an intensity contour is energy over time, formants are the resonances of the vocal tract."
+      zh: "这些菜单名就是语音学的概念：频谱图是时频视图，基频曲线是随时间变化的 F0，强度曲线是随时间变化的能量，共振峰则是声道的共振。"
+    pitfalls:
+      - {en: "There is no TextGrid menu in the Sound editor; the TextGrid command is a button, not a menu item.", zh: "Sound 编辑窗口没有 TextGrid 菜单，开 TextGrid 的是一颗按钮，不是菜单项目。"}
+      - {en: "These menus exist only in the editor; the Objects window has Praat, New, Open, Save and Help instead.", zh: "这些菜单只存在于编辑窗口，Objects 窗口那边是 Praat、New、Open、Save、Help。"}
+    keywords: [sound editor menu, 声音编辑菜单, time, play, analyses, 频谱, 基频, 编辑窗口]
+
+  - id: textgrid-editor-menu-bar
+    aliases: ["TextGrid editor menu bar"]
+    control_types: [MenuItemControl]
+    title: {en: "The TextGrid editor menu bar", zh: "TextGrid 编辑窗口的菜单列"}
+    what:
+      en: "The menus of the TextGrid editor: File, Edit, TextGrid, Interval, Boundary, Tier, Spell, Time, Play and Help. They act on the tiers and on the text in them."
+      zh: "TextGrid 编辑窗口的菜单：File、Edit、TextGrid、Interval、Boundary、Tier、Spell、Time、Play、Help，作用的对象是层级与层里的文字。"
+    how:
+      en: "Boundary inserts and removes boundaries, Tier adds and removes tiers, Interval reads and edits the interval under the cursor, Spell checks the words against a lexicon."
+      zh: "Boundary 插入与删除边界，Tier 增删层级，Interval 读取与修改游标下的区间，Spell 用词库检查字词。"
+    concept:
+      en: "A TextGrid editor is a table with a time axis: the tiers are the rows, the boundaries are the separators between the cells, and the text is what you put in the cells."
+      zh: "TextGrid 编辑窗口是一张带时间轴的表：层级是列（栏），边界是格与格之间的分隔线，文字就是你填进格里的内容。"
+    pitfalls:
+      - {en: "Praat 6.4 has no Type menu here; the symbol you need is looked up in Help → Phonetic symbols.", zh: "Praat 6.4 这里没有 Type 菜单，需要的符号要在 Help → Phonetic symbols 里查。"}
+      - {en: "The menu names here differ from the Sound editor: in that window a boundary is added with Enter, not from a Boundary menu.", zh: "这里的菜单名与 Sound 编辑窗口不同：在那边加边界是按 Enter，不是从 Boundary 菜单来。"}
+    keywords: [textgrid menu bar, 文本网格菜单, boundary, tier, interval, spell, 标注]
+
+  - id: sound-editor-and-picture-window
+    aliases: ["Sound editor and Picture window"]
+    title: {en: "Sound editor or Picture window?", zh: "Sound 编辑窗口还是 Picture 窗口？"}
+    what:
+      en: "The two windows look similar but do different jobs: the Sound editor works with the sound itself, the Picture window works with a figure drawn from objects."
+      zh: "两个窗口看起来相似，工作内容却不同：Sound 编辑窗口处理声音本身，Picture 窗口处理由物件画成的图件。"
+    how:
+      en: "To measure something, stay in the Sound editor and use the Time, Pitch or Formants menus. To make a figure, use Plot in the Objects window and finish the job in the Picture window."
+      zh: "要量测就留在 Sound 编辑窗口，用 Time、Pitch 或 Formants 菜单；要做图就在 Objects 窗口点 Plot，再到 Picture 窗口完成。"
+    concept:
+      en: "The editor is where analysis happens and the numbers are trustworthy; the Picture window is where presentation happens, and the numbers have to be written on the axes by hand."
+      zh: "编辑窗口是分析发生的地方，数字才可靠；Picture 窗口是呈现的地方，数字得自己写在坐标轴上。"
+    pitfalls:
+      - {en: "You cannot select a time range in the Picture window: measuring there is impossible.", zh: "在 Picture 窗口里没法选取时间范围，要量测根本做不到。"}
+      - {en: "The Picture window is a child window like the editors, but it is not an editor: it has no cursor and no time axis.", zh: "Picture 窗口与编辑窗口同属子窗口，但它不是编辑窗口：没有游标，也没有时间轴。"}
+    keywords: [sound editor, picture window, 编辑窗口, 图片窗口, 差别, 量测]
+
+  # ------------------------------------------------------------------
+  # E. Inside the TextGrid editor
+  # ------------------------------------------------------------------
+  - id: textgrid-tier-structure
+    aliases: ["TextGrid tier structure"]
+    title: {en: "The tier structure of a TextGrid", zh: "TextGrid 的层级结构"}
+    what:
+      en: "A TextGrid holds one or more tiers. An interval tier holds segments that tile the whole time domain; a point tier holds events that have a time but no duration."
+      zh: "一个 TextGrid 含一层或多层。区间层放的是铺满整个时间范围的音段，点层放的是有时刻却没有时长的事件。"
+    how:
+      en: "Tier → Add interval tier... for phones, syllables or words, and Tier → Add point tier... for events such as release bursts. Name each tier after the level it carries."
+      zh: "音素、音节或词用 Tier → Add interval tier...，释爆这类事件用 Tier → Add point tier...，每一层按它承载的层级命名。"
+    concept:
+      en: "One tier per linguistic level is the standard design: a phone tier and a word tier over the same sound let you reuse one segmentation at two levels, and a word boundary inside a word shows up as one tier crossing another."
+      zh: "每个语言层级一层是标准做法：同一段声音上的音素层与词层，让你能在两个层级复用同一套切分；词界落在词中间时，就会显示成层与层的交错。"
+    pitfalls:
+      - {en: "An interval tier must cover the whole time domain; a TextGrid that stops early leaves audio with no tiers.", zh: "区间层必须覆盖整个时间范围，TextGrid 提早结束会让后面一段音讯没有层级。"}
+      - {en: "Putting a phone label in a point tier throws away its duration.", zh: "把音素标签放进点层，它的时长就丢掉了。"}
+      - {en: "Only one tier is active at a time, so a label can land in the wrong tier if you forget which one is active.", zh: "同一时间只有一层作用中，忘了当前是哪一层，标签就会打进错的层。"}
+    keywords: [tier structure, 层级结构, interval tier, point tier, 区间层, 点层, textgrid, 标注]
+
+  - id: textgrid-text-window
+    aliases: ["TextGrid text window"]
+    title: {en: "The white text window of the TextGrid editor", zh: "TextGrid 编辑窗口的白色文字窗"}
+    what:
+      en: "The text field at the top of the TextGrid editor. It shows the label of the interval or point under the cursor, and it is the only place where typing changes a label."
+      zh: "TextGrid 编辑窗口最上方的文字栏位，显示游标所在区间或点的标签，也是唯一能靠打字改变标签的地方。"
+    how:
+      en: "Click the interval you want to label, click into the white field, type, and press Enter. The tier updates as soon as you commit the text."
+      zh: "点要标注的区间，再点进白色栏位，打字后按 Enter，层级会立刻更新。"
+    pitfalls:
+      - {en: "Typing into the yellow boundary strip does nothing at all, which is the classic beginner trap.", zh: "在黄色边界条上打字完全没有作用，这是最经典的初学者陷阱。"}
+      - {en: "The field shows the label of whatever is under the cursor, so move the cursor first if the text looks wrong.", zh: "这个栏位显示的是游标下那个区间或点的标签，如果文字不对，先移动游标。"}
+    keywords: [text window, 文字窗, 打字, 标签, label, textgrid, 陷阱]
+
+  - id: textgrid-with-sound
+    aliases: ["TextGrid with Sound"]
+    title: {en: "Opening a TextGrid with its Sound", zh: "让 TextGrid 带着声音一起打开"}
+    what:
+      en: "Praat can show the TextGrid below the sound, so the waveform and the spectrogram stay visible while you type the labels."
+      zh: "Praat 可以把 TextGrid 显示在声音下方，让你打标签时波形与频谱图一直留在画面上。"
+    how:
+      en: "In the Objects list, click the TextGrid, hold Ctrl and click the Sound, then click View & Edit once. Praat opens one window with the sound above and the tiers below."
+      zh: "在 Objects 清单里点 TextGrid，按住 Ctrl 再点 Sound，然后点一次 View & Edit，Praat 会开一个窗口：上面是声音，下面是层级。"
+    concept:
+      en: "Segmentation is a hypothesis about the acoustics, so it has to be checked against them. Seeing both at once turns labelling from a memory task into a measurement task."
+      zh: "切分是对声学事件的假设，所以必须对照声学来检验。两者同时可见，标注才从凭记忆变成真正的量测。"
+    pitfalls:
+      - {en: "Only one View & Edit is needed; clicking it twice can open a second editor window with the sound alone.", zh: "只要按一次 View & Edit，按两次反而会多开一个只有声音的编辑窗口。"}
+      - {en: "Ctrl+click adds a second object; a plain click on the Sound replaces the selection.", zh: "按住 Ctrl 才是加选，直接点 Sound 会取代原本的选取。"}
+    keywords: [textgrid with sound, 声音与标注, ctrl, 双选, view and edit, 声学参照]
+
+  - id: extract-selected-textgrid
+    aliases: ["Extract selected TextGrid"]
+    control_types: [MenuItemControl]
+    title: {en: "Extract selected TextGrid", zh: "Extract selected TextGrid（取出标注）"}
+    what:
+      en: "Takes the annotation out of the TextGrid editor and puts it into the Objects list, where it becomes a TextGrid object of its own."
+      zh: "把标注从 TextGrid 编辑窗口取出来，放进 Objects 清单，成为一个独立的 TextGrid 物件。"
+    how:
+      en: "TextGrid → Extract selected TextGrid (preserve times) keeps the original absolute time axis; the (time from 0) variant shifts the whole grid to start at zero."
+      zh: "TextGrid → Extract selected TextGrid (preserve times) 保留原本的绝对时间轴；(time from 0) 这个版本则把整张网格平移到从 0 开始。"
+    concept:
+      en: "Extracting is how a careful annotation becomes a durable object: it can then be saved, inspected, measured or used in a script."
+      zh: "取出就是让用心的标注变成持久的物件：之后它可以被存档、被检视、被量测，也能写进脚本。"
+    pitfalls:
+      - {en: "Extracting does not save: the object in the list is fine, but the file on disk is still missing.", zh: "取出不等于存档：清单里的物件没问题，但硬盘上仍然没有档案。"}
+      - {en: "Extracting with time from 0 shifts every time reference, which breaks any comparison with the original recording.", zh: "用 time from 0 取出会让所有时间参照平移，与原始录音的任何对照都会错位。"}
+    keywords: [extract textgrid, 取出, textgrid, 物件, objects list, 时间轴]
+
+  # ------------------------------------------------------------------
+  # F. Tools inside the editor windows
+  # ------------------------------------------------------------------
+  - id: sound-editor-button-row
+    aliases: ["Sound editor button row"]
+    control_types: [ButtonControl]
+    title: {en: "The button row of the Sound editor", zh: "Sound 编辑窗口的按钮列"}
+    what:
+      en: "The row of small controls above the drawing area: the five zoom buttons (all, in, out, sel, bak) at the left and the Group checkbox on the right."
+      zh: "绘图区上方的一排小控制：左边是五个缩放按钮（all、in、out、sel、bak），右边是 Group 选框。"
+    how:
+      en: "Use the zoom buttons to change how much of the sound you see, and tick Group to tie this window to the other editors so they scroll and zoom together."
+      zh: "用缩放按钮决定看得到多少声音，勾选 Group 则把这个窗口与其他编辑窗口联结，让它们同步卷动与缩放。"
+    pitfalls:
+      - {en: "The TextGrid button is drawn by Praat on the canvas, so it does not behave like an ordinary Windows button.", zh: "TextGrid 按钮是 Praat 画在画布上的，行为与普通 Windows 按钮不同。"}
+      - {en: "The five zoom buttons change the time axis only; no analysis setting is touched by them.", zh: "五个缩放按钮只改变时间轴，不会动到任何分析设定。"}
+    keywords: [button row, 按钮列, zoom buttons, group, 编辑器, 缩放, 同步]
+
+  - id: editor-time-cursor
+    aliases: ["Time cursor"]
+    title: {en: "The time cursor", zh: "时间游标"}
+    what:
+      en: "The vertical line in the drawing area that marks one instant on the time axis. Every numeric reading in the editor is taken at that instant."
+      zh: "绘图区里标示时间轴上某一时刻的垂直线，编辑窗口里每一个数值都是在这一刻取的。"
+    how:
+      en: "Click in the drawing area to move the cursor, or place it at an exact time from the Time menu. Read values with F5 for pitch, F1 and F2 for formants, F6 for the cursor time and F8 for intensity."
+      zh: "在绘图区点击可以移动游标，也可以在 Time 菜单里把它放到精确时刻。按 F5 读基频、F1 与 F2 读共振峰、F6 读游标时刻、F8 读强度。"
+    concept:
+      en: "Because the cursor fixes the instant of measurement, moving it by one pixel changes the number. A measurement should always be reported together with the time it was taken at."
+      zh: "因为游标决定了量测的时刻，移动一个像素数值就变了，所以报告量测结果时要一并说明取值时刻。"
+    pitfalls:
+      - {en: "Moving the cursor after reading the value does not change the number you have already written down.", zh: "读完数值之后再移动游标，不会改变你已经记下的那个数。"}
+      - {en: "The cursor and the selection are different: some measurements are about the selection, not about the cursor.", zh: "游标与选区不同，有些量测是关于选区而不是关于游标。"}
+    keywords: [time cursor, 时间游标, 游标, cursor, f5, f6, 量测]
+
+  - id: editor-time-selection
+    aliases: ["Time selection"]
+    title: {en: "The time selection", zh: "时间选区"}
+    what:
+      en: "The shaded stretch of the sound between two selection marks. It is the unit that gets played, extracted, measured and copied."
+      zh: "两个选区记号之间被标示出来的一段声音，播放、取出、量测与复制都以它为单位。"
+    how:
+      en: "Drag in the drawing area to select, or type the numbers into the selection fields of the Time menu. Then play the selection, or extract it with Sound → Extract selected sound."
+      zh: "在绘图区拖曳可以选取，也可以在 Time 菜单的选区栏位输入数字，然后播放选区，或用 Sound → Extract selected sound 把它取出。"
+    concept:
+      en: "A selection is a hypothesis about where a phone or a word is, so its boundaries should be moved until they line up with the acoustic events you can see."
+      zh: "选区是你对某个音素或词位置的假设，所以边界应该移动到与你看得见的声学事件对齐为止。"
+    pitfalls:
+      - {en: "A rough selection is still played and measured exactly, so a bad selection gives confidently wrong numbers.", zh: "粗估的选区照样会被精确播放与量测，选区不准就会得到看起来很确定的错误数字。"}
+      - {en: "Extract with preserve times keeps the original time axis; time from 0 shifts everything to the start.", zh: "用 preserve times 取出会保留原本的时间轴，用 time from 0 则把所有时间平移到起点。"}
+    keywords: [time selection, 时间选区, 选区, selection, 拖曳, extract, 取出]
+
+  - id: sound-clipboard
+    aliases: ["Sound clipboard"]
+    title: {en: "The sound clipboard", zh: "声音剪贴簿"}
+    what:
+      en: "A place inside Praat that holds one fragment of a sound, ready to be pasted into another sound. It is separate from the Windows clipboard."
+      zh: "Praat 内部的一个位置，放着一段剪下的声音，随时可以贴到另一个声音里，它与 Windows 剪贴簿是分开的。"
+    how:
+      en: "Select a stretch of the sound, use Edit → Copy selection to Sound clipboard, then in the other sound choose one of the Edit menu's paste commands to put it after or over the selection."
+      zh: "先选取一段声音，用 Edit → Copy selection to Sound clipboard，再到另一个声音用 Edit 菜单里的贴上指令，把它贴在选区之后或选区之上。"
+    concept:
+      en: "Because it holds samples rather than text, it is the only way to move a fragment of audio between two Praat editors without going through a file."
+      zh: "因为它装的是样本而不是文字，所以这是把一段音讯在两个 Praat 编辑窗口之间搬动、而不用绕经档案的唯一办法。"
+    pitfalls:
+      - {en: "Ctrl+C in an editor does not put anything in the Windows clipboard, so pasting into a word processor gives you nothing.", zh: "编辑窗口里的 Ctrl+C 不会把东西放进 Windows 剪贴簿，所以贴进文字处理器是贴不出东西的。"}
+      - {en: "The sound clipboard holds one fragment at a time, so a second copy replaces the first.", zh: "声音剪贴簿一次只放一个片段，第二次复制会取代前一个。"}
+    keywords: [sound clipboard, 声音剪贴簿, copy, paste, 剪贴, 复制, 贴上]
+
+  - id: editor-analysis-menus
+    aliases: ["Analysis menus in the Sound editor"]
+    control_types: [MenuItemControl]
+    title: {en: "The five analysis menus", zh: "五个分析菜单"}
+    what:
+      en: "Spectrogram, Pitch, Intensity, Formants and Pulses are five menus with the same shape: each switches its own display on and off, opens its settings, and can read values at the cursor."
+      zh: "Spectrogram、Pitch、Intensity、Formants、Pulses 这五个菜单结构相同：各自切换自己的显示、打开自己的设定，也都能在游标处读值。"
+    how:
+      en: "Switch on the display you need, for example Pitch → Show pitch, and set the parameters first in Pitch settings... before you judge what you see."
+      zh: "打开你要的显示，例如 Pitch → Show pitch，并且在判断画面之前先在 Pitch settings... 里把参数设好。"
+    concept:
+      en: "These five displays are five views of one signal: energy over frequency and time, the dominant frequency, the total energy, the resonances of the vocal tract, and the instants of glottal closure."
+      zh: "这五种显示是同一段讯号的五个视图：时频上的能量、主导频率、总能量、声道的共振，以及声带闭合的瞬间。"
+    pitfalls:
+      - {en: "The display is computed live from the visible sound, so it is not the same thing as the Pitch or Formant object in the Objects list.", zh: "这些显示是从可见声音即时算出来的，与清单里的 Pitch 或 Formant 物件不是同一件事。"}
+      - {en: "A pitch range that does not contain the voice leaves the contour empty, which looks like missing data.", zh: "基频范围没有框住这个声音时曲线会全空，看起来像资料不见了。"}
+    keywords: [analysis menus, 分析菜单, spectrogram, pitch, intensity, formants, pulses, 显示]
+
+  # ------------------------------------------------------------------
+  # G. Working with several windows
+  # ------------------------------------------------------------------
+  - id: multiple-editor-windows
+    aliases: ["Several editor windows"]
+    title: {en: "Several editor windows at once", zh: "同时打开多个编辑窗口"}
+    what:
+      en: "Praat lets you keep several editors open at the same time, for example the sound on top and its TextGrid below, and each one keeps its own view."
+      zh: "Praat 允许同时开着好几个编辑窗口，例如上面是声音、下面是它的 TextGrid，每个窗口各自保留自己的视图。"
+    how:
+      en: "Open the Sound, then open the TextGrid, and both windows appear. Push Group in them to make them scroll and zoom together."
+      zh: "先开 Sound、再开 TextGrid，两个窗口都会出现。在两个窗口都按 Group，它们就会同步卷动与缩放。"
+    concept:
+      en: "Comparing a segmentation with the acoustics needs two views on the same sound; grouping removes the guesswork of keeping the time axis aligned by eye."
+      zh: "要把切分与声学对照，需要同一段声音的两个视图；Group 免去了用眼睛维持时间轴对齐的猜测。"
+    pitfalls:
+      - {en: "A grouped window cannot be edited; ungroup before cutting and pasting.", zh: "同步中的窗口不能编辑，要剪贴前先解除同步。"}
+      - {en: "Students often think the second window has frozen; it is simply showing the same time range.", zh: "学生常以为第二个窗口卡住了，其实它只是显示同一段时间。"}
+    keywords: [editor windows, 多个窗口, group, 同步, 对照, 比较]
+
+  - id: window-label-ambiguity
+    aliases: ["Same label, different window"]
+    title: {en: "The same label in different windows", zh: "同一个名称在不同窗口"}
+    what:
+      en: "Each Praat window has its own command table, so a label such as Play, File or Select means something slightly different depending on where it is."
+      zh: "Praat 的每个窗口都有自己的指令表，所以 Play、File、Select 这样的名称在不同窗口里意义略有不同。"
+    how:
+      en: "Check the title bar before you act: the Objects window, the Sound editor, the TextGrid editor and the Picture window each have their own File, Edit and Help."
+      zh: "动作之前先看标题列：Objects 窗口、Sound 编辑窗口、TextGrid 编辑窗口与 Picture 窗口各有自己的 File、Edit、Help。"
+    concept:
+      en: "This is why the manual repeats a command under every window that offers it: the same name is a different command in a different window, and a shortcut key follows the window that has the focus."
+      zh: "所以手册会在每个提供该指令的窗口下重复它：同名指令在不同窗口是不同的指令，快捷键则跟着有焦点的窗口走。"
+    pitfalls:
+      - {en: "Ctrl-O opens a file in the Objects window and zooms out in a sound window.", zh: "Ctrl-O 在 Objects 窗口是开档，在声音窗口是缩小。"}
+      - {en: "The Help menu of the Objects window and the Help menu of an editor open different pages of the manual.", zh: "Objects 窗口的 Help 与编辑窗口的 Help 打开的是手册里不同的页。"}
+    keywords: [same label, 名称, 不同窗口, 指令表, shortcut, 快捷键, 菜单]
+
+  - id: picture-window-viewports
+    aliases: ["Inner and outer viewport"]
+    title: {en: "The inner and the outer viewport", zh: "内视窗与外视窗"}
+    what:
+      en: "The Picture window has two drawing areas. The inner viewport holds the data described by the axes; the outer viewport is the surrounding margin where titles and captions go."
+      zh: "Picture 窗口有两个绘图区：内视窗放坐标轴所描述的资料，外视窗是周围的边栏，标题与说明放在那里。"
+    how:
+      en: "Select → Mouse selects inner viewport makes the mouse act on the data; the outer viewport is used for placing text and the frame around the figure."
+      zh: "Select → Mouse selects inner viewport 让鼠标作用在资料上；外视窗则用来放文字与图件四周的外框。"
+    concept:
+      en: "The split keeps the figure honest: text drawn in world coordinates stays attached to the data, while text in the outer margin stays where you put it."
+      zh: "这样的分工让图保持诚实：画在世界坐标里的文字会跟着资料走，画在外视窗里的文字则留在你放的位置。"
+    pitfalls:
+      - {en: "With the mouse set to the outer viewport, clicking in the middle of the figure does nothing and the window looks broken.", zh: "鼠标设定在外视窗时，点在图中央毫无反应，看起来像窗口坏了。"}
+      - {en: "It is the Select menu, not the Margins menu, that decides which viewport the mouse works on.", zh: "决定鼠标作用在哪一个视窗的是 Select 菜单，不是 Margins 菜单。"}
+    keywords: [viewport, 视窗, 内视窗, 外视窗, picture, 边栏, 图]

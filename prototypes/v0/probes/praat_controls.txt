@@ -1,0 +1,96 @@
+=== Praat Picture (PraatChildWindow1 Praat) ===
+WindowControl          Praat Picture
+PaneControl            form
+MenuBarControl         Application
+PaneControl            scrolledWindow
+MenuBarControl         System
+ButtonControl          Minimize
+ButtonControl          Maximize
+ButtonControl          Close
+MenuItemControl        File
+MenuItemControl        Edit
+MenuItemControl        Margins
+MenuItemControl        World
+MenuItemControl        Select
+MenuItemControl        Pen
+MenuItemControl        Font
+MenuItemControl        Help
+PaneControl            drawingArea
+ButtonControl          Column left
+ThumbControl           Position
+ButtonControl          Page right
+ButtonControl          Column right
+ButtonControl          Line up
+ButtonControl          Page down
+ButtonControl          Line down
+=== Praat Objects (PraatShell1 Praat) ===
+WindowControl          Praat Objects
+TextControl            Objects:
+ButtonControl          Rename...
+ButtonControl          Copy...
+ButtonControl          Inspect
+ButtonControl          Info
+ButtonControl          Remove
+MenuItemControl        Praat
+MenuItemControl        New
+MenuItemControl        Open
+MenuItemControl        Save
+=== menu: Praat ===
+MenuItem               About Praat
+MenuItem               New Praat script
+MenuItem               New Praat notebook
+MenuItem               Open Praat script...
+MenuItem               Open Praat notebook...
+MenuItem               Goodies
+MenuItem               Settings
+MenuItem               Technical
+MenuItem               Quit	Ctrl-Q
+=== menu: New ===
+MenuItem               Record mono Sound...	Ctrl-R
+MenuItem               Record stereo Sound...
+MenuItem               Sound
+MenuItem               Create TextGrid...
+MenuItem               Tiers
+MenuItem               Create Corpus...
+MenuItem               Tables
+MenuItem               Stats
+MenuItem               Generics
+MenuItem               Acoustic synthesis (Klatt)
+MenuItem               Articulatory synthesis
+MenuItem               Text-to-speech synthesis
+MenuItem               Constraint grammars
+MenuItem               Symmetric neural networks
+MenuItem               Feedforward neural networks
+=== menu: Open ===
+MenuItem               Read from file...	Ctrl-O
+MenuItem               Open long sound file...	Ctrl-L
+MenuItem               Read separate channels from sound file...
+MenuItem               Read from special sound file
+MenuItem               Read Table from tab-separated file...
+MenuItem               Read Table from comma-separated file...
+MenuItem               Read Table from semicolon-separated file...
+MenuItem               Read Table from whitespace-separated file...
+MenuItem               Read TableOfReal from headerless spreadsheet file...
+MenuItem               Read Matrix from raw text file...
+MenuItem               Read Strings from raw text file...
+MenuItem               Read from special tier file...
+=== menu: Help ===
+MenuItem               Praat Intro	Ctrl-Shift-?
+MenuItem               Objects window
+MenuItem               Frequently asked questions
+MenuItem               Types of objects
+MenuItem               Editors
+MenuItem               What’s new?
+MenuItem               Acknowledgments
+MenuItem               License
+MenuItem               Privacy and security
+MenuItem               Checking for updates?
+MenuItem               Reporting a problem?
+MenuItem               Formulas tutorial
+MenuItem               Scripting tutorial
+MenuItem               Functions
+MenuItem               Demo window
+MenuItem               Interoperability
+MenuItem               Programming
+MenuItem               Go to manual page...
+MenuItem               Search Praat manual...	Ctrl-M

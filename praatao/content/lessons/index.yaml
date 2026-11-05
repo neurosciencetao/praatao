@@ -1,0 +1,86 @@
+# Praatao — lesson pack index
+#
+# The numeric prefix in each file name is the teaching order; the `id`
+# field inside each lesson file matches its file stem, so a loader can
+# key on either one. See docs/13-content-guide.md for the conventions.
+
+version: 1
+
+lessons:
+  - id: 01-first-sound
+    file: 01-first-sound.yaml
+    order: 1
+    title: {en: "Your first sound", zh: "你的第一个声音"}
+    summary:
+      en: "Open a WAV file, understand the Objects window, and read the waveform in View & Edit."
+      zh: "读入一个 WAV 档案、认识 Objects 窗口，并在 View & Edit 里看懂波形。"
+    objective:
+      en: "By the end you can load a recording, explain why the Objects window's buttons change, and open the Sound editor."
+      zh: "结束时你能载入一段录音、说清楚 Objects 窗口的按钮为什么会变形，并打开声音编辑窗口。"
+    prerequisites: []
+    audience: [P0]
+
+  - id: 02-spectrogram
+    file: 02-spectrogram.yaml
+    order: 2
+    title: {en: "Reading a spectrogram", zh: "读频谱图"}
+    summary:
+      en: "Turn on a spectrogram, understand window length and dynamic range, and find the formants of a vowel."
+      zh: "打开频谱图、弄懂窗长与动态范围，并在元音上找到共振峰。"
+    objective:
+      en: "By the end you can set a spectrogram that is readable, explain what the window length trades off, and measure F1 and F2 in a vowel."
+      zh: "结束时你能调出可读的频谱图、说清楚窗长到底换取了什么，并在元音上量出 F1 与 F2。"
+    prerequisites: [01-first-sound]
+    audience: [P0]
+
+  - id: 03-pitch
+    file: 03-pitch.yaml
+    order: 3
+    title: {en: "Reading the pitch track", zh: "读基频曲线"}
+    summary:
+      en: "Show a pitch contour, set the F0 range for the speaker, and diagnose flat lines and octave errors."
+      zh: "显示基频曲线、为说话者设定 F0 范围，并诊断平线与八度跳错。"
+    objective:
+      en: "By the end you can pick an F0 floor and ceiling for a speaker and tell a flat line and an octave error apart from real intonation."
+      zh: "结束时你能为说话者选对 F0 上下限，并分辨平线、八度跳错与真正的语调变化。"
+    prerequisites: [01-first-sound]
+    audience: [P0, P1]
+
+  - id: 04-textgrid
+    file: 04-textgrid.yaml
+    order: 4
+    title: {en: "Annotating with a TextGrid", zh: "用 TextGrid 做标注"}
+    summary:
+      en: "Create a TextGrid, open it together with its sound, label segments, and avoid the four classic beginner traps."
+      zh: "建立 TextGrid、与声音一起打开、标出音段，并避开四个经典初学者陷阱。"
+    objective:
+      en: "By the end you can create a TextGrid with sensible tiers, label intervals by typing in the text window, and save the annotation as text."
+      zh: "结束时你能建立有合理层级的 TextGrid、在文字窗里标出音段，并把标注存成文字档。"
+    prerequisites: [01-first-sound]
+    audience: [P0, P1]
+
+  - id: 05-analysis-workflow
+    file: 05-analysis-workflow.yaml
+    order: 5
+    title: {en: "The everyday analysis workflow", zh: "日常分析流程"}
+    summary:
+      en: "Walk one recording through intensity, pitch and formants, and learn which parameter really changes the answer."
+      zh: "把一段录音依次做完强度、基频与共振峰，并弄懂哪个参数真的改变结果。"
+    objective:
+      en: "By the end you can produce an intensity contour, a pitch track and formant measurements, and you know what the pitch floor, the window length and the pre-emphasis actually trade off."
+      zh: "结束时你能做出强度曲线、基频曲线与共振峰测量，也知道基频下限、窗长与预加重各自换取了什么。"
+    prerequisites: [01-first-sound]
+    audience: [P0, P1]
+
+  - id: 06-batch-and-export
+    file: 06-batch-and-export.yaml
+    order: 6
+    title: {en: "Batch work and taking the results out", zh: "批量处理与导出结果"}
+    summary:
+      en: "Handle a folder of recordings with a Corpus, read the results into a Table, script the repetitive part, and export everything for R or Python."
+      zh: "用 Corpus 处理一整个资料夹，把结果读进 Table，用脚本做重复的部分，再把结果导出给 R 或 Python。"
+    objective:
+      en: "By the end you can build a Corpus from a folder, turn an analysis into a Table, run a Praat script, and export the numbers into a file that other tools can read."
+      zh: "结束时你能用资料夹建立 Corpus、把分析结果变成 Table、执行 Praat 脚本，并把数字导出成别的工具读得懂的文件。"
+    prerequisites: [01-first-sound]
+    audience: [P1, P2]

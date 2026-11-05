@@ -1,0 +1,1396 @@
+{
+  "tops": [
+    {
+      "hwnd": 791768,
+      "title": "Praat Picture",
+      "class": "PraatChildWindow1 Praat",
+      "pid": 150140
+    },
+    {
+      "hwnd": 3738320,
+      "title": "Praat Objects",
+      "class": "PraatShell1 Praat",
+      "pid": 150140
+    },
+    {
+      "hwnd": 727056,
+      "title": "2. Sound demo_vowel",
+      "class": "PraatChildWindow1 Praat",
+      "pid": 150140
+    },
+    {
+      "hwnd": 11208614,
+      "title": "Praat 友好界面与智能辅助 — DeepSeek Harness",
+      "class": "Chrome_WidgetWin_1",
+      "pid": 189832
+    },
+    {
+      "hwnd": 726808,
+      "title": "收件箱 - TAO, Ran [LST] - Outlook",
+      "class": "Outlook Host",
+      "pid": 13436
+    },
+    {
+      "hwnd": 2102692,
+      "title": "AP - File Explorer",
+      "class": "CabinetWClass",
+      "pid": 12500
+    },
+    {
+      "hwnd": 8717390,
+      "title": "This PC - File Explorer",
+      "class": "CabinetWClass",
+      "pid": 12500
+    },
+    {
+      "hwnd": 5837524,
+      "title": "262 - File Explorer",
+      "class": "CabinetWClass",
+      "pid": 12500
+    },
+    {
+      "hwnd": 23529806,
+      "title": "262 Batch 1 Interview Scoresheet from TAO Ran - File Explorer",
+      "class": "CabinetWClass",
+      "pid": 12500
+    },
+    {
+      "hwnd": 68110,
+      "title": "日历 - TAO, Ran [LST] - Outlook",
+      "class": "Outlook Host",
+      "pid": 13436
+    },
+    {
+      "hwnd": 1051810,
+      "title": "Downloads - File Explorer",
+      "class": "CabinetWClass",
+      "pid": 12500
+    },
+    {
+      "hwnd": 9771392,
+      "title": "Settings",
+      "class": "Windows.UI.Core.CoreWindow",
+      "pid": 181764
+    },
+    {
+      "hwnd": 2692758,
+      "title": "Settings",
+      "class": "ApplicationFrameWindow",
+      "pid": 22876
+    },
+    {
+      "hwnd": 2035028,
+      "title": "com.tencent.yuanbao-siw",
+      "class": "com.tencent.yuanbao-sic",
+      "pid": 21596
+    },
+    {
+      "hwnd": 131998,
+      "title": "Windows Input Experience",
+      "class": "Windows.UI.Core.CoreWindow",
+      "pid": 18344
+    },
+    {
+      "hwnd": 3414308,
+      "title": "CBS4943_L9.pptx - PowerPoint",
+      "class": "PPTFrameClass",
+      "pid": 177084
+    },
+    {
+      "hwnd": 33885514,
+      "title": "Grok Bot",
+      "class": "Chrome_WidgetWin_1",
+      "pid": 45384
+    },
+    {
+      "hwnd": 11732402,
+      "title": "Cursor Agents",
+      "class": "Chrome_WidgetWin_1",
+      "pid": 165368
+    },
+    {
+      "hwnd": 4723540,
+      "title": "s42003-025-08231-4.pdf and 22 more pages - School - Microsoft​ Edge",
+      "class": "Chrome_WidgetWin_1",
+      "pid": 190312
+    },
+    {
+      "hwnd": 132166,
+      "title": "ima",
+      "class": "Chrome_WidgetWin_1",
+      "pid": 15124
+    },
+    {
+      "hwnd": 198772,
+      "title": "WorkBuddy",
+      "class": "Chrome_WidgetWin_1",
+      "pid": 24216
+    },
+    {
+      "hwnd": 463710,
+      "title": "Todo清单",
+      "class": "Chrome_WidgetWin_1",
+      "pid": 117772
+    },
+    {
+      "hwnd": 131482,
+      "title": "Program Manager",
+      "class": "Progman",
+      "pid": 12500
+    }
+  ],
+  "trees": {
+    "791768": [
+      {
+        "depth": 0,
+        "type": "WindowControl",
+        "name": "Praat Picture",
+        "automation_id": "",
+        "hwnd": 791768,
+        "rect": [
+          1265,
+          0,
+          1903,
+          983
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 1,
+        "type": "PaneControl",
+        "name": "form",
+        "automation_id": "",
+        "hwnd": 2758606,
+        "rect": [
+          1273,
+          51,
+          1895,
+          975
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "PaneControl",
+        "name": "scrolledWindow",
+        "automation_id": "",
+        "hwnd": 2955568,
+        "rect": [
+          1275,
+          53,
+          1895,
+          975
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "ScrollBarControl",
+        "name": "",
+        "automation_id": "1",
+        "hwnd": 858656,
+        "rect": [
+          1275,
+          959,
+          1880,
+          975
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 4,
+        "type": "ButtonControl",
+        "name": "Column left",
+        "automation_id": "UpButton",
+        "hwnd": 0,
+        "rect": [
+          1275,
+          959,
+          1292,
+          975
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 4,
+        "type": "ThumbControl",
+        "name": "Position",
+        "automation_id": "ScrollbarThumb",
+        "hwnd": 0,
+        "rect": [
+          1292,
+          959,
+          1579,
+          975
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 4,
+        "type": "ButtonControl",
+        "name": "Page right",
+        "automation_id": "DownPageButton",
+        "hwnd": 0,
+        "rect": [
+          1579,
+          959,
+          1863,
+          975
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 4,
+        "type": "ButtonControl",
+        "name": "Column right",
+        "automation_id": "DownButton",
+        "hwnd": 0,
+        "rect": [
+          1863,
+          959,
+          1880,
+          975
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "ScrollBarControl",
+        "name": "",
+        "automation_id": "1",
+        "hwnd": 595134,
+        "rect": [
+          1879,
+          53,
+          1895,
+          960
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 4,
+        "type": "ButtonControl",
+        "name": "Line up",
+        "automation_id": "UpButton",
+        "hwnd": 0,
+        "rect": [
+          1879,
+          53,
+          1895,
+          70
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 4,
+        "type": "ThumbControl",
+        "name": "Position",
+        "automation_id": "ScrollbarThumb",
+        "hwnd": 0,
+        "rect": [
+          1879,
+          70,
+          1895,
+          728
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 4,
+        "type": "ButtonControl",
+        "name": "Page down",
+        "automation_id": "DownPageButton",
+        "hwnd": 0,
+        "rect": [
+          1879,
+          728,
+          1895,
+          943
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 4,
+        "type": "ButtonControl",
+        "name": "Line down",
+        "automation_id": "DownButton",
+        "hwnd": 0,
+        "rect": [
+          1879,
+          943,
+          1895,
+          960
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "PaneControl",
+        "name": "drawingArea",
+        "automation_id": "",
+        "hwnd": 12192942,
+        "rect": [
+          1276,
+          54,
+          2476,
+          1254
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 1,
+        "type": "TitleBarControl",
+        "name": "",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1289,
+          3,
+          1895,
+          31
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuBarControl",
+        "name": "System",
+        "automation_id": "MenuBar",
+        "hwnd": 0,
+        "rect": [
+          1273,
+          8,
+          1295,
+          30
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "MenuItemControl",
+        "name": "System",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1273,
+          8,
+          1295,
+          30
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "Minimize",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1756,
+          1,
+          1803,
+          31
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "Maximize",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1803,
+          1,
+          1849,
+          31
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "Close",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1849,
+          1,
+          1896,
+          31
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 1,
+        "type": "MenuBarControl",
+        "name": "Application",
+        "automation_id": "MenuBar",
+        "hwnd": 0,
+        "rect": [
+          1273,
+          31,
+          1895,
+          50
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuItemControl",
+        "name": "File",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1273,
+          31,
+          1305,
+          50
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuItemControl",
+        "name": "Edit",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1305,
+          31,
+          1339,
+          50
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuItemControl",
+        "name": "Margins",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1339,
+          31,
+          1396,
+          50
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuItemControl",
+        "name": "World",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1396,
+          31,
+          1442,
+          50
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuItemControl",
+        "name": "Select",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1442,
+          31,
+          1487,
+          50
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuItemControl",
+        "name": "Pen",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1487,
+          31,
+          1521,
+          50
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuItemControl",
+        "name": "Font",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1521,
+          31,
+          1559,
+          50
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuItemControl",
+        "name": "Help",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1856,
+          31,
+          1895,
+          50
+        ],
+        "offscreen": false
+      }
+    ],
+    "3738320": [
+      {
+        "depth": 0,
+        "type": "WindowControl",
+        "name": "Praat Objects",
+        "automation_id": "",
+        "hwnd": 3738320,
+        "rect": [
+          10,
+          0,
+          546,
+          739
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 1,
+        "type": "PaneControl",
+        "name": "form",
+        "automation_id": "",
+        "hwnd": 923592,
+        "rect": [
+          18,
+          51,
+          538,
+          731
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "TextControl",
+        "name": "Objects:",
+        "automation_id": "1",
+        "hwnd": 3283450,
+        "rect": [
+          21,
+          56,
+          288,
+          72
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ListControl",
+        "name": "Objects:",
+        "automation_id": "",
+        "hwnd": 2037840,
+        "rect": [
+          18,
+          77,
+          288,
+          625
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "ListItemControl",
+        "name": "1. Sound demo_vowel",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          19,
+          78,
+          287,
+          91
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "ListItemControl",
+        "name": "2. Sound demo_vowel",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          19,
+          91,
+          287,
+          104
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "Rename...",
+        "automation_id": "1",
+        "hwnd": 857704,
+        "rect": [
+          26,
+          641,
+          108,
+          661
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "Copy...",
+        "automation_id": "1",
+        "hwnd": 661594,
+        "rect": [
+          116,
+          641,
+          198,
+          661
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "Inspect",
+        "automation_id": "1",
+        "hwnd": 1251282,
+        "rect": [
+          26,
+          671,
+          108,
+          691
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "Info",
+        "automation_id": "1",
+        "hwnd": 5511360,
+        "rect": [
+          116,
+          671,
+          198,
+          691
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "Remove",
+        "automation_id": "1",
+        "hwnd": 12849418,
+        "rect": [
+          26,
+          701,
+          108,
+          721
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "Sound help",
+        "automation_id": "1",
+        "hwnd": 10688072,
+        "rect": [
+          298,
+          61,
+          533,
+          81
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "View & Edit",
+        "automation_id": "1",
+        "hwnd": 27791002,
+        "rect": [
+          298,
+          86,
+          533,
+          106
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "Play",
+        "automation_id": "1",
+        "hwnd": 19139360,
+        "rect": [
+          298,
+          111,
+          533,
+          131
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "PaneControl",
+        "name": "rowColumn",
+        "automation_id": "",
+        "hwnd": 10425696,
+        "rect": [
+          298,
+          136,
+          533,
+          160
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "ButtonControl",
+        "name": "     Draw  >",
+        "automation_id": "1",
+        "hwnd": 11670640,
+        "rect": [
+          300,
+          138,
+          531,
+          158
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "PaneControl",
+        "name": "rowColumn",
+        "automation_id": "",
+        "hwnd": 16848436,
+        "rect": [
+          298,
+          161,
+          533,
+          185
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "ButtonControl",
+        "name": "     Query  >",
+        "automation_id": "1",
+        "hwnd": 9639852,
+        "rect": [
+          300,
+          163,
+          531,
+          183
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "PaneControl",
+        "name": "rowColumn",
+        "automation_id": "",
+        "hwnd": 24842968,
+        "rect": [
+          298,
+          186,
+          533,
+          210
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "ButtonControl",
+        "name": "     Modify  >",
+        "automation_id": "1",
+        "hwnd": 7083852,
+        "rect": [
+          300,
+          188,
+          531,
+          208
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "PaneControl",
+        "name": "rowColumn",
+        "automation_id": "",
+        "hwnd": 10163410,
+        "rect": [
+          298,
+          211,
+          533,
+          235
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "ButtonControl",
+        "name": "     Annotate  >",
+        "automation_id": "1",
+        "hwnd": 8852590,
+        "rect": [
+          300,
+          213,
+          531,
+          233
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "PaneControl",
+        "name": "rowColumn",
+        "automation_id": "",
+        "hwnd": 9640140,
+        "rect": [
+          298,
+          236,
+          533,
+          260
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "ButtonControl",
+        "name": "     Analyse periodicity  >",
+        "automation_id": "1",
+        "hwnd": 13178124,
+        "rect": [
+          300,
+          238,
+          531,
+          258
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "PaneControl",
+        "name": "rowColumn",
+        "automation_id": "",
+        "hwnd": 15340602,
+        "rect": [
+          298,
+          261,
+          533,
+          285
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "ButtonControl",
+        "name": "     Analyse spectrum  >",
+        "automation_id": "1",
+        "hwnd": 16848642,
+        "rect": [
+          300,
+          263,
+          531,
+          283
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "To Intensity...",
+        "automation_id": "1",
+        "hwnd": 18422388,
+        "rect": [
+          298,
+          286,
+          533,
+          306
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "PaneControl",
+        "name": "rowColumn",
+        "automation_id": "",
+        "hwnd": 64620626,
+        "rect": [
+          298,
+          311,
+          533,
+          335
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "ButtonControl",
+        "name": "     Manipulate  >",
+        "automation_id": "1",
+        "hwnd": 9706390,
+        "rect": [
+          300,
+          313,
+          531,
+          333
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "PaneControl",
+        "name": "rowColumn",
+        "automation_id": "",
+        "hwnd": 12522920,
+        "rect": [
+          298,
+          336,
+          533,
+          360
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "ButtonControl",
+        "name": "     Convert  >",
+        "automation_id": "1",
+        "hwnd": 8722470,
+        "rect": [
+          300,
+          338,
+          531,
+          358
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "PaneControl",
+        "name": "rowColumn",
+        "automation_id": "",
+        "hwnd": 41422832,
+        "rect": [
+          298,
+          361,
+          533,
+          385
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "ButtonControl",
+        "name": "     Filter  >",
+        "automation_id": "1",
+        "hwnd": 12917094,
+        "rect": [
+          300,
+          363,
+          531,
+          383
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "PaneControl",
+        "name": "rowColumn",
+        "automation_id": "",
+        "hwnd": 7804122,
+        "rect": [
+          298,
+          386,
+          533,
+          410
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "ButtonControl",
+        "name": "     Combine  >",
+        "automation_id": "1",
+        "hwnd": 12129806,
+        "rect": [
+          300,
+          388,
+          531,
+          408
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 1,
+        "type": "TitleBarControl",
+        "name": "",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          34,
+          3,
+          538,
+          31
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuBarControl",
+        "name": "System",
+        "automation_id": "MenuBar",
+        "hwnd": 0,
+        "rect": [
+          18,
+          8,
+          40,
+          30
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "MenuItemControl",
+        "name": "System",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          18,
+          8,
+          40,
+          30
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "Minimize",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          399,
+          1,
+          446,
+          31
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "Maximize",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          446,
+          1,
+          492,
+          31
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "ButtonControl",
+        "name": "Close",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          492,
+          1,
+          539,
+          31
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 1,
+        "type": "MenuBarControl",
+        "name": "Application",
+        "automation_id": "MenuBar",
+        "hwnd": 0,
+        "rect": [
+          18,
+          31,
+          538,
+          50
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuItemControl",
+        "name": "Praat",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          18,
+          31,
+          59,
+          50
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuItemControl",
+        "name": "New",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          59,
+          31,
+          97,
+          50
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuItemControl",
+        "name": "Open",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          97,
+          31,
+          140,
+          50
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuItemControl",
+        "name": "Save",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          140,
+          31,
+          178,
+          50
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "MenuItemControl",
+        "name": "Help",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          499,
+          31,
+          538,
+          50
+        ],
+        "offscreen": false
+      }
+    ],
+    "11208614": [
+      {
+        "depth": 0,
+        "type": "WindowControl",
+        "name": "Praat 友好界面与智能辅助 — DeepSeek Harness",
+        "automation_id": "",
+        "hwnd": 11208614,
+        "rect": [
+          -8,
+          -8,
+          1928,
+          1040
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 1,
+        "type": "PaneControl",
+        "name": "",
+        "automation_id": "",
+        "hwnd": 14290760,
+        "rect": [
+          0,
+          0,
+          1920,
+          1032
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 1,
+        "type": "PaneControl",
+        "name": "Praat 友好界面与智能辅助 — DeepSeek Harness",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          0,
+          0,
+          1920,
+          1032
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 2,
+        "type": "PaneControl",
+        "name": "",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          0,
+          0,
+          1920,
+          1032
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 3,
+        "type": "PaneControl",
+        "name": "",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          0,
+          0,
+          1920,
+          1032
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 4,
+        "type": "PaneControl",
+        "name": "",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1783,
+          0,
+          1920,
+          40
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 5,
+        "type": "ButtonControl",
+        "name": "Minimize",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1783,
+          0,
+          1828,
+          40
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 5,
+        "type": "ButtonControl",
+        "name": "Maximize",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1828,
+          0,
+          1874,
+          40
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 5,
+        "type": "ButtonControl",
+        "name": "Restore",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1828,
+          0,
+          1874,
+          40
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 5,
+        "type": "ButtonControl",
+        "name": "Close",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          1874,
+          0,
+          1920,
+          40
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 4,
+        "type": "PaneControl",
+        "name": "",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          0,
+          0,
+          1920,
+          1032
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 5,
+        "type": "PaneControl",
+        "name": "",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          0,
+          0,
+          1920,
+          1032
+        ],
+        "offscreen": false
+      },
+      {
+        "depth": 6,
+        "type": "PaneControl",
+        "name": "",
+        "automation_id": "",
+        "hwnd": 0,
+        "rect": [
+          0,
+          0,
+          1920,
+          1032
+        ],
+        "offscreen": false
+      }
+    ]
+  }
+}

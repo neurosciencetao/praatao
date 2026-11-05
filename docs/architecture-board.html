@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Praatao 架构看板</title>
+<style>
+  :root{
+    --paper:#FDF6EC; --paper-2:#FFFDF8; --ink:#1F2933; --muted:#7A6A58;
+    --accent:#E8590C; --accent-soft:#FFE8CC; --line:#E7D9C4;
+    --ok:#2F7D4F; --warn:#B4690E; --cool:#3C6E9E;
+    --shadow:0 1px 2px rgba(31,41,51,.06), 0 8px 24px rgba(31,41,51,.06);
+    --mono:"Cascadia Mono","JetBrains Mono",Consolas,"Courier New",monospace;
+    --sans:"Microsoft YaHei UI","Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--paper); color:var(--ink); font-family:var(--sans);
+    font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1240px;margin:0 auto;padding:36px 28px 72px}
+
+  /* ---------- header ---------- */
+  header.top{
+    background:linear-gradient(135deg,#FFF9F0 0%, #FDF0DC 100%);
+    border:1px solid var(--line); border-top:4px solid var(--accent);
+    border-radius:16px; padding:28px 30px; box-shadow:var(--shadow);
+  }
+  .kicker{font-size:12px;letter-spacing:.14em;color:var(--accent);font-weight:700;text-transform:uppercase}
+  h1{margin:6px 0 4px;font-size:30px;line-height:1.25;font-weight:700}
+  .sub{margin:0;color:var(--muted);font-size:14px;max-width:76ch}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:22px}
+  .tile{background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+  .tile b{display:block;font-size:24px;line-height:1.2;font-weight:700;color:var(--accent)}
+  .tile span{font-size:12px;color:var(--muted)}
+
+  /* ---------- sections ---------- */
+  section{margin-top:34px}
+  h2{
+    font-size:19px;margin:0 0 4px;font-weight:700;display:flex;align-items:center;gap:10px;
+  }
+  h2::before{content:"";width:5px;height:19px;border-radius:3px;background:var(--accent)}
+  .note{margin:0 0 16px;color:var(--muted);font-size:13px;max-width:88ch}
+
+  .card{
+    background:var(--paper-2);border:1px solid var(--line);border-radius:14px;
+    padding:18px 20px;box-shadow:var(--shadow);
+  }
+  .grid{display:grid;gap:14px}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}
+
+  /* ---------- flow ---------- */
+  .flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+  .stage{
+    flex:1 1 190px;background:var(--paper-2);border:1px solid var(--line);
+    border-radius:12px;padding:14px 16px;position:relative;
+  }
+  .stage h3{margin:0 0 4px;font-size:14px;font-weight:700}
+  .stage p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.55}
+  .stage .cost{
+    display:inline-block;margin-top:9px;font-family:var(--mono);font-size:11.5px;
+    background:var(--accent-soft);color:#A3440A;border-radius:6px;padding:2px 7px;
+  }
+  .arrow{display:flex;align-items:center;justify-content:center;width:34px;color:var(--accent);font-size:20px;font-weight:700}
+
+  /* ---------- module cards ---------- */
+  .mod h3{margin:0 0 2px;font-size:15px;font-weight:700}
+  .mod .file{font-family:var(--mono);font-size:11.5px;color:var(--accent);word-break:break-all}
+  .mod p{margin:8px 0 0;font-size:13px;line-height:1.6}
+  .mod ul{margin:9px 0 0;padding-left:18px;font-size:12.5px;color:var(--muted)}
+  .mod li{margin:2px 0}
+  .badge{
+    display:inline-block;font-size:11px;border-radius:999px;padding:1px 9px;margin-left:8px;
+    vertical-align:middle;font-weight:600;
+  }
+  .b-hot{background:#FFE0E0;color:#A32020}
+  .b-cold{background:#E2EEF8;color:#2C5C88}
+  .b-data{background:#E6F3E8;color:#26693F}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.04em}
+  td code, code{font-family:var(--mono);font-size:12px;background:#F6EEE2;padding:1px 5px;border-radius:4px}
+  tr:last-child td{border-bottom:none}
+
+  .rule{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px dashed var(--line)}
+  .rule:last-child{border-bottom:none}
+  .rule .mark{
+    flex:0 0 26px;height:26px;border-radius:8px;background:var(--accent-soft);color:#A3440A;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;
+  }
+  .rule b{font-size:13.5px}
+  .rule p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+
+  .keys{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .key{background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:7px 11px;font-size:12.5px}
+  .key b{font-family:var(--mono);color:var(--accent)}
+  .key span{color:var(--muted)}
+
+  .cmd{font-family:var(--mono);font-size:12.5px;background:#22303C;color:#E8EEF4;border-radius:10px;padding:14px 16px;overflow:auto;line-height:1.75;white-space:pre-wrap}
+  .cmd .c{color:#8FA6BC}
+  .cmd .p{color:#F0C987}
+
+  footer{margin-top:38px;color:var(--muted);font-size:12.5px;text-align:center;line-height:1.8}
+  @media print{body{background:#fff}.card,header.top{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="kicker">Praatao · 架构看板</div>
+    <h1>悬停即懂的 Praat 助教</h1>
+    <p class="sub">一条鼠标 → 传感 → 讲解 → 浮层的流水线，外加一条把 Praat 的界面翻译成中文双语的离线知识库。整个程序只做一件事：你在 Praat 里停住鼠标，它就告诉你这个按钮是干什么的。</p>
+    <div class="tiles">
+      <div class="tile"><b>288</b><span>知识库条目（中英双语）</span></div>
+      <div class="tile"><b>352</b><span>可查找的界面标签</span></div>
+      <div class="tile"><b>6</b><span>课程包（49 步）</span></div>
+      <div class="tile"><b>264</b><span>自动化测试</span></div>
+      <div class="tile"><b>312 ms</b><span>悬停到出卡片（实测中位数）</span></div>
+      <div class="tile"><b>5.5 %</b><span>空闲时的 CPU 占用</span></div>
+      <div class="tile"><b>6.4.12</b><span>实测通过的 Praat 版本</span></div>
+      <div class="tile"><b>0</b><span>需要联网的环节（关掉模型时）</span></div>
+    </div>
+  </header>
+
+  <section>
+    <h2>一次悬停，数据怎么流动</h2>
+    <p class="note">热路径必须快到「感觉不到它在工作」。下面是鼠标停在某个按钮上时，数据的四个阶段与实测耗时。</p>
+    <div class="flow">
+      <div class="stage">
+        <h3>1 · 鼠标</h3>
+        <p>10 毫秒轮询一次指针位置，只有「位置真的变了」才继续往下走。</p>
+        <span class="cost">10 ms 轮询</span>
+      </div>
+      <div class="arrow">→</div>
+      <div class="stage">
+        <h3>2 · 传感器</h3>
+        <p>UI Automation 命中测试，拿到控件名字、类型与精确矩形；菜单开着时直接读菜单自己的树。</p>
+        <span class="cost">6 ms 命中测试（实测）</span>
+      </div>
+      <div class="arrow">→</div>
+      <div class="stage">
+        <h3>3 · 讲解</h3>
+        <p>先查本地知识库（O(1) 索引）；查不到才请大模型，并把窗口、选中物件、时长与采样率一起给它。</p>
+        <span class="cost">0.01 ms 本地 / 2 s 模型</span>
+      </div>
+      <div class="arrow">→</div>
+      <div class="stage">
+        <h3>4 · 浮层</h3>
+        <p>卡片浮在控件旁边，绝不盖住控件本身；不抢焦点（SWP_NOACTIVATE）。</p>
+        <span class="cost">6 ms 绘制（实测）</span>
+      </div>
+    </div>
+    <p class="note">总耗时 = 停留 280 毫秒（等学生把指针稳住）＋ 实做 9 毫秒 = <b>312 毫秒</b>。改之前是 380 毫秒，最坏的一轮要 2.6 秒（撞上 Praat 执行脚本）。数字来自 <code>prototypes/v1/experiments/perf_probe.py</code>，方法写在 <code>docs/15-performance.md</code>。</p>
+  </section>
+
+  <section>
+    <h2>七个模块，各管一件事</h2>
+    <p class="note">每个模块只做一件事，而且可以单独测试。代码量最大的地方是传感器，因为 Windows 的界面没有别的入口。</p>
+    <div class="grid g3">
+      <div class="card mod">
+        <h3>传感器<span class="badge b-hot">热路径</span></h3>
+        <div class="file">praatao/sensors/uia.py</div>
+        <p>读 Praat 的界面：控件树、命中测试、菜单枚举、窗口激活。</p>
+        <ul>
+          <li>只碰「前台就是 Praat」的时候（见护栏）</li>
+          <li>菜单开着时读菜单自己的树，不做命中测试</li>
+          <li>窗口激活用 AttachThreadInput 绕过前台锁</li>
+        </ul>
+      </div>
+      <div class="card mod">
+        <h3>语义探针<span class="badge b-cold">冷路径</span></h3>
+        <div class="file">praatao/sensors/praat_state.py</div>
+        <p>读 Praat「里面」有什么：物件清单、选中对象、TextGrid 层级。用 Praat 自己的脚本通道。</p>
+        <ul>
+          <li>脚本会激活 Praat 窗口，所以只在空闲且前台时发</li>
+          <li>发完会关掉打开中的菜单，所以频率压到 8 秒一次</li>
+          <li>版本号读执行文件的版本资源，不启动第二个 Praat</li>
+        </ul>
+      </div>
+      <div class="card mod">
+        <h3>知识库<span class="badge b-data">数据</span></h3>
+        <div class="file">praatao/tutor/kb.py · praatao/content/</div>
+        <p>288 条中英双语条目，加载成索引后按最长标签匹配。查不到就安静，不猜。</p>
+        <ul>
+          <li>elements.yaml 主档案 + elements/ 五个分片</li>
+          <li>lessons/ 六个课程包，按 Praat 状态自动前进</li>
+          <li>tools/check_elements.py 与 check_lessons.py 负责体检</li>
+        </ul>
+      </div>
+      <div class="card mod">
+        <h3>讲解器</h3>
+        <div class="file">praatao/tutor/advisor.py · llm.py</div>
+        <p>把「控件 + 当前情境」变成一段话。本地知识库优先，大模型是补充。</p>
+        <ul>
+          <li>提示词带窗口名、选中物件、层级、声学属性</li>
+          <li>模型可关：关掉后完全离线</li>
+          <li>绘图区截图默认不外传</li>
+        </ul>
+      </div>
+      <div class="card mod">
+        <h3>界面层</h3>
+        <div class="file">praatao/ui/qt/ · praatao/ui/</div>
+        <p>悬浮卡、高亮光环、侧栏、设置窗口、托盘图标。PySide6 为主，Tk 为备援。</p>
+        <ul>
+          <li>卡片永远不盖住它解释的控件</li>
+          <li>抬窗用 SWP_NOACTIVATE，绝不抢焦点</li>
+          <li>Tk 与 Qt 两套界面行为一致</li>
+        </ul>
+      </div>
+      <div class="card mod">
+        <h3>启动器</h3>
+        <div class="file">praatao/launcher.py · tools/packaging/</div>
+        <p>让初学者双击一次就能用：没有命令行窗口，Praat 自动就位，有欢迎提示。</p>
+        <ul>
+          <li>打包成单个可执行文件（PyInstaller，无控制台）</li>
+          <li>Praat 没开就开它并置前</li>
+          <li>托盘图标里放侧栏、设置、退出</li>
+        </ul>
+      </div>
+      <div class="card mod">
+        <h3>离线出图<span class="badge b-data">数据</span></h3>
+        <div class="file">praatao/figures.py · praatao/figures/</div>
+        <p>用 Parselmouth（Praat 自己的 C/C++ 程式码）离线画出教学用的波形、频谱图、基频、共振峰与强度曲线。</p>
+        <ul>
+          <li>不碰正在跑的 Praat，也不会抢焦点</li>
+          <li>颜色沿用工具的配色，900×450，够大能看清</li>
+          <li>同一套程式码也用来核对知识库里的数字</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid g2">
+    <div class="card">
+      <h2 style="font-size:16px">热路径：每一次悬停都跑</h2>
+      <table>
+        <tr><th>做什么</th><th>多久</th><th>为什么是这个频率</th></tr>
+        <tr><td>指针轮询</td><td><code>10 ms</code></td><td>要跟得上快速移动，也要省电</td></tr>
+        <tr><td>命中测试</td><td><code>6 ms</code></td><td>只在指针真的动了之后才做</td></tr>
+        <tr><td>知识库查找</td><td><code>0.01 ms</code></td><td>索引查表，不遍历</td></tr>
+        <tr><td>卡片绘制</td><td><code>6 ms</code></td><td>先量好高度再画，阴影位图缓存</td></tr>
+        <tr><td>轻量状态刷新</td><td><code>0.9 s</code></td><td>只读界面，不发脚本</td></tr>
+        <tr><td>空闲时的 CPU</td><td><code>5.5 %</code></td><td>优化前是 14.8 %，会让人觉得机器在发热</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h2 style="font-size:16px">冷路径：偶尔才做</h2>
+      <table>
+        <tr><th>做什么</th><th>多久</th><th>为什么这么少</th></tr>
+        <tr><td>语义探针（发脚本）</td><td><code>8 s</code></td><td>脚本会激活 Praat，也会关掉打开的菜单</td></tr>
+        <tr><td>大模型回答</td><td><code>~2 s</code></td><td>迟到就迟到，卡片会就地补上</td></tr>
+        <tr><td>AI 配图</td><td><code>~20 s</code></td><td>可选，而且默认关闭</td></tr>
+        <tr><td>绘图区截图</td><td><code>&lt;80 ms</code></td><td>只在指针停在画布上时抓</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>内容流水线</h2>
+    <p class="note">知识不是写死在程序里的，是一份可检查的数据。每次改内容都要过体检脚本。</p>
+    <div class="flow">
+      <div class="stage">
+        <h3>核对真标签</h3>
+        <p>对着真的 Praat 6.4.12 逐个标签核对，不凭记忆写。</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="stage">
+        <h3>写 YAML 分片</h3>
+        <p>一个主题一个文件，中英双语，长度有上限。</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="stage">
+        <h3>合并与体检</h3>
+        <p>merge_elements.py 合并，check_elements.py 查别名重复与缺中文。</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="stage">
+        <h3>装载与匹配</h3>
+        <p>最长标签优先，匹配不到就安静。</p>
+      </div>
+    </div>
+    <p class="note">还有一道更严的关：知识库里每个数字（75 Hz、2e-5 Pa、每 1000 Hz 一个共振峰）都用 <b>Parselmouth</b> 重算过一遍。那是 Praat 自己的 C/C++ 程式码，算出来的就是 Praat 会印出来的数字。这一关抓出 8 条写错的说法，全部改好了。方法见 <code>docs/17-parselmouth-checks.md</code>。</p>
+  </section>
+
+  <section class="grid g2">
+    <div class="card">
+      <h2 style="font-size:16px">悬浮卡片的六层</h2>
+      <p style="margin:0 0 8px;font-size:13px;color:var(--muted)">卡片是学生真正会读的东西，所以层次按 VS Code、IntelliJ、Raycast 的做法重做了一遍：靠字重与位置分层，不用颜色分层。</p>
+      <table>
+        <tr><th>层</th><th>作用</th></tr>
+        <tr><td>标题</td><td>唯一的重字，橙色 14px</td></tr>
+        <tr><td>现在</td><td>新增：此刻的现场信息（已选中哪个物件）</td></tr>
+        <tr><td>这是什么</td><td>一句话</td></tr>
+        <tr><td>怎么用</td><td>一条短话，不是一串步骤</td></tr>
+        <tr><td>概念</td><td>背后的原理</td></tr>
+        <tr><td>常见坑</td><td>真正的项目符号列表，可扫读</td></tr>
+        <tr><td>页脚</td><td>来源：本地知识库，还是大模型</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h2 style="font-size:16px">卡片的三条规矩</h2>
+      <div class="rule"><div class="mark">1</div><div><b>不盖住它解释的控件</b><p>卡片放在控件旁边 16 像素；放不下就翻到左边；再不行才挪到下方。</p></div></div>
+      <div class="rule"><div class="mark">2</div><div><b>中文当中文排</b><p>微软雅黑 UI 字体栈，正文 13 像素、行高 1.56，一行不超过 28 个汉字。</p></div></div>
+      <div class="rule"><div class="mark">3</div><div><b>内容变了不跳</b><p>列宽固定，迟到的模型答案让卡片往下长高，顶边不动。</p></div></div>
+      <p class="note" style="margin-top:12px">重做之后卡片绘制快了 2.5 倍（中位数 1.7 到 4 毫秒），笔记见 <code>docs/16-card-design.md</code>。</p>
+    </div>
+  </section>
+
+  <section class="grid g2">
+    <div class="card">
+      <h2 style="font-size:16px">入口与快捷键</h2>
+      <p style="margin:0 0 8px;font-size:13px;color:var(--muted)">双击桌面上的「Praatao 助教」：Praat 自动就位，没有命令行窗口，右下角有一句欢迎语，托盘图标里是全部控制。</p>
+      <div class="keys">
+        <div class="key"><b>Ctrl+Alt+P</b> <span>侧栏</span></div>
+        <div class="key"><b>Ctrl+Alt+N</b> <span>下一步</span></div>
+        <div class="key"><b>Ctrl+Alt+R</b> <span>重开课程</span></div>
+        <div class="key"><b>Ctrl+Alt+Q</b> <span>提问</span></div>
+        <div class="key"><b>Ctrl+Alt+S</b> <span>设置</span></div>
+        <div class="key"><b>Ctrl+Alt+H</b> <span>隐藏浮层</span></div>
+        <div class="key"><b>Ctrl+Alt+X</b> <span>退出</span></div>
+        <div class="key"><b>F1</b> <span>固定卡片</span></div>
+        <div class="key"><b>Esc</b> <span>关掉卡片</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 style="font-size:16px">护栏：不能被破坏的规矩</h2>
+      <div class="rule"><div class="mark">1</div><div><b>Praat 不能抢键盘</b><p>只有当 Praat 是前台应用时，讲解层才碰它：不做命中测试、不抓图、不发脚本。</p></div></div>
+      <div class="rule"><div class="mark">2</div><div><b>Praat 在后台就不出声</b><p>学生跑到别的程序去了，卡片就收起来。判断靠的是「前台窗口属不属于 Praat.exe」，不是看标题：别的程序也可能叫「Praat 什么」。</p></div></div>
+      <div class="rule"><div class="mark">3</div><div><b>打开的菜单不能被抢走</b><p>菜单开着时只读菜单自己的树，绝不做命中测试，也不发脚本。</p></div></div>
+      <div class="rule"><div class="mark">4</div><div><b>对话框盖住绘图区时，讲对话框</b><p>模态对话框（例如「Formant settings」）压在图画上面时，指针下面就是对话框里的控件，不是背后的波形。</p></div></div>
+      <div class="rule"><div class="mark">5</div><div><b>没把握就不出声</b><p>标签没有对着真的 Praat 核对过的控件，讲解层宁可沉默，也不编一个解释。</p></div></div>
+      <div class="rule"><div class="mark">6</div><div><b>隐私由学生决定</b><p>大模型、绘图区截图都可以在设置窗口里关掉；关掉之后完全离线。</p></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>怎么跑、怎么测、怎么改</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3 style="margin:0 0 8px;font-size:14px">日常</h3>
+        <div class="cmd"><span class="c"># 打包（第一次要几分钟）</span>
+python tools\packaging\build.py
+<span class="c"># 重建桌面快捷方式</span>
+python tools\make_shortcut.py --start-menu
+<span class="c"># 开发时直接跑</span>
+python run.py</div>
+      </div>
+      <div class="card">
+        <h3 style="margin:0 0 8px;font-size:14px">检查</h3>
+        <div class="cmd"><span class="c"># 全部测试</span>
+python -m unittest discover -s tests
+<span class="c"># 内容体检</span>
+python tools\check_elements.py
+python tools\check_lessons.py
+<span class="c"># 验收截图</span>
+python prototypes\v1\acceptance_capture.py</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Praatao · 架构看板 · 2026-11-05 · 数字都来自这台机器上的实测<br>
+    离线知识库 288 条 · 课程包 6 个 · 自动化测试 264 项 · 未做任何 git 提交
+  </footer>
+</div>
+</body>
+</html>

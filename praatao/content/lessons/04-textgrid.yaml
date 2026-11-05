@@ -1,0 +1,105 @@
+# Praatao lesson pack 4 — TextGrid: tiers, boundaries, and the traps that catch everybody
+
+version: 1
+id: 04-textgrid
+file: 04-textgrid.yaml
+title: {en: "Annotating with a TextGrid", zh: "用 TextGrid 做标注"}
+summary:
+  en: "Create a TextGrid, open it together with its sound, label segments, and avoid the four classic beginner traps."
+  zh: "建立 TextGrid、与声音一起打开、标出音段，并避开四个经典初学者陷阱。"
+prerequisites: [01-first-sound]
+
+steps:
+  - id: create-textgrid
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: false
+    highlight: {kind: menu, path: ["Annotate", "To TextGrid..."]}
+    tip: {en: "Annotate → To TextGrid…", zh: "Annotate → To TextGrid...（建立 TextGrid）"}
+    detail:
+      en: "With the Sound selected, **Annotate → To TextGrid…** creates an empty annotation grid over exactly the same time domain as the sound. The dialog asks for the tier names and for which of them to be point tiers: an **interval tier** holds segments that last a while (phones, syllables, words), a **point tier** holds events that happen at an instant (a release burst, a word boundary). The grid starts empty; nothing is transcribed for you."
+      zh: "选中 Sound 后，**Annotate → To TextGrid...** 会在与声音完全相同的时间范围上建立一个空的标注网格。对话框会问层级名称，以及哪些层是点层：**区间层**放持续一段时间的音段（音素、音节、词），**点层**放发生在某一瞬间的事件（释爆点、词界）。网格一开始是空的，不会帮你转写。"
+
+  - id: select-both-objects
+    detect:
+      object_types_present: ["Sound", "TextGrid"]
+      selected_types: []
+      editor_open: false
+    highlight: {kind: list, name: "Objects:"}
+    tip: {en: "Ctrl+click the Sound as well as the TextGrid", zh: "Ctrl+click 同时选中 Sound 与 TextGrid"}
+    detail:
+      en: "This is the step that trips up nearly everybody. Select the TextGrid, then **Ctrl+click the Sound** so that both rows are highlighted, and only then press **View & Edit**. With both selected, Praat opens one window that shows the waveform and spectrogram above and the tiers below, so you can see whether a boundary you place actually lands on an acoustic event."
+      zh: "这一步几乎人人都会出错。先选中 TextGrid，再 **Ctrl+click 选中 Sound**，让两列都呈选取状态，然后才按 **View & Edit**。两个都选中时，Praat 打开的是同一个窗口：上面是波形与频谱图，下面是层级，你能检查自己标的边界是否真的落在声学事件上。"
+
+  - id: open-the-editor
+    detect:
+      object_types_present: ["Sound", "TextGrid"]
+      selected_types: ["Sound", "TextGrid"]
+      editor_open: false
+    highlight: {kind: button, name: "View & Edit"}
+    tip: {en: "One click, both objects", zh: "按一次，两个物件一起进来"}
+    detail:
+      en: "Praat opens the TextGrid editor with the sound attached above the tiers. If you only see the tiers and no waveform, you selected the TextGrid alone; go back, Ctrl+click the Sound and press View & Edit again. At the very top of the window there is a white text field: that field, not the tiers themselves, is where labels are typed."
+      zh: "Praat 打开的 TextGrid 编辑窗口，声音就在层级的上方。如果你只看到层级、没有波形，那就是你只选了 TextGrid；请回去，Ctrl+click 选中 Sound 之后再按一次 View & Edit。窗口最上方有一个白色文字栏位：标签要打在那里，而不是打在层级上。"
+
+  - id: add-boundaries
+    detect:
+      object_types_present: ["Sound", "TextGrid"]
+      selected_types: ["Sound", "TextGrid"]
+      editor_open: true
+    highlight: {kind: menu, path: ["Boundary", "Add on selected tier"]}
+    tip: {en: "Put the cursor, then add a boundary (Enter)", zh: "游标放好，再新增边界（Enter）"}
+    detail:
+      en: "Click in the waveform to place the time cursor on the acoustic event you want to mark, then insert a boundary with **Boundary → Add on selected tier** or simply with **Enter**. The boundary appears in the yellow strip and splits the interval above it. Ctrl-F1 to Ctrl-F8 add a boundary on a specific tier and Ctrl-F9 adds one on every tier at the same moment, which is how you mark an event that cuts across all your levels."
+      zh: "在波形上点一下，把时间游标放到你想标记的声学事件上，再用 **Boundary → Add on selected tier** 插入边界，或者直接按 **Enter**。边界会出现在黄色条上，并把上方的区间一分为二。Ctrl-F1 到 Ctrl-F8 可以在指定层新增，Ctrl-F9 则在所有层同时新增，用来标记横跨各层级的事件。"
+
+  - id: type-the-label
+    detect:
+      object_types_present: ["Sound", "TextGrid"]
+      selected_types: ["Sound", "TextGrid"]
+      editor_open: true
+    highlight: {kind: button, name: "TextGrid toolbar"}
+    tip: {en: "Type in the white box at the top, not in the yellow tier", zh: "打在顶部的白框里，不要打在黄色层上"}
+    detail:
+      en: "Select the interval you want to label, and the text field at the top of the editor shows its current content; type and the tier updates immediately. Typing directly into the yellow boundary strip does nothing, and students regularly conclude that Praat has frozen. If the IPA symbols come out as little boxes, look them up in **Help → Phonetic symbols** and paste them in, or switch the font in **TextGrid → TextGrid settings…**."
+      zh: "选中要标注的区间，编辑窗口上方的文字栏位会显示它目前的内容；直接打字，层级会立刻更新。直接打在黄色的边界条上没有任何作用，学生常常因此以为 Praat 卡住了。如果 IPA 符号显示成小方块，可以在 **Help → Phonetic symbols** 查到再贴进来，或在 **TextGrid → TextGrid settings…** 里换字型。"
+
+  - id: build-the-tiers
+    detect:
+      object_types_present: ["Sound", "TextGrid"]
+      selected_types: ["Sound", "TextGrid"]
+      editor_open: true
+    highlight: {kind: menu, path: ["Tier", "Add interval tier..."]}
+    tip: {en: "One tier per linguistic level", zh: "每个语言层级各有一层"}
+    detail:
+      en: "A usable annotation has one tier per level: phone boundaries in one interval tier, syllables or words in another, events such as a release burst in a point tier. Adding a tier is done from the **Tier** menu, and new tiers appear at the top, so the tier you were working on moves down and its number changes. Keep the names short, because a long name eats the horizontal space you need for the labels, and use **Tier → Rename tier…** to fix a name afterwards."
+      zh: "一份好用的标注，每个层级各占一层：音素边界放一个区间层，音节或词放另一层，释爆点这类事件放点层。加层用 **Tier** 菜单，新层会出现在最上方，你原本在处理的那层会往下移、编号也跟着变。层名要短，太长的名字会吃掉标注需要的横向空间；要改名字就用 **Tier → Rename tier…**。"
+
+  - id: watch-the-boundary-tier
+    detect:
+      object_types_present: ["Sound", "TextGrid"]
+      selected_types: ["Sound", "TextGrid"]
+      editor_open: true
+    highlight: {kind: button, name: "Boundary tier"}
+    tip: {en: "The yellow strip shows the segmentation, it does not take text", zh: "黄色条显示切分，它不接收文字"}
+    detail:
+      en: "The narrow yellow strip is the boundary tier: it displays where the boundaries of the interval tier above it fall, and you drag the handles there to adjust them. It is a working area, not a text field. Also remember that only one tier is active at a time, shown in red with a pointing hand, and it is the active tier that receives your labels and your new boundaries."
+      zh: "那条窄窄的黄色条就是边界层：它显示上方区间层的边界落点，你要调整边界就拖那里的把手。它是工作区，不是文字栏位。另外要记住同一时间只有一层是作用中的，它会以红色显示并带一只手指；你的标签与新边界都会进入当前作用的那一层。"
+
+  - id: save-the-annotation
+    detect:
+      object_types_present: ["Sound", "TextGrid"]
+      selected_types: ["Sound", "TextGrid"]
+      editor_open: true
+    highlight: {kind: menu, path: ["File", "Save TextGrid as text file..."]}
+    tip: {en: "Save the annotation as text", zh: "把标注存成文字档"}
+    detail:
+      en: "Use **File → Save TextGrid as text file…** in the editor (or select the TextGrid and use Save → Save as text file… in the Objects window). The result is a plain text file that any annotation tool can read, and it is the only version of your work that survives if Praat is closed without asking. Note that saving the annotation does not save the audio: they are two separate objects."
+      zh: "在编辑窗口用 **File → Save TextGrid as text file…**（或在 Objects 窗口选中 TextGrid 后用 Save → Save as text file…）。结果是任何标注工具都读得懂的纯文字档，而且如果 Praat 在没询问的情况下被关掉，这是你工作唯一能存活下来的版本。注意存标注不等于存声音，它们是两个独立物件。"
+
+completion:
+  message:
+    en: "You can build, label and save a TextGrid against its sound. That is the core of a first phonetics lab."
+    zh: "你已经能建立 TextGrid、对着声音标注并存档。这就是第一堂语音学实验的核心。"
+  next_lesson: null

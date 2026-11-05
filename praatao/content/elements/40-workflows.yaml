@@ -1,0 +1,336 @@
+# Praatao — workflow knowledge pack (v1)
+#
+# These entries explain the common TASKS a beginner has to carry out in Praat.
+# Each entry is anchored on the control that starts the task.
+#
+# Matching contract (docs/CONTRACTS.md): the UIA name is normalised and
+# compared case-insensitively against `aliases` and `id`, longest alias wins,
+# keywords are the fallback.
+#
+# Rules for this file:
+#   * `aliases` hold the CLEAN label text exactly as Praat 6.4.12 shows it.
+#   * Aliases must not repeat an alias already used in praatao/content/elements.yaml
+#     (the taken list is prototypes/v0/probes/existing_aliases.txt).
+#   * Every user-facing string exists in English and Simplified Chinese.
+#
+# Labels were checked against Praat 6.4.12: the live UIA menu dump in
+# prototypes/v0/probes/praat_controls.txt, the manual pages embedded in
+# Praat.exe (6.4.12, 2 May 2024), and the online Praat manual.
+
+version: 1
+
+entries:
+  - id: workflow-record-mono-sound
+    aliases: ["Record mono Sound..."]
+    title: {en: "Recording a sound from the microphone (mono)", zh: "用麦克风录音（单声道）"}
+    what:
+      en: "Opens the SoundRecorder window, where you record your voice from one microphone channel and then copy the recording into Praat as a Sound object."
+      zh: "打开 SoundRecorder 录音窗口，从一个麦克风声道录下你的声音，再把录音复制成 Praat 里的 Sound 物件。"
+    how:
+      en: "Choose New → Record mono Sound... (Ctrl-R). Pick the input device, press Record, speak, then press Stop; when you are satisfied, use the button next to the name field to copy the recording into the Objects window, where it appears as a Sound object."
+      zh: "选 New → Record mono Sound...（Ctrl-R）。挑好输入装置，按 Record 说话，再按 Stop；满意之后，用名称输入框旁边的按钮把录音复制到 Objects 窗口，它就会成为一个 Sound 物件。"
+    concept:
+      en: "The recording arrives as 16-bit samples at the sampling frequency of the input device, so the microphone, not Praat, decides how much of the spectrum is captured."
+      zh: "录音进来时是 16-bit 的样本，取样频率由输入装置决定，也就是麦克风决定你记录到多少频谱内容。"
+    pitfalls:
+      - {en: "On Windows the input device is chosen in the Windows sound settings, not in Praat; if the level meter stays flat, Praat is listening to the wrong device.", zh: "在 Windows 上，输入装置要在 Windows 的声音设定里选，不是在 Praat 里；电平表一直是平的，多半是 Praat 接错装置了。"}
+      - {en: "The recording buffer is finite (20 megabytes by default), so a long take stops at the buffer limit.", zh: "录音缓冲是有限的（预设 20 MB），录太长会在缓冲上限处停住。"}
+      - {en: "If the recording is too long to keep in memory, use the File menu of the SoundRecorder window to write it to a sound file on disk instead.", zh: "录音太长、记忆体放不下时，用 SoundRecorder 窗口的 File 菜单把它写成硬盘上的音档。"}
+    keywords: [record, microphone, 录音, 麦克风, mono, 单声道, soundrecorder, 录音窗口, sampling, 取样]
+
+  - id: workflow-record-stereo-sound
+    aliases: ["Record stereo Sound..."]
+    title: {en: "Recording a sound with two channels (stereo)", zh: "双声道录音（立体声）"}
+    what:
+      en: "Records with two channels at once, so you can keep two microphones, or two sides of a room, apart."
+      zh: "同时录两个声道，让两支麦克风或房间的两侧分开保留。"
+    how:
+      en: "Choose New → Record stereo Sound.... In the SoundRecorder you can then copy the whole recording into the Objects window, or only the left or the right channel, using the buttons next to the name field."
+      zh: "选 New → Record stereo Sound...。在 SoundRecorder 窗口里，你可以把整段录音复制到 Objects 窗口，也可以只复制左声道或右声道，用名称输入框旁边的按钮决定。"
+    concept:
+      en: "Two channels are not automatically two speakers: they are two microphones in two places, so the channels differ in level and in timing as well as in timbre."
+      zh: "两个声道并不自动等于两个人的声音，它们是两支放在不同位置的麦克风，所以左右声道在音量、时间与音色上都会不同。"
+    pitfalls:
+      - {en: "A stereo file read into Praat is one object with two channels; use Read separate channels from sound file... if you want one Sound per channel.", zh: "立体声档案读进 Praat 是一个含两个声道的物件；要左右各一个 Sound，就用 Read separate channels from sound file...。"}
+      - {en: "Recording in stereo fills the buffer twice as fast, so the maximum recording time is roughly halved.", zh: "立体声录音消耗缓冲快一倍，所以最长录音时间大约减半。"}
+    keywords: [record, stereo, 录音, 立体声, 双声道, channel, 声道, microphone, 麦克风, buffer, 缓冲]
+
+  - id: workflow-stop-recording
+    aliases: ["Stop"]
+    title: {en: "Stop (ending a recording or a playback)", zh: "Stop（停止录音或播放）"}
+    what:
+      en: "Stops whatever is running: in the SoundRecorder it ends the recording, in the editors it cuts off the playback."
+      zh: "停止正在进行的动作：在 SoundRecorder 里是结束录音，在编辑窗口里是截断播放。"
+    how:
+      en: "In the SoundRecorder, press Stop to end the take; the recording stays in the window until you copy it into the Objects window. The Play menu of the Sound editor has a Stop as well, which cuts playback short."
+      zh: "在 SoundRecorder 里按 Stop 结束这一段，录音还留在窗口里，等你复制出去；声音编辑窗口的 Play 菜单里也有 Stop，可以截断播放。"
+    concept:
+      en: "A recording is only stored data once you copy it into the Objects window or write it to disk, so Stop by itself never loses anything."
+      zh: "录音在复制进 Objects 窗口或写成档案之前都只是暂存资料，所以 Stop 本身不会弄丢东西。"
+    pitfalls:
+      - {en: "Stop ends the take but does not save it; afterwards you still have to copy the recording into the Objects window.", zh: "Stop 只是结束录制，不会存档，之后仍要把录音复制进 Objects 窗口。"}
+      - {en: "Stop in the Play menu stops the sound, it does not interrupt an analysis that is running.", zh: "Play 菜单里的 Stop 只停声音，不会中止正在跑的分析。"}
+    keywords: [stop, 停止, 录音, record, playback, 播放, 结束, end]
+
+  - id: workflow-read-sound-file
+    aliases: ["Read from special sound file"]
+    title: {en: "Getting a sound file into Praat", zh: "把音档读进 Praat"}
+    what:
+      en: "The Open menu is how a recording on disk becomes a Praat object: Read from file... is the normal route, Read from special sound file is the fallback for formats Praat cannot recognise by itself, such as raw sound data."
+      zh: "Open 菜单是硬盘上的录音变成 Praat 物件的入口：一般用 Read from file...，Read from special sound file 则是给 Praat 自己认不出的档案格式用的。"
+    how:
+      en: "Open → Read from file... (Ctrl-O) and pick the file; Praat recognises WAV, AIFF, MP3, FLAC, NeXT/Sun and NIST files, and asks for the name of the new Sound object. Choose Read from special sound file only when that fails."
+      zh: "Open → Read from file...（Ctrl-O）选择档案；Praat 认得 WAV、AIFF、MP3、FLAC、NeXT/Sun 与 NIST 等格式，然后问你要新 Sound 物件的名字。只有前一步失败时才用 Read from special sound file。"
+    concept:
+      en: "Whatever the format, Praat converts everything into one internal form: a sampled waveform with a declared sampling frequency, and that frequency sets the range you can analyse."
+      zh: "不管原来是哪种格式，Praat 都会转成同一种内部形式：带取样频率的取样波形，而这个取样频率决定你能分析的频率范围。"
+    pitfalls:
+      - {en: "Read from file... loads the whole file into memory; for a recording of hours use Open long sound file... instead.", zh: "Read from file... 会把整个档案载入记忆体，录制数小时的长音档要改用 Open long sound file...。"}
+      - {en: "The object you get is a copy: editing it afterwards does not change the file on disk.", zh: "读进来的是副本：之后改这个物件不会改到硬盘上的档案。"}
+      - {en: "The same recording opened twice under two names is still one recording; do not treat it as two speakers.", zh: "同一份录音用两个名字打开两次仍然只是同一段录音，别把它当成两位说话者。"}
+    keywords: [read, open, 读取, 读档, wav, aiff, mp3, flac, 音档, 格式, format, 声音, sound]
+
+  - id: workflow-annotate-textgrid
+    aliases: ["Read from special tier file..."]
+    title: {en: "Annotating a sound with a TextGrid", zh: "用 TextGrid 标注声音"}
+    what:
+      en: "A TextGrid is a set of labelled intervals on the time axis of your sound; making one and putting boundaries and labels in it turns a recording into linguistic data."
+      zh: "TextGrid 是声音时间轴上的一组带标签区间；建立它并在里面放边界与标签，就是把一段录音变成语言资料的过程。"
+    how:
+      en: "Select the Sound and choose Annotate → To TextGrid... for an empty grid over the same time range, or Open → Read from special tier file... for an existing one. Then select the Sound and the TextGrid together, click View & Edit, press Enter at the cursor to add a boundary, and type the label."
+      zh: "选中 Sound 后选 Annotate → To TextGrid...，会在同样的时间范围上建立空网格；也可以用 Open → Read from special tier file... 读入已有的标注。同时选中 Sound 与 TextGrid 后点 View & Edit，在游标处按 Enter 加入边界，再在文字方块里输入标签。"
+    concept:
+      en: "Tiers are your hypotheses about the utterance: one tier for phones, one for syllables or words, one point tier for events such as a release burst, all on the sound's time axis."
+      zh: "各层就是你对这段语流的假设：一层放音素，一层放音节或词，一层放释爆点这类事件，全部共用同一条时间轴。"
+    pitfalls:
+      - {en: "A TextGrid without its Sound has no waveform, so you cannot see where a sound is; select both objects before View & Edit.", zh: "没有配对 Sound 的 TextGrid 没有波形，看不到声音在哪里；View & Edit 之前要同时选中两个物件。"}
+      - {en: "Labels belong in the white text field, not in the yellow boundary tier; typing in the tier changes nothing.", zh: "标签要打在白色文字方块里，不是黄色的边界层；在层里打字不会改到标签。"}
+      - {en: "To TextGrid... creates an empty grid; it does not transcribe anything for you.", zh: "To TextGrid... 只产生空网格，不会帮你转写。"}
+    keywords: [annotate, textgrid, 标注, 文本网格, tier, 层级, boundary, 边界, interval, 区间, 标签]
+
+  - id: workflow-read-table-file
+    aliases: ["Read Table from semicolon-separated file...", "Read Table from whitespace-separated file...", "Read TableOfReal from headerless spreadsheet file..."]
+    title: {en: "Bringing a data table into Praat", zh: "把数据表读进 Praat"}
+    what:
+      en: "Reads a plain text file of numbers into a Table object, so measurements made in other software can be analysed, sorted or plotted in Praat."
+      zh: "把纯文字的数值档案读成 Table 物件，让别处量到的数据也能在 Praat 里分析、排序或绘图。"
+    how:
+      en: "Open → Read Table from tab-separated file... for tab-separated text, or the semicolon and whitespace variants for files saved with other separators; the first line becomes the column names unless the file starts with a special marker."
+      zh: "定位字元分隔的文字档用 Open → Read Table from tab-separated file...，其他分隔符就用分号或空白字元的版本；第一行会成为栏位名称，除非档案开头有特殊标记。"
+    concept:
+      en: "A Table with one row per token and one column per variable is the standard bridge between Praat and any statistics package, and the format you should hand in with a lab report."
+      zh: "一列一个语流、一栏一个变数的 Table，是 Praat 与任何统计软体之间的标准桥梁，也是实验报告该附上的格式。"
+    pitfalls:
+      - {en: "If the file uses spaces or commas instead of the separator you chose, the whole row lands in one column and the values are lost.", zh: "档案用的分隔符和你选的不符时，整列会被塞进同一栏，数值就全丢了。"}
+      - {en: "Text cells and empty cells come in as empty strings, not as missing numbers, so check the first row after reading.", zh: "文字格与空格读进来都是空字串，不是缺失值，读完要检查第一行。"}
+    keywords: [table, 表格, 读入, read, 试算表, 数据, data, 分隔, separator, spreadsheet]
+
+  - id: workflow-sound-editor
+    aliases: ["View spectral slice"]
+    title: {en: "Reading a sound in the Sound editor", zh: "在声音编辑窗口读声音"}
+    what:
+      en: "The Sound editor draws the waveform, and usually the spectrogram, the pitch contour and the intensity contour, on one shared time axis that you can zoom, measure and annotate."
+      zh: "声音编辑窗口把波形，通常还有频谱图、基频曲线与强度曲线，画在同一条时间轴上，你可以放大、量测并标注。"
+    how:
+      en: "Select the Sound and click View & Edit. The horizontal axis is time in seconds and the vertical axis is amplitude; use the Time menu to zoom, click in the picture to move the cursor, and click on the spectrogram to open a spectral slice and read the spectrum at that instant."
+      zh: "选中 Sound 后点 View & Edit。横轴是以秒为单位的时间，纵轴是振幅；用 Time 菜单放大，在图上点击移动游标，点频谱图可打开频谱切片，读出那一瞬间的频谱。"
+    concept:
+      en: "The waveform shows the signal, the spectrogram shows where its energy sits in frequency, and the pitch and intensity curves are analyses drawn on the same axis, so one boundary can be checked against all of them at once."
+      zh: "波形显示讯号本身，频谱图显示能量落在哪些频率上，基频与强度曲线则是画在同一时间轴上的分析结果，所以一个边界可以同时对照这几种图形来检查。"
+    pitfalls:
+      - {en: "Clicking in the editor moves the cursor; clicking and dragging selects a time range, and the analysis commands then use that selection.", zh: "在编辑窗口单击是移动游标，按住拖动是选一段时间范围，之后的分析指令用的就是这个选区。"}
+      - {en: "The zoom commands of the Time menu change the view, not the data; the sound itself is unchanged.", zh: "Time 菜单里的缩放只改变视图，资料本身并没有变。"}
+      - {en: "The white stripes at the very start and end of a spectrogram are normal: the analysis window has no data there.", zh: "频谱图最开头与最末尾的白边是正常现象，分析窗在那些位置没有资料。"}
+    keywords: [sound editor, 编辑窗口, 波形, waveform, 时间轴, time axis, 光标, cursor, zoom, 放大, spectrogram, 频谱图]
+
+  - id: workflow-pitch
+    aliases: ["Extract visible pitch contour"]
+    title: {en: "Measuring pitch (F0)", zh: "量测基频（F0）"}
+    what:
+      en: "Pitch analysis produces a Pitch object: a time series of fundamental frequency estimates with a voiced or unvoiced decision for every frame."
+      zh: "基频分析会产生一个 Pitch 物件：随时间变化的基频估计序列，每一格还标出有声或无声。"
+    how:
+      en: "Select the Sound, then Analyse periodicity → To Pitch..., and set the pitch floor (75 Hz by default) and ceiling (600 Hz by default) so they bracket your speaker. The Pitch object appears in the list; in the editor, Extract visible pitch contour copies the drawn contour into a queryable object."
+      zh: "选中 Sound 后选 Analyse periodicity → To Pitch...，设定基频下限（预设 75 Hz）与上限（预设 600 Hz），让它们框住说话者的音高。Pitch 物件会出现在清单里；在编辑窗口里，Extract visible pitch contour 可把画出来的曲线复制成可查询的物件。"
+    concept:
+      en: "The floor and the ceiling bound the search: the algorithm looks for repetitions between them, so a range that is wrong gives octave errors or a flat line rather than a plausible wrong number."
+      zh: "上下限界定了搜索范围：演算法只在这之间找重复周期，所以范围设错会得到八度跳错或一条平线，而不是看似合理的错值。"
+    pitfalls:
+      - {en: "A floor of 75 Hz with a ceiling of 600 Hz suits a typical adult speaker; the octave error starts when the speaker's F0 reaches the ceiling, so raise the ceiling for a child.", zh: "下限 75 Hz、上限 600 Hz 适合一般成人说话者；八度跳错发生在基频碰到上限的时候，所以儿童的声音要把上限调高。"}
+      - {en: "An unvoiced consonant has no periodicity; Praat still returns a value or marks the frame unvoiced, so check the voicing decisions.", zh: "清音没有周期性，Praat 仍会给出数值或标成无声，所以有声与无声的判定要自己检查。"}
+      - {en: "A gap in the contour is an unvoiced frame, not a pitch of zero.", zh: "曲线上的空缺代表无声，不是音高等于零。"}
+    keywords: [pitch, 基频, f0, periodicity, 周期性, analyse, 分析, contour, 曲线, voiced, 有声, octave, 八度]
+
+  - id: workflow-formant
+    aliases: ["Extract visible formant contour"]
+    title: {en: "Measuring formants", zh: "量测共振峰"}
+    what:
+      en: "Formant analysis fits an all-pole LPC model to successive frames of the spectrum and returns the resonance frequencies of the vocal tract over time."
+      zh: "共振峰分析把全极点 LPC 模型套到频谱的连续分析窗上，回传声道共振频率随时间的变化。"
+    how:
+      en: "Select the Sound, then Analyse spectrum → To Formant (burg)...; the dialog asks for the time step, the maximum number of formants and the formant range. The Formant object appears in the list; in the editor, Extract visible formant contour copies the F1 and F2 curves into a new object."
+      zh: "选中 Sound 后选 Analyse spectrum → To Formant (burg)...，对话框会问时间步长、共振峰最大数目与共振峰范围。Formant 物件会出现在清单里；在编辑窗口里，Extract visible formant contour 可把看得到的 F1、F2 曲线复制成新物件。"
+    concept:
+      en: "The vocal tract acts as a filter and its resonances shape the spectrum; because LPC models poles only, it fits formants well but not the anti-resonances of nasals."
+      zh: "声道是一个滤波器，它的共振塑造了频谱形状；LPC 只模拟极点，对共振峰拟合得好，对鼻音的反共振却拟合不了。"
+    pitfalls:
+      - {en: "The formant range has to match the speaker: Praat's standard 5500 Hz suits an adult female voice, about 5000 Hz an adult male and about 8000 Hz a young child.", zh: "共振峰范围必须配合说话者：Praat 的预设 5500 Hz 适合成年女性，成年男性约 5000 Hz，幼童约 8000 Hz。"}
+      - {en: "More formants is not better; the extra poles usually fit the noise floor rather than real resonances.", zh: "共振峰不是越多越好，多出来的极点通常只是在拟合杂讯底噪。"}
+      - {en: "A formant that jumps by a factor of two between frames is usually a tracking failure, not a real acoustic event.", zh: "共振峰在相邻两格之间跳了一倍，多半是 LPC 追踪失败，不是真实的声学事件。"}
+    keywords: [formant, 共振峰, lpc, burg, 频谱, spectrum, analyse, 分析, f1, f2, 声道, vocal tract]
+
+  - id: workflow-intensity
+    aliases: ["Extract visible intensity contour"]
+    title: {en: "Measuring intensity", zh: "量测强度"}
+    what:
+      en: "Intensity analysis turns the waveform into a contour of short-time energy in dB, which follows the syllabic peaks and the stress of the utterance."
+      zh: "强度分析把波形变成以 dB 表示的短时能量曲线，用来追踪音节峰值与语流的重音。"
+    how:
+      en: "Select the Sound and click To Intensity...; Praat asks for the pitch floor, the minimum pitch that has to be resolved (100 Hz by default) and adds an Intensity object to the list. Draw it with Plot, or copy the curve out of the editor with Extract visible intensity contour."
+      zh: "选中 Sound 后点 To Intensity...，Praat 会问必须分辨的最低基频（Pitch floor，预设 100 Hz），然后在清单里加上一个 Intensity 物件。用 Plot 画出来，或用 Extract visible intensity contour 把编辑窗口里的曲线复制出来。"
+    concept:
+      en: "Intensity is an energy measure: it is the short-time energy of the signal in dB relative to the hearing threshold, so it inherits the periodicity of the voice."
+      zh: "强度是能量量：它把分析窗内的信号短时能量换算成 dB，以听觉阈值为零点，因此会带上声带周期的起伏。"
+    pitfalls:
+      - {en: "The pitch floor sets the length of the analysis window (3.2 divided by the pitch floor): set it too high for the speaker and the curve ripples at the pitch period, set it too low and the curve is smeared.", zh: "最低基频（Pitch floor）决定分析窗的长度（3.2 除以最低基频）：设得比说话者的基频还高，曲线上会出现音高周期的波纹；设得太低，曲线则被抹平。"}
+      - {en: "Do not read intensity as loudness; it says nothing about pitch or spectral shape.", zh: "不要把强度当成响度，它既不讲音高也不讲频谱形状。"}
+      - {en: "Higher on the plot means more energy on an absolute scale (0 dB is the hearing threshold), but an uncalibrated recording means the level is not a true SPL.", zh: "曲线较高表示能量较多，刻度是绝对的（0 dB 为听觉阈值），但未校正的录音得不到真正的声压级。"}
+    keywords: [intensity, 强度, 能量, energy, db, contour, 曲线, 分析, analyse, 响度]
+
+  - id: workflow-convert
+    aliases: ["Convert to stereo", "Convert to mono"]
+    title: {en: "Converting a sound to another representation", zh: "把声音转成另一种表示"}
+    what:
+      en: "The Convert button changes how a sound is represented without changing the recording itself: another channel layout, another sampling frequency, or another kind of object."
+      zh: "Convert 按钮改变声音的表现方式，而不是录音内容：换声道配置、换取样频率，或换成另一种物件。"
+    how:
+      en: "Select the Sound and click Convert. The leaves include Convert to mono and Convert to stereo, Resample..., Extract part..., and commands that turn the sound into a Pitch, Intensity or Manipulation object. Each choice adds a new object to the list and leaves the original untouched."
+      zh: "选中 Sound 后点 Convert，其中的项目包括 Convert to mono、Convert to stereo、Resample...、Extract part...，以及把声音转成 Pitch、Intensity 或 Manipulation 物件的指令。每个选择都会在清单里加上新物件，原件不受影响。"
+    concept:
+      en: "Resampling changes the sampling frequency and therefore the usable frequency range: at 16 kHz the Nyquist limit is 8 kHz, so nothing above that survives in the file."
+      zh: "重取样会改变取样频率，也因此改变可用频率范围：16 kHz 时奈奎斯特上限是 8 kHz，超过 8 kHz 的成分就不存在了。"
+    pitfalls:
+      - {en: "Resampling down throws away frequency information; never resample before an analysis you intend to publish.", zh: "向下重取样会丢掉频率资讯，要发表的分析绝不要在重取样之后才做。"}
+      - {en: "Convert to mono averages the channels and can change the timbre noticeably on a stereo recording.", zh: "Convert to mono 是把左右声道平均，立体声录音的音色可能明显改变。"}
+      - {en: "Extract part... takes a time slice out of the sound; the new object is a copy, the original is not cut.", zh: "Extract part... 取的是声音的一段，新物件是副本，原件不会被挖掉。"}
+    keywords: [convert, 转换, mono, mono, stereo, 单声道, 立体声, resample, 重取样, extract part, 取出]
+
+  - id: workflow-export-results
+    aliases: ["Save as tab-separated file...", "Save as comma-separated file...", "Save as semicolon-separated file..."]
+    title: {en: "Getting your results out of Praat", zh: "把结果带出 Praat"}
+    what:
+      en: "Objects live in memory and disappear when Praat closes; the Save menu writes them to a file that other software can read."
+      zh: "物件活在记忆体里，关掉 Praat 就消失；Save 菜单把它们写成档案，让别的软体也读得到。"
+    how:
+      en: "Select the object, then choose a command from the Save menu: Save as tab-separated file... for a Table, Save as WAV file... for a Sound, Save as text file... for any object, and Save TextGrid as text file... in the TextGrid editor for annotation. Give the file a name and a folder, then confirm."
+      zh: "先选中物件，再从 Save 菜单挑指令：Table 用 Save as tab-separated file...，声音用 Save as WAV file...，任何物件用 Save as text file...，标注则在 TextGrid 编辑窗口用 Save TextGrid as text file...。指定档名与资料夹后确认。"
+    concept:
+      en: "A Praat object and its file are two different things: the file is a snapshot in a format other programs can read, the object stays in memory with Praat's own types."
+      zh: "Praat 物件与档案是两回事：档案是写下来、别的程式也读得懂的快照，物件则留在记忆体里，带着 Praat 自己的型别。"
+    pitfalls:
+      - {en: "Save only affects the selected object; objects derived from it are not saved with it.", zh: "Save 只作用于选中的物件，衍生出来的下游物件不会跟着一起存。"}
+      - {en: "Saving a Sound as a WAV file keeps the sampling frequency but not your microphone calibration.", zh: "声音存成 WAV 会保留取样频率，但不会保留麦克风的校正值。"}
+      - {en: "Export the annotation before you clean up the Objects list: removing the Sound also removes its TextGrid.", zh: "清理 Objects 清单前先把标注汇出；移除 Sound 会连它的 TextGrid 一起移除。"}
+    keywords: [save, 储存, 存盘, 汇出, export, tab separated, 定位字元, table, 表格, wav, 档案, file]
+
+  - id: workflow-new-praat-script
+    aliases: ["New Praat script"]
+    title: {en: "Writing a Praat script", zh: "写 Praat 脚本"}
+    what:
+      en: "A script is a text file of Praat commands that runs by itself, so a sequence you do by hand every time can be done in one go."
+      zh: "脚本是一个由 Praat 指令组成的文字档，可以自己跑，让你每次手动做的一串动作一次完成。"
+    how:
+      en: "Choose Praat → New Praat script to open the script editor, type the commands, and press Run in the Run menu. Use File → Save to store it as a .praat file; the file name then appears in the window title, and the script can be reopened with Open Praat script...."
+      zh: "选 Praat → New Praat script 打开脚本编辑窗口，输入指令后在 Run 菜单按 Run 执行。用 File → Save 存成 .praat 档，档名会出现在窗口标题上，之后可用 Open Praat script... 再打开。"
+    concept:
+      en: "A script is a list of menu commands and action commands executed in order, so it reproduces exactly the clicks you would have made, including the mistakes."
+      zh: "脚本是一串依序执行的菜单指令与动作指令，所以它重现的正是你手动会做的点击，连出错的地方都一样。"
+    pitfalls:
+      - {en: "Dynamic commands such as Play only work when the right object is selected; otherwise Praat says the command is not available for the current selection.", zh: "像 Play 这样的动态指令只有在选对物件时才可用，否则 Praat 会说这条指令对目前的选取不可用。"}
+      - {en: "A script has no undo history, so test it on a copy of the sound before you let it loose on your data.", zh: "脚本没有撤销纪录，所以先在声音副本上试过，再拿去处理正式资料。"}
+    keywords: [script, 脚本, praat script, run, 执行, 编辑器, editor, 自动化, automation, .praat]
+
+  - id: workflow-open-praat-script
+    aliases: ["Open Praat script..."]
+    title: {en: "Reopening a saved script", zh: "重新打开已存的脚本"}
+    what:
+      en: "Opens a .praat file from disk in the script editor, so a script you wrote last week is one click away."
+      zh: "把硬盘上的 .praat 档在脚本编辑窗口打开，让你上周写的脚本一下就能用到。"
+    how:
+      en: "Choose Praat → Open Praat script..., pick the file, and the script appears in the editor; from a new script you reach the same place with File → Open.... Save it under a clear name, because the file name is what you will recognise in the folder."
+      zh: "选 Praat → Open Praat script...，选择档案，脚本就出现在编辑窗口里；从新建的脚本用 File → Open... 也能到同一处。存档时给个清楚的名字，因为日后在资料夹里靠的就是这个档名。"
+    concept:
+      en: "Scripts are plain text, so they can be versioned, mailed and read by anyone; a script that documents an analysis is better evidence than a screenshot of it."
+      zh: "脚本是纯文字，所以可以纳入版本管制、可以电邮、任何人都读得懂；一个记录分析过程的脚本，比一张截图更有说服力。"
+    pitfalls:
+      - {en: "Opening a script does not run it; you still press Run yourself.", zh: "打开脚本不会自动执行，还是要自己按 Run。"}
+      - {en: "The script works on the objects that are in the list at that moment, so select the sound before you press Run.", zh: "脚本作用在当下清单里的物件，所以按 Run 之前先把声音选好。"}
+    keywords: [open script, 打开脚本, praat script, 脚本, .praat, 编辑器, editor, 档案, file, 重开]
+
+  - id: workflow-scripting-tutorial
+    aliases: ["Scripting tutorial"]
+    title: {en: "Learning the Praat scripting language", zh: "学习 Praat 脚本语言"}
+    what:
+      en: "The official online tutorial that takes you from a one-line script to loops, variables, procedures and reading files."
+      zh: "官方线上教学，从一行脚本一路带到循环、变量、程序与读档。"
+    how:
+      en: "Help → Scripting tutorial opens it in your browser; work through it in order, because each page builds on the previous one. Write each example in a script editor next to the tutorial and run it as you read."
+      zh: "Help → Scripting tutorial 会在浏览器里打开，请照顺序读，因为每一页都建立在前一页之上。一边读一边把例子写进脚本编辑窗口并执行。"
+    concept:
+      en: "Scripting is procedural: the statements run in the order you write them, which is why a wrong selection produces an error at the line where the command is unavailable."
+      zh: "脚本是程序式的：语句照你写的顺序执行，所以选错物件时，出错的就是那条指令所在的那一行。"
+    pitfalls:
+      - {en: "The tutorial is online: on a lab machine without internet, keep a local copy of the pages.", zh: "教学是线上的，实验课机器没有网路时要自己留一份本地页面。"}
+      - {en: "Read the error messages: 'command not available' means the wrong selection, a syntax error means the line itself is wrong.", zh: "要看错误讯息：「指令不可用」是选错物件，语法错误则是那一行写错了。"}
+    keywords: [scripting, 脚本, tutorial, 教学, 学习, manual, 手册, loops, 循环, 变数, variables]
+
+  - id: workflow-formulas-tutorial
+    aliases: ["Formulas tutorial"]
+    title: {en: "The formula language (numbers, strings, arrays)", zh: "公式语言（数字、文字、阵列）"}
+    what:
+      en: "The tutorial for Praat's formula language, the notation used to calculate with objects and to fill tables and matrices."
+      zh: "Praat 公式语言的教学，也就是用来计算物件、填表格与矩阵的记法。"
+    how:
+      en: "Help → Formulas tutorial opens it in your browser. Formulas appear in dialogs such as Sound: Formula..., in scripts after the word formula, and in the Table and Matrix editors."
+      zh: "Help → Formulas tutorial 会在浏览器里打开。公式出现在像 Sound: Formula... 这样的对话框里、脚本中 formula 关键字之后，以及 Table 与 Matrix 编辑窗口中。"
+    concept:
+      en: "A formula works on the attributes of an object, for example the samples of a sound or the cells of a matrix, so one expression can rewrite or summarise a whole object."
+      zh: "公式作用在物件的属性上，例如声音的样本或矩阵的格子，所以一个表达式就能改写或总结整个物件。"
+    pitfalls:
+      - {en: "In a formula x is time in seconds, so sin (2*pi*1000*x) is a 1000 Hz tone while sin (1000*x) is not.", zh: "公式中的 x 是以秒为单位的時間，sin (2*pi*1000*x) 才是 1000 Hz 正弦波，sin (1000*x) 不是。"}
+      - {en: "A formula changes the object in place; make a copy first if the original has to stay intact.", zh: "公式是就地改变物件的，原件要保留就先复制一份。"}
+    keywords: [formula, 公式, 计算, tutorial, 教学, matrix, 矩阵, table, 表格, 数字, numbers]
+
+  - id: workflow-demo-window
+    aliases: ["Demo window"]
+    title: {en: "The Demo window", zh: "Demo 窗口（示范窗口）"}
+    what:
+      en: "Opens the manual section about Praat's Demo window: a window in which a script can draw and ask the user for input, used for demonstrations, presentations and experiments."
+      zh: "打开手册中关于 Demo 窗口的说明：那是一个可以让脚本绘图、可以向使用者提问的窗口，用在示范、简报与实验上。"
+    how:
+      en: "Help → Demo window explains what the Demo window can do. The window itself only exists through a script: a script creates it with demo, draws on it, and then waits for a click with demoWaitForInput or demoClicked."
+      zh: "Help → Demo window 会说明 Demo 窗口能做什么。这个窗口本身只能透过脚本存在：脚本用 demo 打开它、在上面绘图，再用 demoWaitForInput 或 demoClicked 等待使用者点击。"
+    concept:
+      en: "Because the demo window is script-driven, the same program can be handed to a participant as an experiment: it draws the stimulus, records the answer and stores it."
+      zh: "因为 Demo 窗口由脚本驱动，同一个程式可以直接交给受试者当实验：它画出刺激、记录反应并存档。"
+    pitfalls:
+      - {en: "The Demo window is a scripting feature, not a guided tour of Praat: nothing appears until a script puts something there.", zh: "Demo 窗口是脚本功能，不是 Praat 的导览：没有脚本放东西进去，窗口里就是空的。"}
+      - {en: "A script that waits for input stays blocked until the user clicks, so a frozen screen can be a waiting script and not a crash.", zh: "等待输入的脚本会一直卡住，直到使用者点击，所以画面不动可能是脚本在等，不一定是当机。"}
+    keywords: [demo, 示范, 窗口, script, 脚本, experiment, 实验, input, 输入, drawing, 绘图]
+
+  - id: workflow-go-to-manual-page
+    aliases: ["Go to manual page..."]
+    title: {en: "Jumping straight to a manual page", zh: "直接跳到手册的某一页"}
+    what:
+      en: "A Help-menu command that opens the page of the Praat manual that you name, so you do not have to hunt through the manual."
+      zh: "Help 菜单里的指令，能直接打开你指定名称的手册页面，不用自己在手册里翻找。"
+    how:
+      en: "Choose Help → Go to manual page..., type the name of the page you are looking for, and Praat opens it in your browser. Use it when you know roughly what the manual calls something but not where it lives."
+      zh: "选 Help → Go to manual page...，输入你要找的页面名称，Praat 会在浏览器里打开它。大致知道手册怎么称呼某个东西、却不知道它在哪一页时就用它。"
+    concept:
+      en: "The manual is organised by object type, so page names follow the type: TextGrid, Pitch, Sound, and the commands that belong to each of them."
+      zh: "手册以物件类型分章，页面名称也依循类型：TextGrid、Pitch、Sound，以及各类型各自的指令。"
+    pitfalls:
+      - {en: "It opens the online manual, so it needs an internet connection; with no network, keep a local copy of the manual.", zh: "它打开的是线上手册，需要网路连线；没有网路时自己留一份本地手册。"}
+      - {en: "The command opens the page that describes what you were looking for; it does not carry the command out for you.", zh: "这个指令只是打开说明你要找的东西的那一页，并不会替你执行那个指令。"}
+    keywords: [manual, 手册, help, 说明, 帮助, go to, 前往, page, 页面, documentation, 文件]

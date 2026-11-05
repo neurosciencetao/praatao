@@ -1,0 +1,122 @@
+# Praatao lesson pack 5 — the everyday analysis workflow: intensity, pitch, formants
+#
+# Labels and parameter names verified against Praat 6.4.12 (the binary at the
+# project root): the Objects window cascades "Analyse periodicity" and
+# "Analyse spectrum", the Sound editor menus File, Edit, Time, Play, Sound,
+# Analyses, Spectrogram, Pitch, Intensity, Formants, Pulses, Help, and the
+# command "To Formant (burg)..." (there is no "To Formant (LT)..." in 6.4.12).
+
+version: 1
+id: 05-analysis-workflow
+file: 05-analysis-workflow.yaml
+title: {en: "The everyday analysis workflow", zh: "日常声学分析流程"}
+summary:
+  en: "Take one recording through intensity, pitch and formants, in the order that works, with the parameters that actually matter."
+  zh: "把一段录音依序变成强度、基频与共振峰的量测，用对顺序，也用对真正重要的参数。"
+prerequisites: [01-first-sound]
+
+steps:
+  - id: to-intensity
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: false
+    highlight: {kind: button, name: "To Intensity..."}
+    tip: {en: "Select the Sound, then To Intensity...", zh: "选中 Sound，再按 To Intensity...（转成强度）"}
+    detail:
+      en: "With the Sound selected, **To Intensity...** turns it into an **Intensity** object: a contour of sound energy over time, sampled at evenly spaced time points and expressed in dB. The dialog asks for the minimum pitch you want to resolve and for the time step of the curve; leave the time step at zero and Praat derives it from the pitch floor. The Intensity object is data, not a picture, so you can plot it, query it frame by frame, or keep it for the next steps."
+      zh: "选中 Sound 后按 **To Intensity...**，Praat 会产生一个 **Intensity** 物件：一条随时间变化的能量曲线，取样点等距，数值为 dB。对话框会问两件事：你要分辨多低的基频，以及曲线的时间步长；时间步长留 0，Praat 就依基频下限自动算出来。Intensity 物件是资料而不是图，你可以把它画出来、逐格查询，或留到后面几步再用。"
+
+  - id: read-the-intensity-object
+    detect:
+      object_types_present: ["Sound", "Intensity"]
+      selected_types: ["Intensity"]
+      editor_open: false
+    highlight: {kind: list, name: "Objects:"}
+    tip: {en: "The new row is data, and a figure is one click away", zh: "新那一列是资料，要变成图只差一个按钮"}
+    detail:
+      en: "A new row appears in the Objects list and Praat selects it for you; select it and click **Plot** to draw the contour into the Picture window, which is the version you can put in a report. Read the curve as intensity over time: the syllable peaks, the stressed syllable, the pauses. The absolute dB values assume a calibrated recording, so with an uncalibrated microphone read the differences between peaks rather than the numbers themselves. Intensity is not loudness: it says nothing about pitch and nothing about the shape of the spectrum."
+      zh: "Objects 清单里会多出一列，Praat 顺手帮你选好。选中它按 **Plot**，曲线就画进 Picture 窗口，那才是能放进报告的版本。请把这条曲线当成「随时间变化的强度」来读：音节的峰、重读的那个音、中间的停顿。绝对 dB 值预设录音经过校正，所以麦克风没校正时请读峰值之间的差距，不要读数字本身。强度也不等于响度，它既不讲音高，也不讲频谱的形状。"
+
+  - id: intensity-first
+    detect:
+      object_types_present: ["Sound", "Intensity"]
+      selected_types: []
+      editor_open: false
+    highlight: {kind: button, name: "To Intensity..."}
+    tip: {en: "Intensity first: it is the cheapest and the steadiest layer", zh: "强度排在前面：它最便宜，也最不容易出错"}
+    detail:
+      en: "The everyday order is: look at the spectrogram, weigh the token with intensity, place the pitch with F0, describe the vowel shape with formants. Intensity comes first because it is the most robust analysis and because it shows you where the voice is actually present, which tells you what to do about the pitch range next. Its window is tied to the pitch floor, so a floor that is too low smears the curve while a floor that is too high lets the curve ripple at the pitch period. Praat's own Manipulation workflow is built on this same intensity contour."
+      zh: "日常的顺序是：先看频谱图，再用强度称出这段话的轻重，用基频定位高低，用共振峰描述元音的形状。强度之所以排在前面，是因为它最稳，也因为它一眼就告诉你声音到底出现在哪里，你据此才决定基频范围要怎么设。它的分析窗与基频下限绑在一起：下限太低会把曲线抹糊，下限太高又让曲线跟着音高周期起伏。Praat 自己的 Manipulation 工作流程，搭的就是同一条强度曲线。"
+
+  - id: analyse-periodicity
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: false
+    highlight: {kind: button, name: "Analyse periodicity"}
+    tip: {en: "Analyse periodicity: the commands that need a periodic signal", zh: "Analyse periodicity：需要周期讯号的指令都在这里"}
+    detail:
+      en: "The Objects window rebuilds its buttons from whatever is selected, so with a Sound selected a row of analysis buttons appears. **Analyse periodicity** opens the commands that need a periodic signal: **To Pitch...**, **To Harmonicity (cc)...** and **To PointProcess (periodic, cc)...**. The product of To Pitch... is a **Pitch** object: one F0 estimate per analysis frame, with a gap wherever the algorithm found no reliable period. A gap does not mean zero pitch, it means undefined."
+      zh: "Objects 窗口的按钮会依选中的东西重建，所以选中 Sound 之后才会出现那一排分析按钮。**Analyse periodicity** 打开的是需要周期讯号的指令：**To Pitch...**、**To Harmonicity (cc)...**、**To PointProcess (periodic, cc)...**。To Pitch... 的产物是一个 **Pitch** 物件：每个分析窗一个 F0 估计值，演算法找不到可靠周期的地方就留一个缺口。缺口不代表音高是零，而是代表未定义。"
+
+  - id: to-pitch
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: false
+    highlight: {kind: menu, path: ["Analyse periodicity", "To Pitch..."]}
+    tip: {en: "Analyse periodicity → To Pitch...", zh: "Analyse periodicity → To Pitch...（产生基频轨迹）"}
+    detail:
+      en: "Three settings decide the pitch track: the **pitch floor**, the **pitch ceiling** and the **time step**. The floor and the ceiling bound the search, because candidates below the floor or above the ceiling are not recruited, so Praat never hands you a value outside that range. The analysis window is three periods long, and a time step of zero means four pitch values per window length, about 0.01 s at a 75 Hz floor. Get the range wrong and you do not get a slightly wrong number: a floor that is too high gives a flat line sitting on the limit, and a candidate at half or double the true F0 gives an octave error."
+      zh: "有三个设定决定基频轨迹：**基频下限**、**基频上限**、**时间步长**。上下限界定了搜索范围，因为低于下限或高于上限的候选一律不收，所以 Praat 绝不会交给你范围外的数值。分析窗有三个周期长，时间步长填 0 的话，每个窗长会算四个基频值，下限 75 Hz 时大约 0.01 秒一格。范围设错不会得到「稍微有点错」的数字：下限太高就是一条贴在下限上的平线，而候选值刚好是真实 F0 的一半或两倍时，就是八度跳错。"
+
+  - id: analyse-spectrum-and-spectrogram
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: false
+    highlight: {kind: menu, path: ["Analyse spectrum", "To Spectrogram..."]}
+    tip: {en: "Analyse spectrum → To Spectrogram...", zh: "Analyse spectrum → To Spectrogram...（先做频谱图）"}
+    detail:
+      en: "**Analyse spectrum** opens the frequency-domain commands: **To Spectrogram...**, **To Spectrum...**, **To Formant (burg)...** and the filters. Make the spectrogram first, because it is the map you check every other measurement against. Use a window length of 0.005 s when you look at vowels and formants, and 0.03 s when you look at F0 and the harmonic structure. In the Sound editor the spectrogram has its own top-level **Spectrogram** menu with **Show spectrogram** and **Spectrogram settings...**; it does not live under Analyses."
+      zh: "**Analyse spectrum** 打开频域的指令：**To Spectrogram...**、**To Spectrum...**、**To Formant (burg)...**，以及各种滤波器。先把频谱图做出来，因为它是其他所有量测的对照地图。看元音与共振峰时窗长用 0.005 秒，看 F0 与谐波结构时用 0.03 秒。在声音编辑窗口里，频谱图有自己的顶层 **Spectrogram** 菜单，里面是 **Show spectrogram** 与 **Spectrogram settings...**，它不在 Analyses 底下。"
+
+  - id: to-formant-burg
+    detect:
+      object_types_present: ["Sound"]
+      selected_types: ["Sound"]
+      editor_open: false
+    highlight: {kind: menu, path: ["Analyse spectrum", "To Formant (burg)..."]}
+    tip: {en: "Analyse spectrum → To Formant (burg)...", zh: "Analyse spectrum → To Formant (burg)...（产生共振峰）"}
+    detail:
+      en: "**To Formant (burg)...** fits an all-pole LPC model to each analysis frame and reads the formants off its poles; that is the standard method for speech. Two settings decide which formants you get: the **number of formants**, 5 for speech, where Praat fits twice that many poles and the extra poles mostly fit noise, and the **maximum frequency** of the search, which has to match the speaker, since a woman's or a child's voice needs a higher ceiling than a man's. Older tutorials call this command To Formants (burg)..., and some write To Formant (LT); in Praat 6.4.12 the Objects window offers To Formant (burg)..., while the Levinson-Durbin style LPC commands sit in the editor under Formants → Formants & LPC menu."
+      zh: "**To Formant (burg)...** 会在每个分析窗套上一个全极点 LPC 模型，再从极点读出共振峰，这是语音分析的标准做法。有两个设定决定你得到哪些共振峰：**共振峰个数**，语音一般取 5，而 Praat 会配出两倍数量的极点，多出来的极点多半只是在拟合杂讯；以及**搜索范围的最高频率**，这一项必须配合说话者，女声与儿童要更高的上限，男声可以低一些。旧教材把这条指令写作 To Formants (burg)...，也有人写 To Formant (LT)；在 Praat 6.4.12 的 Objects 窗口里给的是 To Formant (burg)...，而 Levinson-Durbin 那一套 LPC 指令则放在编辑窗口的 Formants → Formants & LPC menu。"
+
+  - id: formant-window-and-preemphasis
+    detect:
+      object_types_present: ["Sound", "Formant"]
+      selected_types: ["Formant"]
+      editor_open: false
+    highlight: {kind: menu, path: ["Formants", "Get first formant"]}
+    tip: {en: "Formants → Get first formant, in the vowel", zh: "Formants → Get first formant，在元音里取值"}
+    detail:
+      en: "Two further settings decide how precisely you get them: the **window length**, where 0.025 s gives a frequency resolution of about 1.3 divided by the window length, so roughly 50 Hz, and the actual analysis window is twice as long, and the **pre-emphasis**, which starts at 50 Hz and lifts the spectrum by 6 dB per octave above that point, cancelling the -6 dB per octave slope of the vocal tract so the poles land on the real resonances. Whatever the settings, formants only make sense on vowels: read F1 and F2 in the steady nucleus with **Formants → Get first formant** and **Get second formant**, never in the transitions, where the model cannot keep up."
+      zh: "另外两个设定决定共振峰的精度：**窗长**，0.025 秒的窗长给出大约 1.3 除以窗长的频率解析度，也就是约 50 Hz，而实际分析窗是它的两倍长；以及**预加重**，从 50 Hz 起算，在那之上每倍频程抬高 6 dB，用来抵消声道本身每倍频程下降 6 dB 的斜度，让极点落在真正的共振上。不管设定怎么调，共振峰只在元音上说得通：请在元音稳定的核心用 **Formants → Get first formant** 与 **Get second formant** 读 F1 与 F2，绝不要在过渡区读，那里的模型跟不上变化。"
+
+  - id: view-the-results
+    detect:
+      object_types_present: ["Sound", "Pitch", "Formant"]
+      selected_types: []
+      editor_open: true
+    highlight: {kind: menu, path: ["Intensity", "Show intensity"]}
+    tip: {en: "Intensity → Show intensity: the rows in the editor", zh: "Intensity → Show intensity：编辑窗口里的那一行"}
+    detail:
+      en: "Open the Sound with **View & Edit** and switch the analyses on from the editor's own menus: **Intensity → Show intensity** for the intensity contour, **Pitch → Show pitch** for the green F0 line and **Formants → Show formant** for the red formant speckles. The objects have their own editors too: select a Pitch or Formant object and click **View & Edit** to open the pitch or formant editor, and **Plot** to turn it into a figure. Before you believe any of it, check that the red speckles sit on the dark bands of the spectrogram, that the F0 line never touches the limits, and that you wrote the settings down next to every number."
+      zh: "用 **View & Edit** 打开声音，再从编辑窗口自己的菜单把分析显示出来：**Intensity → Show intensity** 打开强度曲线，**Pitch → Show pitch** 画出绿色的基频线，**Formants → Show formant** 画出红色的共振峰斑点。这些物件也有自己的编辑窗口：选中 Pitch 或 Formant 物件后按 **View & Edit** 会打开基频或共振峰编辑窗口，按 **Plot** 则把它变成一张图。在相信任何一个数字之前，先检查：红色斑点有没有落在频谱图的暗带上、F0 曲线有没有贴到上下限、以及你有没有把设定写在每个数值旁边。"
+
+completion:
+  message:
+    en: "You can take one recording all the way to intensity, pitch and formant measurements, in an order that works and with settings you can defend. That is the everyday Praat workflow."
+    zh: "你现在能把一段录音一路做到强度、基频与共振峰的量测，顺序正确，设定也讲得出理由。这就是 Praat 的日常分析流程。"
+  next_lesson: null

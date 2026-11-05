@@ -1,0 +1,581 @@
+# Praatao: UI element dictionary, fragment 10: the Objects window and its buttons
+#
+# Fragment of the element dictionary, loaded next to praatao/content/elements.yaml
+# (see praatao/tutor/kb.py -> load_default). Style follows the main file.
+#
+# Labels were verified against Praat 6.4.12 on Windows:
+#   * the UIA probe of a live session (prototypes/v1/experiments/uia_probe_output.json)
+#     gives the exact button names of the Objects window:
+#     Rename..., Copy..., Inspect, Info, Remove, Sound help, View & Edit, Play,
+#     and the selection-dependent row
+#     Draw >, Query >, Modify >, Annotate >, Analyse periodicity >,
+#     Analyse spectrum >, To Intensity..., Manipulate >, Convert >, Filter >, Combine >
+#   * the manual of that release gives the contents of the cascade menus.
+#
+# NOTE FOR THE INTEGRATOR: the twenty labels listed above are also used by the
+# Section A entries of praatao/content/elements.yaml (ids: objects-panel, rename,
+# copy, inspect, info, remove, object-help-button, view-and-edit, play,
+# to-intensity, dynamic-draw, dynamic-query, dynamic-modify, dynamic-annotate,
+# dynamic-analyse-periodicity, dynamic-analyse-spectrum, dynamic-manipulate,
+# dynamic-convert, dynamic-filter, dynamic-combine). Aliases must stay unique in
+# the merged dictionary, so those Section A entries should be dropped from
+# elements.yaml when this fragment is merged in. The ten leaf entries at the end
+# of this file (Get value at time..., Get mean..., Get energy...,
+# Get root-mean-square..., To Harmonicity (ac)..., Filter (stop Hann band)...,
+# Filter (pre-emphasis)..., Cross-correlate..., Autocorrelate...) use labels that
+# are not used anywhere else in the dictionary.
+
+version: 1
+
+entries:
+  # ------------------------------------------------------------------
+  # The list on the left
+  # ------------------------------------------------------------------
+  - id: ow-objects-list
+    aliases: ["Objects:"]
+    control_types: [ListControl]
+    title: {en: "The Objects list", zh: "Objects 清单"}
+    what:
+      en: "The caption \"Objects:\" and the list of every object Praat holds in memory, one row per object, each row reading like 1. Sound demo_vowel."
+      zh: "「Objects:」这个标题，以及 Praat 记忆体里所有物件的清单，一列一个物件，写成 1. Sound demo_vowel 这样。"
+    how:
+      en: "Click a row to select it; the buttons on the right change to match the selected type. Ctrl+click adds a second object, which is how you pair a Sound with its TextGrid."
+      zh: "点一列就选中它，右边的按钮会跟着物件类型变。要同时选 Sound 与它的 TextGrid，按住 Ctrl 再点另一个。"
+    concept:
+      en: "Praat is object-based: a file becomes a Sound object, and every analysis (Pitch, Formant, Intensity) is another object that shares the same time axis."
+      zh: "Praat 以物件为中心：档案变成 Sound 物件，之后的基频、共振峰、强度分析都是各自独立的物件，但共用同一条时间轴。"
+    pitfalls:
+      - {en: "With nothing selected the button column looks empty and several buttons seem to be missing; they only appear once something is selected.", zh: "没有选中任何物件时右边那一栏看起来是空的，好几个按钮像是不见了，其实只是还没选东西。"}
+      - {en: "Renaming a row does not rename the file on disk; it only changes the label inside Praat.", zh: "在清单里改名不会改到硬盘上的档名，只是改了 Praat 内部的标签。"}
+      - {en: "There is no file browser here; files arrive through Open → Read from file....", zh: "这里没有档案浏览器，档案要从 Open → Read from file... 进来。"}
+    keywords: [objects, list, 对象, 清单, 列表, 数据, sound]
+
+  # ------------------------------------------------------------------
+  # The fixed buttons under the list
+  # ------------------------------------------------------------------
+  - id: ow-rename
+    aliases: ["Rename..."]
+    control_types: [ButtonControl]
+    title: {en: "Rename...", zh: "Rename...（改名）"}
+    what:
+      en: "Changes the name of the selected object, so that later analysis, scripts and figure labels refer to it by a meaningful name."
+      zh: "把选中的物件改名，之后做分析、写脚本、画图时就能用有意义的名称指代它。"
+    how:
+      en: "Select the object in the list, click Rename..., type the new name and press Enter. The same command also sits in the Modify menu of several object types."
+      zh: "在清单里选中物件，点 Rename...，输入新名字，按 Enter。有些物件类型的 Modify 菜单里也有同名指令。"
+    concept:
+      en: "Object names travel into your output: they become the labels in a TextGrid, the titles in a Table and the default file names when you export."
+      zh: "物件名称会一路带到你的产出里：变成 TextGrid 上的标注、表格里的标题、汇出时的默认档名。"
+    pitfalls:
+      - {en: "Renaming is not duplicating; use Copy... if you want two versions of the same sound.", zh: "改名不是复制，想要同一段声音的两个版本要用 Copy...。"}
+      - {en: "Spaces are allowed but can break later scripts; underscores or hyphens are safer.", zh: "名字里可以有空白，但容易让后面的脚本出错，用底线或连字比较安全。"}
+    keywords: [rename, 改名, 重命名, 名称, 物件]
+
+  - id: ow-copy
+    aliases: ["Copy..."]
+    control_types: [ButtonControl]
+    title: {en: "Copy...", zh: "Copy...（复制物件）"}
+    what:
+      en: "Creates a second, independent copy of the selected object in the Objects list."
+      zh: "在清单里复制出同一个物件的第二个独立副本。"
+    how:
+      en: "Select an object, click Copy..., and Praat asks for a name for the copy. The original stays untouched, which makes this the safe way to experiment on a sound."
+      zh: "选中物件，点 Copy...，Praat 会问你要副本的名字。原件完全不受影响，所以想动手改声音时先按这个。"
+    concept:
+      en: "Praat objects are values with a copy-on-write discipline: copying a long sound really does duplicate the samples, so large copies cost memory."
+      zh: "Praat 的物件采用写时复制（copy-on-write）的观念：复制一段长声音真的会复制所有样本，大副本很吃记忆体。"
+    pitfalls:
+      - {en: "Copy... and Ctrl+C in the editor are different things: Copy... clones an object, Ctrl+C copies a time selection to the sound clipboard.", zh: "Objects 窗口的 Copy... 与编辑窗口的 Ctrl+C 不同：前者复制整个物件，后者把选区复制到声音剪贴簿。"}
+      - {en: "The copy is a new object with its own name; forget to rename it and every figure ends up labelled demo_vowel_2.", zh: "副本是新物件，有自己的名字，忘记改名的话每张图都会写成 demo_vowel_2。"}
+    keywords: [copy, duplicate, 复制, 拷贝, 副本, 物件]
+
+  - id: ow-inspect
+    aliases: ["Inspect"]
+    control_types: [ButtonControl]
+    title: {en: "Inspect", zh: "Inspect（检视内容）"}
+    what:
+      en: "Opens a detailed table of the internal fields of the selected object, for example the samples of a Sound or the boundaries of a TextGrid."
+      zh: "打开一个详尽的表格，显示选中物件内部的各个栏位，例如 Sound 的样本值或 TextGrid 的边界时间。"
+    how:
+      en: "Select an object and click Inspect. The window that opens is itself a Table, so you can scroll it, sort it and copy values out of it."
+      zh: "选中物件后点 Inspect，打开的窗口本身就是一个 Table，可以滚动、排序、复制里面的资料。"
+    concept:
+      en: "Inspect is the bridge between the interface and the data model: it is where you confirm that a sound really has 44100 Hz sampling frequency, or that a tier really holds 12 intervals."
+      zh: "Inspect 是介面与资料模型之间的桥：在那里你可以确认声音的取样率真的是 44100 Hz，或某一层真的有 12 个区间。"
+    pitfalls:
+      - {en: "For a long Sound, Inspect lists every sample and can appear to hang; use Info when you only want a summary.", zh: "长声音用 Inspect 会列出每个样本，看起来像当机，只要摘要的话改用 Info。"}
+      - {en: "Inspect shows what the object holds, not what the file on disk holds; the two can differ after you resample.", zh: "Inspect 显示的是物件里的内容，不是硬盘上档案的内容，重取样之后两者可能不同。"}
+    keywords: [inspect, 检视, 查看, 内部, 栏位, fields, 数据]
+
+  - id: ow-info
+    aliases: ["Info"]
+    control_types: [ButtonControl]
+    title: {en: "Info", zh: "Info（资讯摘要）"}
+    what:
+      en: "Prints a short plain-text report about the selected object: type, name, duration, sampling frequency, number of samples, and so on."
+      zh: "用纯文字印出选中物件的简短报告：类型、名称、长度、取样频率、样本数等等。"
+    how:
+      en: "Select the object and click Info; the report appears in a text window you can select and paste into your notes. Query commands write their answers to the same window."
+      zh: "选中物件点 Info，报告会出现在一个文字窗口里，可以整段选取贴到笔记中。查询指令的答案也写进同一个窗口。"
+    concept:
+      en: "For a Sound the two lines that matter most are the sampling frequency and the duration: every later setting (window length in seconds, formant range, Nyquist limit) follows from these two numbers."
+      zh: "对 Sound 来说最关键的两行是取样频率与长度，之后所有设定（几秒的分析窗、共振峰范围、奈奎斯特上限）都由这两个数字决定。"
+    pitfalls:
+      - {en: "Info reports the object, not the file on disk: a resampled copy still shows the sampling frequency you gave it.", zh: "Info 讲的是物件而不是硬盘上的档案：重取样后的副本会显示你设定的新取样率。"}
+      - {en: "Info prints, it does not measure; copy the number you need out of the window before you carry on.", zh: "Info 只是印出来，不是量测；要留数字就先复制出来再继续。"}
+    keywords: [info, 资讯, 信息, 摘要, summary, report, 报告]
+
+  - id: ow-remove
+    aliases: ["Remove"]
+    control_types: [ButtonControl]
+    title: {en: "Remove", zh: "Remove（移除物件）"}
+    what:
+      en: "Deletes the selected object from memory, together with everything Praat derived from it."
+      zh: "把选中物件从记忆体里删掉，连带它衍生的下游物件一起消失。"
+    how:
+      en: "Select the object and click Remove. Praat asks for confirmation when other objects depend on it."
+      zh: "选中物件点 Remove，若有其他物件依赖它，Praat 还会再确认一次。"
+    concept:
+      en: "Praat keeps a dependency graph: a Pitch object points back to the Sound it came from, so removing that Sound removes the Pitch too. That is why one click can empty the list."
+      zh: "Praat 内部有依赖关系：Pitch 物件指向它来源的 Sound，所以移除那个 Sound 会连 Pitch 一起移除，这也是清空清单常只需一步的原因。"
+    pitfalls:
+      - {en: "Removing is not saving. If you have not saved the TextGrid or Table, the data is gone for good.", zh: "移除不等于储存，TextGrid 或 Table 还没存盘就消失，资料就找不回来了。"}
+      - {en: "Removing the Sound also removes its TextGrid; export the annotation before you clean up the list.", zh: "移除 Sound 会连它的 TextGrid 一起移除，清理清单前先把标注汇出。"}
+    keywords: [remove, delete, 移除, 删除, 清除, 物件]
+
+  - id: ow-object-help
+    aliases: ["Sound help"]
+    control_types: [ButtonControl]
+    title: {en: "The type-specific help button", zh: "物件专属的说明按钮"}
+    what:
+      en: "Opens the manual page for the type of the selected object, so the manual you land on is the manual for that object and not a general overview."
+      zh: "打开与选中物件类型对应的手册页，让你读到的是这一种物件的手册，而不是泛泛的总览。"
+    how:
+      en: "The label follows the selection: Sound help for a Sound, TextGrid help for a TextGrid, Pitch help for a Pitch. Click it and the manual opens in your browser."
+      zh: "按钮的字跟着选中物件变：Sound 时是 Sound help，TextGrid 时是 TextGrid help，Pitch 时是 Pitch help，点一下就在浏览器里打开手册。"
+    concept:
+      en: "Praat's manual is organised by object type, and each type page lists the commands that make sense for it: a Pitch object can be drawn and queried, but not edited the way a Sound can."
+      zh: "Praat 手册以物件类型分章，每种类型各有专页，列出对它有意义的指令：Pitch 可以画、可以查询，却不像 Sound 那样可以编辑。"
+    pitfalls:
+      - {en: "The manual is English only; it describes the interface precisely but does not teach phonetics.", zh: "手册只有英文，它把介面讲得很精确，但不会教你语音学。"}
+      - {en: "Without an internet connection this button has nowhere to go; keep an offline copy of the manual.", zh: "没有网路时这个按钮无处可去，记得留一份离线手册。"}
+    keywords: [help, 说明, 帮助, 手册, manual, documentation]
+
+  - id: ow-view-and-edit
+    aliases: ["View & Edit"]
+    control_types: [ButtonControl]
+    title: {en: "View & Edit", zh: "View & Edit（检视与编辑）"}
+    what:
+      en: "Opens the editor window for the selected object: the Sound editor for a Sound, the TextGrid editor for a TextGrid."
+      zh: "为选中的物件打开编辑窗口：Sound 就是声音编辑窗口，TextGrid 就是 TextGrid 编辑窗口。"
+    how:
+      en: "Select the object and click View & Edit. To see a sound together with its annotation, select the Sound AND the TextGrid (Ctrl+click) and then click View & Edit once."
+      zh: "选中物件后点 View & Edit。若要同时看声音与标注，先用 Ctrl 选 Sound 与 TextGrid，再点一次 View & Edit。"
+    concept:
+      en: "View & Edit is not a viewer: inside the editor you can select a time range, measure it, publish the selection as a new object and switch analyses on and off."
+      zh: "View & Edit 不只是看：在编辑窗口里你可以选时间范围、量测、把选区发布成新物件，也可以开关各种分析显示。"
+    pitfalls:
+      - {en: "With only the TextGrid selected, View & Edit shows the tiers but no waveform, so you lose the acoustic reference.", zh: "只选 TextGrid 时 View & Edit 只显示层级、没有波形，你会失去声学参照。"}
+      - {en: "With only the Sound selected, you get the waveform but no tiers, and nowhere to type a label.", zh: "只选 Sound 时只有波形没有层级，根本没地方打标签。"}
+    keywords: [view, edit, editor, 检视, 编辑, 编辑器, 波形]
+
+  - id: ow-play
+    aliases: ["Play"]
+    control_types: [ButtonControl]
+    title: {en: "Play", zh: "Play（播放）"}
+    what:
+      en: "Plays the selected object, so you hear the material you are about to measure."
+      zh: "播放选中的物件，先听到你即将量测的材料。"
+    how:
+      en: "In the Objects window: select the Sound and click Play. Inside the Sound editor the same word is a menu that can play the selection, the visible window or a chosen part."
+      zh: "在 Objects 窗口：选中 Sound 后点 Play。在声音编辑窗口里同名的是菜单，可播放选区、可见范围或指定片段。"
+    concept:
+      en: "Listening is a measurement: compare what you hear with the spectrogram and the pitch contour to check that your settings are plausible before you measure anything."
+      zh: "听本身就是一种测量：把听到的和频谱、基频曲线对照，确认设定合理，再开始量测。"
+    pitfalls:
+      - {en: "The button is greyed out for object types that carry no samples (TextGrid, Pitch, Table).", zh: "没有样本的物件（TextGrid、Pitch、Table）是没法播放的，按钮会变灰。"}
+      - {en: "In the Sound editor, Tab plays the selection and stops at its end, which surprises people who expect the whole file.", zh: "在编辑窗口按 Tab 只播放选区，到选区尾就停，不是整段播放，常常让人以为出错。"}
+    keywords: [play, 播放, 试听, listen, audio, 声音]
+
+  - id: ow-to-intensity
+    aliases: ["To Intensity..."]
+    control_types: [ButtonControl]
+    title: {en: "To Intensity...", zh: "To Intensity...（转成强度）"}
+    what:
+      en: "Turns the selected Sound into an Intensity object: a contour of sound energy over time, computed from the short-time energy of the waveform."
+      zh: "把选中的 Sound 转成 Intensity 物件，也就是依据波形短时能量算出的随时间变化的强度曲线。"
+    how:
+      en: "Select the Sound and click To Intensity...; Praat asks for the pitch floor, the minimum pitch it should resolve (100 Hz by default), then adds an Intensity object to the list."
+      zh: "选中 Sound 后点 To Intensity...，Praat 会问最低基频（Pitch floor，预设 100 Hz），然后在清单里加上一个 Intensity 物件。"
+    concept:
+      en: "Intensity is an energy measure: the short-time energy of the signal in dB relative to the hearing threshold (0 dB is 2e-5 Pa). Because it relies on the waveform, it follows syllabic peaks and stress, not fine structure."
+      zh: "强度是能量量：它把分析窗内的信号短时能量换算成 dB，以听觉阈值为零点（0 dB 是 2e-5 Pa）。它依赖波形，所以跟着音节峰值与重音走，不反映精细结构。"
+    pitfalls:
+      - {en: "The pitch floor sets the length of the analysis window (3.2 divided by the pitch floor): set it too high for the speaker and the curve ripples at the pitch period, set it too low and the curve is smeared.", zh: "最低基频（Pitch floor）决定分析窗的长度（3.2 除以最低基频）：设得比说话者的基频还高，曲线上会出现音高周期的波纹；设得太低，曲线则被抹平。"}
+      - {en: "Do not read intensity as loudness; it says nothing about pitch or spectral shape.", zh: "不要把强度当成响度，它既不讲音高也不讲频谱形状。"}
+    keywords: [intensity, 强度, 能量, energy, convert, 转换, contour, 曲线]
+
+  # ------------------------------------------------------------------
+  # The selection-dependent row of buttons
+  # ------------------------------------------------------------------
+  - id: ow-dynamic-row
+    aliases: []
+    control_types: [ButtonControl]
+    title: {en: "The selection-dependent button row", zh: "随选中物件变化的按钮列"}
+    what:
+      en: "The row of buttons under the Objects list is not fixed: Praat rebuilds it from the type of the selected object, so the same slot offers different commands for a Sound, a TextGrid or a Pitch."
+      zh: "Objects 清单下方那一列按钮不是固定的：Praat 会根据选中物件的类型重新排它，同一个位置对 Sound、TextGrid、Pitch 给的是不同指令。"
+    how:
+      en: "Select something in the list and the row appears; select nothing and it disappears. Nine of its entries are cascade buttons that open a menu, while To Intensity... is a plain button that opens a dialog."
+      zh: "在清单里选中东西，这一列就出现，没有选中就整列消失。其中九个是会展开菜单的层叠按钮，只有 To Intensity... 是按下就开对话框的按钮。"
+    concept:
+      en: "The row is Praat's dynamic menu: every button asks the selected object what can be done with it, which is why one button can be a menu for one type and a dialog for another."
+      zh: "这一列就是 Praat 的动态菜单：每个按钮都在问「这个物件能做什么」，所以同一个按钮对一种类型是菜单，对另一种类型是对话框。"
+    pitfalls:
+      - {en: "Nothing selected means no buttons: students often report that the panel is broken when it is only waiting for a selection.", zh: "没选中就没有按钮，不少学生会以为面板坏了，其实它只是在等你选东西。"}
+      - {en: "The buttons change with the selection, so a click that worked for a Sound may be a different command for a TextGrid.", zh: "按钮会跟着选中物件变，对 Sound 有效的一次点击，对 TextGrid 可能是另一条指令。"}
+    keywords: [dynamic menu, 动态菜单, 按钮列, 动态按钮, button row, 选中最重要]
+
+  - id: ow-draw
+    aliases: ["Draw"]
+    control_types: [ButtonControl]
+    title: {en: "Draw (dynamic button)", zh: "Draw（动态按钮）"}
+    what:
+      en: "Opens the menu of drawing commands for the selected object; the result is drawn into the Picture window, where you can print it or paste it into a document."
+      zh: "打开选中物件的绘图指令菜单，结果会画进 Picture 窗口，你可以在那里打印或贴进文件。"
+    how:
+      en: "Select a Sound and click Draw, then pick a representation from the menu, for example Draw... for the waveform itself or To Spectrogram... for the spectral view."
+      zh: "选中 Sound 后点 Draw，再从菜单里挑一种表现方式，例如 Draw... 画波形本身，或 To Spectrogram... 画频谱图。"
+    concept:
+      en: "Praat separates showing from measuring: the Draw menu is about what you put on screen, while the Analyse menus are about the objects you can then measure, edit and save."
+      zh: "Praat 把「显示」与「量测」分开：Draw 菜单管的是画面上出现什么，Analyse 菜单管的是之后能量测、编辑、存盘的物件。"
+    pitfalls:
+      - {en: "The menu contents change completely with the object type; the same button offers different commands for a Sound and for a Pitch.", zh: "换了物件类型，整个菜单内容都变：同一个按钮对 Sound 和对 Pitch 给的是完全不同的指令。"}
+      - {en: "A drawing in the Picture window is a picture, not data: if you want numbers to measure, use Query instead.", zh: "Picture 窗口里的图是图，不是资料：你要量测的数字要用 Query 去拿。"}
+    keywords: [draw, 绘图, 画, picture, 图片窗口, dynamic, 动态]
+
+  - id: ow-query
+    aliases: ["Query"]
+    control_types: [ButtonControl]
+    title: {en: "Query (dynamic button)", zh: "Query（动态按钮）"}
+    what:
+      en: "Opens the measurement commands for the selected object, for example Get number of samples, Get sampling frequency or Get mean..."
+      zh: "打开选中物件的量测指令，例如 Get number of samples、Get sampling frequency 或 Get mean..."
+    how:
+      en: "Select the object, click Query and choose the quantity you need; the answer is written to the Info window, where you can copy it."
+      zh: "选中物件点 Query，再挑需要的量，答案会写进 Info 窗口，可以复制。"
+    concept:
+      en: "A query returns a number, not a picture. In a lab report you usually need the number (duration in ms, sampling frequency, F0 at a given time) and the picture is only the illustration."
+      zh: "查询给的是数字而不是图。实验报告里真正需要的往往是数字（毫秒为单位的长度、取样频率、某时刻的 F0），图只是配图。"
+    pitfalls:
+      - {en: "Queries on the whole object ignore the cursor and the selection; for the value at the cursor use the editor's Time menu.", zh: "对整个物件的查询不看光标也不看选区，要光标处的值请用编辑窗口的 Time 菜单。"}
+      - {en: "Get sampling frequency tells you the rate, not the pitch: a 44100 Hz file can still contain a 120 Hz voice.", zh: "Get sampling frequency 讲的是取样率，不是音高：44.1 kHz 的档案里装的仍是 120 Hz 的声音。"}
+    keywords: [query, 查询, 量测, 测量, get, 取得]
+
+  - id: ow-modify
+    aliases: ["Modify"]
+    control_types: [ButtonControl]
+    title: {en: "Modify (dynamic button)", zh: "Modify（动态按钮）"}
+    what:
+      en: "Opens the commands that change the selected object in place, for example Rename..., Reverse or Scale peak..."
+      zh: "打开会就地改变选中物件的指令，例如 Rename...、Reverse 或 Scale peak..."
+    how:
+      en: "The list depends on the object type: a Sound offers amplitude and duration operations, a Pitch or Manipulation object offers duration and resynthesis operations. The change applies to the object itself."
+      zh: "清单随物件类型而变：Sound 上是振幅与时长类操作，Pitch 或 Manipulation 上则是时长与重合成类操作，改动直接作用在物件本身。"
+    concept:
+      en: "Modify usually works on the object itself and therefore destroys the original data. For reproducible work, do the modification on a copy made with Copy... first."
+      zh: "Modify 通常直接改动物件本身，会破坏原始资料。要做可重复的分析，先用 Copy... 复制一份再改。"
+    pitfalls:
+      - {en: "Scale peak... normalises amplitude, so a file you export afterwards is no longer calibrated to your microphone.", zh: "Scale peak... 会把振幅标准化，之后汇出的档案就不再对应你麦克风的校正值了。"}
+      - {en: "Change duration... on a Pitch or Manipulation object changes the time axis of the whole token, not the phoneme you had in mind.", zh: "在 Pitch 或 Manipulation 上用 Change duration... 改的是整个语流的时间轴，不是你以为的那个音段。"}
+    keywords: [modify, 修改, 调整, 变形, dynamic, 动态]
+
+  - id: ow-annotate
+    aliases: ["Annotate"]
+    control_types: [ButtonControl]
+    title: {en: "Annotate (dynamic button)", zh: "Annotate（动态按钮）"}
+    what:
+      en: "In the Objects window it opens the commands that turn the selected Sound into a TextGrid, the usual way to start annotating a recording."
+      zh: "在 Objects 窗口，它打开把选中 Sound 转成 TextGrid 的指令，也就是开始标注一段录音的标准入口。"
+    how:
+      en: "Select the Sound, click Annotate → To TextGrid..., then set the tier name and whether the tier holds intervals or points. To insert boundaries later, use Boundary → Add on selected tier in the editor."
+      zh: "选中 Sound，点 Annotate → To TextGrid...，设定层级名称以及层级放区间还是点。之后要插边界，在编辑窗口用 Boundary → Add on selected tier。"
+    concept:
+      en: "Annotation is the bridge between the acoustic signal and linguistic categories: the tiers are your hypothesis about phones, syllables or words, and the time axis is the shared ground."
+      zh: "标注是声学讯号与语言类别之间的桥：层级是你对音素、音节或词所作的假设，时间轴是双方共用的基准。"
+    pitfalls:
+      - {en: "To TextGrid... creates an empty tier; it does not transcribe anything for you.", zh: "To TextGrid... 只产生一个空层级，不会帮你转写，标签还是要自己打。"}
+      - {en: "If you pick point tiers when you meant intervals, you end up with a tier that cannot hold segment labels.", zh: "本来想要区间却选了 point tier，结果会得到一个放不下音段标签的层级。"}
+    keywords: [annotate, 标注, 注释, textgrid, tier, 层级, 边界]
+
+  - id: ow-analyse-periodicity
+    aliases: ["Analyse periodicity"]
+    control_types: [ButtonControl]
+    title: {en: "Analyse periodicity", zh: "Analyse periodicity（周期分析）"}
+    what:
+      en: "Opens the commands that look for periodicity in the sound, that is the vibratory pattern of the vocal folds: To Pitch..., To PointProcess (periodic, cc)... and To Harmonicity (cc)..."
+      zh: "打开寻找声音周期性的指令，也就是声带的振动规律：To Pitch...、To PointProcess (periodic, cc)... 与 To Harmonicity (cc)..."
+    how:
+      en: "Select the Sound, click Analyse periodicity → To Pitch..., then set the pitch floor and ceiling. The resulting Pitch object appears in the list and can be plotted or queried."
+      zh: "选中 Sound，点 Analyse periodicity → To Pitch...，设定基频下限与上限，产生的 Pitch 物件会出现在清单里，可以绘图也可以查询。"
+    concept:
+      en: "Pitch tracking asks how often the waveform repeats. Autocorrelation counts periodic repeats inside a window; cross-correlation compares the waveform with an impulse train. The window needs at least two pitch periods for a stable estimate."
+      zh: "基频追踪问的是波形多久重复一次。自相关在分析窗内数周期性重复，跨相关则把波形与脉冲串比对。窗内至少要含两个基频周期，估计才稳定。"
+    pitfalls:
+      - {en: "A floor of 75 Hz with a ceiling of 600 Hz suits a typical adult speaker but produces octave errors for a child or a high voice.", zh: "75 至 600 Hz 适合一般成人说话者，但儿童或高音声线会出现八度跳错。"}
+      - {en: "An unvoiced consonant or a silence has no periodicity; check whether a frame was marked unvoiced instead of reading a number blindly.", zh: "清音或静音没有周期性，看数值之前先确认那一格是不是被标成无声。"}
+    keywords: [periodicity, 周期性, 基频, pitch, autocorrelation, 自相关, analyse, 分析]
+
+  - id: ow-analyse-spectrum
+    aliases: ["Analyse spectrum"]
+    control_types: [ButtonControl]
+    title: {en: "Analyse spectrum", zh: "Analyse spectrum（频谱分析）"}
+    what:
+      en: "Opens the spectral analysis commands for the sound: To Spectrogram..., To Spectrum..., To Formant (burg)... and the LPC (linear predictive coding) variants."
+      zh: "打开声音的频谱分析指令：To Spectrogram...、To Spectrum...、To Formant (burg)... 以及各种 LPC（线性预测编码）版本。"
+    how:
+      en: "Select the Sound, then Analyse spectrum → To Spectrogram...; in the dialog choose window length and frequency range, and Praat adds a Spectrogram object to the list."
+      zh: "选中 Sound，再选 Analyse spectrum → To Spectrogram...，在对话框里设定窗长与频率范围，Praat 会在清单里加上一个 Spectrogram 物件。"
+    concept:
+      en: "Spectral analysis trades time resolution against frequency resolution: the window length sets the bandwidth, roughly 1.3 divided by the window length in seconds, so 5 ms resolves about 260 Hz and 30 ms about 43 Hz."
+      zh: "频谱分析在时间解析与频率解析之间取舍：窗长决定频宽，大约是 1.3 除以窗长秒数，5 毫秒约 260 Hz，30 毫秒约 43 Hz。"
+    pitfalls:
+      - {en: "A window that is too long smears transitions and hides the segment boundaries you are trying to label.", zh: "窗太长会把音变过渡抹平，看不出你要标注的音段边界。"}
+      - {en: "A window that is too short cannot separate neighbouring formants in a vowel.", zh: "窗太短则分不开元音里相邻的共振峰。"}
+    keywords: [spectrum, 频谱, 频谱图, spectrogram, analyse, 分析, 窗长, window]
+
+  - id: ow-manipulate
+    aliases: ["Manipulate"]
+    control_types: [ButtonControl]
+    title: {en: "Manipulate (dynamic button)", zh: "Manipulate（动态按钮）"}
+    what:
+      en: "Opens the commands that treat the sound as an editable time structure, above all To Manipulation..., which turns it into pitch, duration and intensity targets."
+      zh: "打开把声音当作可编辑时间结构来处理的指令，最重要的是 To Manipulation...，它把声音转成基频、时长与强度目标。"
+    how:
+      en: "Select the Sound and click Manipulate → To Manipulation.... The Manipulation object opens in its own editor, where the targets can be edited and then resynthesised into a new Sound."
+      zh: "选中 Sound 后点 Manipulate → To Manipulation...，Manipulation 物件会在专属编辑窗口里打开，可以修改目标，再重合成新的 Sound。"
+    concept:
+      en: "A Manipulation object is a time-aligned set of pitch, duration and intensity targets, the standard tool for controlled experiments on intonation and speaking rate."
+      zh: "Manipulation 物件是一组与时间轴对齐的基频、时长与强度目标，是做语调与语速控制实验的标准工具。"
+    pitfalls:
+      - {en: "Manipulation only makes sense for voiced material; on mostly unvoiced sound the pitch targets are meaningless.", zh: "Manipulation 只对有声材料有意义，大段清音的基频目标毫无意义。"}
+      - {en: "To Sound (resynthesis)... rebuilds audio from the targets and sounds synthetic; it is not a faithful round trip.", zh: "To Sound (resynthesis)... 是从目标重新合成声音，听起来是合成的，不是无损往返。"}
+    keywords: [manipulate, 操作, manipulation, 重合成, resynthesis, 目标]
+
+  - id: ow-convert
+    aliases: ["Convert"]
+    control_types: [ButtonControl]
+    title: {en: "Convert (dynamic button)", zh: "Convert（动态按钮）"}
+    what:
+      en: "Opens the commands that change the representation of the sound without changing its content, such as Extract part... and Resample..."
+      zh: "打开改变声音表现方式而不改变内容的指令，例如 Extract part... 与 Resample..."
+    how:
+      en: "Select the Sound and click Convert; the leaves let you take out a piece (Extract part...), change the sampling frequency (Resample...) or work on the channels of a stereo recording."
+      zh: "选中 Sound 后点 Convert，其中的项目包括取出片段的 Extract part...、改变取样频率的 Resample...，以及处理立体声声道的指令。"
+    concept:
+      en: "Resampling changes the sampling frequency and therefore the usable frequency range: at 16 kHz the Nyquist limit is 8 kHz, so anything above that is not represented in the file at all."
+      zh: "重取样会改变取样频率，也因此改变可用频率范围：16 kHz 时奈奎斯特上限是 8 kHz，超过 8 kHz 的成分在档案里根本不存在。"
+    pitfalls:
+      - {en: "Resampling down throws away frequency information; never resample before an analysis you intend to publish.", zh: "向下重取样会丢掉频率资讯，要发表的分析绝不要在重取样之后才做。"}
+      - {en: "Extract part... changes the time domain of the object, so anything measured afterwards lives on a different time axis.", zh: "Extract part... 会改变物件的时间范围，之后量到的东西都落在另一条时间轴上。"}
+    keywords: [convert, 转换, 格式, resample, 重取样, 声道, channel, 立体声]
+
+  - id: ow-filter
+    aliases: ["Filter"]
+    control_types: [ButtonControl]
+    title: {en: "Filter (dynamic button)", zh: "Filter（动态按钮）"}
+    what:
+      en: "Opens the filtering commands that shape the spectrum or the time-domain signal, such as Filter (pass Hann band)... or Filter (one formant)..."
+      zh: "打开塑造频谱或时域讯号的滤波指令，例如 Filter (pass Hann band)... 或 Filter (one formant)..."
+    how:
+      en: "Select the Sound, click Filter and choose the band you want to keep or to remove. The result is a new Sound object; the original is untouched."
+      zh: "选中 Sound，点 Filter，挑选要保留或去除的频带，结果会产生一个新的 Sound 物件，原件不受影响。"
+    concept:
+      en: "Frequency-domain filtering (Hann band) uses a smooth window in the frequency domain, so the cut is gentle; time-domain filtering (one formant, pre-emphasis) designs an inverse filter from the signal model and is more surgical."
+      zh: "频域滤波（Hann band）在频域上用平滑窗裁切，过渡比较柔和；时域滤波（单一共振峰、预加重）是从讯号模型设计反滤波器，比较干净利落。"
+    pitfalls:
+      - {en: "Pre-emphasis changes the spectral tilt of the sound, so do not measure formants on a pre-emphasised copy.", zh: "预加重会改变频谱倾斜，不能用预加重过的副本去量共振峰。"}
+      - {en: "Filtering in place destroys the original; take Copy... first if the original matters.", zh: "就地滤波会毁掉原件，原始资料重要就先 Copy...。"}
+    keywords: [filter, 滤波, 频带, band, formant, 共振峰, pre-emphasis, 预加重]
+
+  - id: ow-combine
+    aliases: ["Combine"]
+    control_types: [ButtonControl]
+    title: {en: "Combine (dynamic button)", zh: "Combine（动态按钮）"}
+    what:
+      en: "Opens the commands that put two or more objects together, such as Concatenate, Combine to stereo or Convolve..."
+      zh: "打开把两个以上物件合在一起的指令，例如 Concatenate、Combine to stereo 或 Convolve..."
+    how:
+      en: "Select the two or more Sounds you want to combine (Ctrl+click for several), click Combine and choose the operation; a new object appears in the list."
+      zh: "选中要合并的两个或多个 Sound（按住 Ctrl 选多个），点 Combine 选操作，清单里会出现新的物件。"
+    concept:
+      en: "Concatenation adds durations but not frequencies: two tokens spliced end to end still show the original formants of each token, which is what makes it a useful probe of boundary effects."
+      zh: "串接是加时间不是加频率：两个语流首尾相接，各自的共振峰仍保留原来的样子，所以它常被用来检验边界效应。"
+    pitfalls:
+      - {en: "Concatenate joins the waveforms; it does not crossfade, so clicks may appear at the join.", zh: "Concatenate 只是把波形接起来，没有做交叉淡化，接缝处可能出现爆音。"}
+      - {en: "Combine to stereo expects one mono Sound per channel; combining two stereo sounds gives you four channels.", zh: "Combine to stereo 期望每个声道一个单声道声音，把两个立体声合起来会得到四个声道。"}
+    keywords: [combine, 合并, 结合, concatenate, 串接, stereo, 立体声, convolve, 卷积]
+
+  # ------------------------------------------------------------------
+  # Leaves of the Query menu
+  # ------------------------------------------------------------------
+  - id: ow-query-get-value-at-time
+    aliases: ["Get value at time..."]
+    control_types: [MenuItemControl]
+    title: {en: "Get value at time...", zh: "Get value at time...（取某时刻的振幅）"}
+    what:
+      en: "A Query command that reports the amplitude of a Sound at a given time, interpolated between the two nearest samples."
+      zh: "Query 菜单里的指令，报告 Sound 在指定时刻的振幅，数值在前后两个样本之间内插。"
+    how:
+      en: "Select the Sound, open Query and choose Get value at time..., type the time in seconds; the number appears in the Info window."
+      zh: "选中 Sound，打开 Query 选 Get value at time...，输入秒数，数值会出现在 Info 窗口里。"
+    concept:
+      en: "A Sound is a sampled signal, so a value at time is really a value at sample index t divided by the sampling period; Praat reconstructs a smooth value with sinc interpolation by default."
+      zh: "Sound 是取样讯号，所以「某时刻的数值」其实就是取样编号（时间除以取样周期）处的数值；Praat 预设用 sinc 内插还原出平滑的数值。"
+    pitfalls:
+      - {en: "The time is in seconds from the start of the object, not a sample number and not a frame number.", zh: "这里的時間是物件起算的秒数，不是取样编号，也不是帧编号。"}
+      - {en: "If the time lies outside the samples of the sound, the result is the value of the nearest sample rather than an interpolated one.", zh: "如果時間落在声音样本范围之外，结果是最近那个样本的数值，而不是内插出来的。"}
+    keywords: [get value at time, 取值, 振幅, amplitude, query, 查询, 秒]
+
+  - id: ow-query-get-mean
+    aliases: ["Get mean..."]
+    control_types: [MenuItemControl]
+    title: {en: "Get mean...", zh: "Get mean...（平均值）"}
+    what:
+      en: "A Query command that reports the average of the selected object over a chosen time range: the mean amplitude of a Sound, or the mean of a curve such as a Pitch track."
+      zh: "Query 菜单里的指令，报告选中物件在指定时间范围内的平均值：Sound 是平均振幅，曲线物件如基频轨迹则是曲线的平均值。"
+    how:
+      en: "Select the object, open Query and choose Get mean..., set the time range in seconds and read the answer in the Info window."
+      zh: "选中物件，打开 Query 选 Get mean...，设定时间范围（秒），答案在 Info 窗口里。"
+    concept:
+      en: "The mean amplitude of a voiced sound is close to zero, because the waveform oscillates around zero; a mean far from zero points to a DC offset or a recording fault, not to loudness."
+      zh: "有声声音的平均振幅接近零，因为波形是绕着零上下振荡的；平均值离零很远，通常反映直流偏移或录音问题，而不是响度。"
+    pitfalls:
+      - {en: "A mean over the whole sound is dominated by the loudest part; give the range you are actually interested in.", zh: "整段声音的平均会被最响的部分带跑，要给你真正关心的那个时间范围。"}
+      - {en: "A mean near zero does not mean the sound is silent; for amplitude use Get root-mean-square... instead.", zh: "平均接近零不代表没声音，要看振幅请用 Get root-mean-square...。"}
+    keywords: [get mean, 平均, 均值, mean, amplitude, 振幅, query]
+
+  - id: ow-query-get-energy
+    aliases: ["Get energy..."]
+    control_types: [MenuItemControl]
+    title: {en: "Get energy...", zh: "Get energy...（能量）"}
+    what:
+      en: "A Query command that reports the energy of the selected Sound over a time range, that is the sum of the squared sample values."
+      zh: "Query 菜单里的指令，报告选中 Sound 在一段时间内的能量，也就是样本值的平方和。"
+    how:
+      en: "Select the Sound, open Query and choose Get energy..., set the range in seconds, and read the number in the Info window."
+      zh: "选中 Sound，打开 Query 选 Get energy...，设定时间范围（秒），数字在 Info 窗口里。"
+    concept:
+      en: "Energy is the raw quantity behind loudness measures: it grows with the square of the amplitude, so doubling the amplitude quadruples the energy. The intensity contour in Praat is a smoothed, relative version of the same idea."
+      zh: "能量是响度量背后的原始量，它随振幅的平方增长，振幅加倍能量就变四倍。Praat 的强度曲线是同一个想法经过平滑与相对化之后的版本。"
+    pitfalls:
+      - {en: "The absolute number depends on the units of the samples; compare two sounds only when they were recorded and stored in the same way.", zh: "绝对数值取决于样本单位，只有录音与储存方式相同的两个声音才适合直接比较。"}
+    keywords: [get energy, 能量, energy, 强度, query, 查询]
+
+  - id: ow-query-get-rms
+    aliases: ["Get root-mean-square..."]
+    control_types: [MenuItemControl]
+    title: {en: "Get root-mean-square...", zh: "Get root-mean-square...（均方根）"}
+    what:
+      en: "A Query command that reports the root-mean-square amplitude of a Sound over a time range, the standard way to state how large a signal is."
+      zh: "Query 菜单里的指令，报告 Sound 在一段时间内的均方根振幅，这是说明讯号大小最常用的方式。"
+    how:
+      en: "Select the Sound, open Query and choose Get root-mean-square..., set the range, and compare the answer across tokens or speakers."
+      zh: "选中 Sound，打开 Query 选 Get root-mean-square...，设定范围，就可以拿这个数字在语流或说话者之间比较。"
+    concept:
+      en: "RMS is the square root of the mean of the squared samples, so it grows linearly with amplitude while energy grows quadratically. It is the amplitude measure that appears in the definition of sound pressure level."
+      zh: "均方根是平方样本平均值的平方根，所以振幅加倍时它加倍，能量却是四倍。声压级的定义用的就是这一种振幅量。"
+    pitfalls:
+      - {en: "RMS hides the peak: a short click can have a low RMS but a very high peak value.", zh: "均方根会藏住峰值：短短一声爆音可以均方根很低，峰值却很高。"}
+    keywords: [rms, root-mean-square, 均方根, 振幅, loudness, 响度, query]
+
+  # ------------------------------------------------------------------
+  # Leaves of the Analyse periodicity and Filter and Combine menus
+  # ------------------------------------------------------------------
+  - id: ow-harmonicity-ac
+    aliases: ["To Harmonicity (ac)..."]
+    control_types: [MenuItemControl]
+    title: {en: "To Harmonicity (ac)...", zh: "To Harmonicity (ac)...（自相关谐振度）"}
+    what:
+      en: "Computes a Harmonicity object from the selected Sound with the autocorrelation method, giving the harmonic-to-noise ratio of each frame in dB."
+      zh: "用自相关法从选中的 Sound 算出 Harmonicity 物件，逐格给出以 dB 表示的谐波与噪声比。"
+    how:
+      en: "Select the Sound, open Analyse periodicity and choose To Harmonicity (ac)...; Praat asks for the pitch range and the time step, and adds a Harmonicity object to the list."
+      zh: "选中 Sound，打开 Analyse periodicity 选 To Harmonicity (ac)...，Praat 会问基频范围与时间步长，然后在清单里加上一个 Harmonicity 物件。"
+    concept:
+      en: "Harmonicity, often written HNR, falls sharply at the onset of voicing, and that dip is expected. It is a quick way to separate voiced from unvoiced material."
+      zh: "谐振度常写作 HNR，它在有声起点会陡降，那个凹陷是预期现象。它是快速区分有声与清音的好工具。"
+    pitfalls:
+      - {en: "In silence the harmonicity is undefined; Praat marks those frames as undefined rather than giving a number of zero.", zh: "静音段的谐振度其实是未定义的，Praat 会把那些格标成未定义，而不是给一个零。"}
+    keywords: [harmonicity, 谐振度, hnr, 自相关, autocorrelation, 清浊, voicing]
+
+  - id: ow-filter-stop-band
+    aliases: ["Filter (stop Hann band)..."]
+    control_types: [MenuItemControl]
+    title: {en: "Filter (stop Hann band)...", zh: "Filter (stop Hann band)...（滤掉频带）"}
+    what:
+      en: "Removes a band of frequencies from the selected Sound with a smooth Hann-shaped filter and leaves the rest of the spectrum in place."
+      zh: "用平滑的 Hann 形滤波器把选中 Sound 的一段频率去掉，其余频谱保留不动。"
+    how:
+      en: "Select the Sound, open Filter and choose Filter (stop Hann band)...; type the low and high edge of the band you want to delete, and a new Sound object appears in the list."
+      zh: "选中 Sound，打开 Filter 选 Filter (stop Hann band)...，填上要去掉的那一段频率的下限与上限，清单里会出现一个新的 Sound 物件。"
+    concept:
+      en: "The Hann window gives a gentle roll-off, so the edges of the removed band are blurred rather than cut off, which avoids the ringing you would hear from a brick-wall filter."
+      zh: "Hann 窗的边缘是渐渐斜下去的，所以被去掉频带的边缘是模糊而不是一刀切掉，也避免了砖墙式滤波器带来的振铃。"
+    pitfalls:
+      - {en: "Removing a band changes the timbre of the sound; use it to probe what a region contributes, not to clean up a recording for publication.", zh: "去掉一段频率会改变音色，它适合用来检验某段频率的贡献，不是用来把录音修好发表。"}
+    keywords: [filter, 滤波, stop band, 频带, hann, 去除频带]
+
+  - id: ow-filter-pre-emphasis
+    aliases: ["Filter (pre-emphasis)..."]
+    control_types: [MenuItemControl]
+    title: {en: "Filter (pre-emphasis)...", zh: "Filter (pre-emphasis)...（预加重）"}
+    what:
+      en: "Applies a first-order pre-emphasis filter to the selected Sound, boosting the high frequencies relative to the low ones."
+      zh: "对选中的 Sound 做一阶预加重滤波，把高频相对低频抬高。"
+    how:
+      en: "Select the Sound, open Filter and choose Filter (pre-emphasis)...; the result is a new Sound object with a tilted spectrum."
+      zh: "选中 Sound，打开 Filter 选 Filter (pre-emphasis)...，结果是一个频谱被倾斜的新 Sound 物件。"
+    concept:
+      en: "Pre-emphasis is the inverse of the glottal source tilt, so it flattens the spectrum before LPC analysis and lets the LPC coefficients model the vocal tract rather than the source."
+      zh: "预加重正好抵消声门源的频谱倾斜，让频谱变平，这样 LPC 系数据来描述声道，而不是描述声源。"
+    pitfalls:
+      - {en: "Never measure formants on a pre-emphasised copy; the tilt has already moved the peaks.", zh: "绝不要在预加重过的副本上量共振峰，倾斜已经把峰位挪走了。"}
+      - {en: "Pre-emphasis also lifts high-frequency noise, so it is a poor choice for fricative consonants.", zh: "预加重也会把高频杂音一起拉高，用在擦音上并不合适。"}
+    keywords: [filter, 滤波, pre-emphasis, 预加重, 倾斜, lpc]
+
+  - id: ow-combine-cross-correlate
+    aliases: ["Cross-correlate..."]
+    control_types: [MenuItemControl]
+    title: {en: "Cross-correlate...", zh: "Cross-correlate...（互相关）"}
+    what:
+      en: "Cross-correlates two selected Sounds: the result is a new Sound object whose shape is the correlation function, so its peak marks the time lag at which the two sounds match best."
+      zh: "把选中的两个 Sound 做互相关：结果是一个新的 Sound 物件，形状就是相关函数，它的峰指出两个声音最吻合的时间延迟。"
+    how:
+      en: "Select the two Sounds (Ctrl+click), open Combine and choose Cross-correlate...; Praat asks how to scale the result and adds a new Sound to the list. Open that Sound and look for its peak."
+      zh: "用 Ctrl 选两个 Sound，打开 Combine 选 Cross-correlate...，Praat 会问结果要如何缩放，然后在清单里加上一个新的 Sound，打开它找峰。"
+    concept:
+      en: "Cross-correlation measures similarity as a function of lag. A peak at a negative lag means the second sound starts later than the first by that amount, which is how alignment is measured."
+      zh: "互相关衡量的是相似度随延迟的变化，峰出现在负延迟，表示第二个声音比第一个晚这么多开始，这正是对齐音流的量法。"
+    pitfalls:
+      - {en: "The result is a Sound, not a number: the lag has to be read off the peak of that new object.", zh: "结果是物件而不是数字，延迟要从那个新物件的峰上读出来。"}
+      - {en: "The order of the two sounds matters, because cross-correlation is not commutative: swapping them reverses the result.", zh: "两个声音的先后顺序会影响结果，因为互相关不可交换，对调之后结果会左右翻转。"}
+    keywords: [cross-correlate, 互相关, correlation, 相关, 延迟, lag, 对齐]
+
+  - id: ow-combine-autocorrelate
+    aliases: ["Autocorrelate..."]
+    control_types: [MenuItemControl]
+    title: {en: "Autocorrelate...", zh: "Autocorrelate...（自相关）"}
+    what:
+      en: "Autocorrelates a selected Sound with itself: the result is a new Sound object that is the autocorrelation function, whose peaks fall on the multiples of the pitch period."
+      zh: "把选中的 Sound 跟自己做自相关：结果是一个新的 Sound 物件，也就是自相关函数，它的峰正好落在基频周期的整数倍上。"
+    how:
+      en: "Select one Sound and choose Autocorrelate... from the dynamic menus; Praat asks how to scale the result and adds the new Sound to the list. Open it and find the first peak."
+      zh: "选中一个 Sound，在动态按钮的菜单里选 Autocorrelate...，Praat 会问结果要如何缩放，然后把新的 Sound 加进清单，打开它找第一个峰。"
+    concept:
+      en: "The distance between the peaks of the autocorrelation function is the base period, and its reciprocal is F0. This is the same idea the pitch tracker uses, and the function is symmetric around zero lag."
+      zh: "自相关函数峰与峰之间的距离就是基周期，倒数就是 F0，这正是基频追踪器用的同一个想法，而且这个函数在零延迟左右是对称的。"
+    pitfalls:
+      - {en: "The result is a Sound, not a number: the period has to be read off the peak of that new object.", zh: "结果是物件而不是数字，周期要从那个新物件的峰上读出来。"}
+      - {en: "This command has moved between menus across Praat versions; in recent versions it sits with the periodicity commands, in older ones it was under Combine.", zh: "这条指令在不同版本里换过位置：新版与周期分析指令放在一起，旧版则在 Combine 底下。"}
+    keywords: [autocorrelate, 自相关, autocorrelation, 基频, 周期, period]

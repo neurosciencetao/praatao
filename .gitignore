@@ -1,0 +1,19 @@
+# Build artefacts
+build/
+dist/
+*.egg-info/
+
+# Praat itself (GPL, 54 MB): not in this repository.
+# Download Praat 6.4.12 from https://praat.org and put Praat.exe here.
+Praat.exe
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Runtime leftovers
+.tmp-probe/
+*.lnk
+*.log

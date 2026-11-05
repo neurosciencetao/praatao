@@ -1,0 +1,754 @@
+# Praatao — UI element dictionary, fragment 20: the menu bar of the Objects window
+#
+# Scope: the five menus of the Objects window (Praat, New, Open, Save, Help)
+# and the items they contain.
+#
+# Matching contract (see docs/CONTRACTS.md → "praatao.content.elements schema"):
+#   1. The UIA name is normalised (collapse whitespace, strip a trailing ">",
+#      strip a leading "1. " list index, strip a trailing "\tCtrl-O" style
+#      shortcut suffix) and compared case-insensitively against `aliases` and `id`.
+#   2. Longest alias wins.
+#   3. If no alias hits, keyword matching on the normalised name is used.
+#
+# Labels were verified against Praat 6.4.12 on Windows: a live UI Automation
+# probe of the running Praat (top-level menus plus the contents of every
+# submenu) and the Praat manual pages for the New, Open and Save menus.
+# See docs/13-content-guide.md.
+
+version: 1
+
+entries:
+  # ------------------------------------------------------------------
+  # A. The menu bar itself
+  # ------------------------------------------------------------------
+  - id: objects-menu-praat
+    aliases: ["Praat"]
+    control_types: [MenuItemControl]
+    title: {en: "The Praat menu (Objects window)", zh: "Praat 菜单（Objects 窗口）"}
+    what:
+      en: "The first menu of the Objects window. Everything in it acts on Praat itself rather than on the objects in the list: scripts, notebooks, global settings and the exit command."
+      zh: "Objects 窗口的第一个菜单。这里的一切都作用于 Praat 本身，而不是清单里的物件：脚本、笔记本、全局设定，以及离开程式的指令。"
+    how:
+      en: "Praat → New Praat script opens a script editor, Praat → Settings holds the preferences, Praat → Quit (Ctrl-Q) leaves the program. The other four menus are about your objects."
+      zh: "Praat → New Praat script 开脚本窗口，Praat → Settings 放偏好设定，Praat → Quit（Ctrl-Q）离开程式。另外四个菜单才是关于你的物件。"
+    concept:
+      en: "Keeping global actions apart from object actions is what makes Praat predictable: a command in the Praat menu never changes a Sound, and a command in a dynamic button never changes Praat itself."
+      zh: "把全局动作与物件动作分开，是 Praat 可预测的原因：Praat 菜单里的指令不会改动 Sound，动态按钮里的指令也不会改动 Praat 本身。"
+    pitfalls:
+      - {en: "This menu is not the place to save your work: saving is done in the Save menu, and objects still in memory are gone when you quit.", zh: "这个菜单不是存档的地方：存档在 Save 菜单里，而且离开程式时还在记忆体里的物件会全部消失。"}
+      - {en: "Settings changes persist for the whole lab, so a changed font size or sound device affects every later session.", zh: "Settings 的设定会保留给整间实验室，改过的字体大小或声音装置会影响之后每一堂课。"}
+    keywords: [praat, menu, 菜单, 脚本, script, 设定, settings, 全域, global, 离开, quit]
+
+  - id: objects-menu-new
+    aliases: ["New"]
+    control_types: [MenuItemControl]
+    title: {en: "The New menu (Objects window)", zh: "New 菜单（Objects 窗口）"}
+    what:
+      en: "Creates new objects from scratch, never from a file: recordings, synthetic sounds, an empty TextGrid, tiers, tables, statistical examples, and the synthesis and grammar modules."
+      zh: "从头创造新物件，绝不从档案读入：录音、合成声音、空的 TextGrid、各类层级、表格、统计示例，以及合成与文法的模块。"
+    how:
+      en: "New → Record mono Sound... captures from the microphone, New → Sound → Create Sound from formula... synthesises a signal, New → Create TextGrid... starts an annotation grid. Files come in through the Open menu instead."
+      zh: "New → Record mono Sound... 从麦克风录音，New → Sound → Create Sound from formula... 合成讯号，New → Create TextGrid... 开始标注网格。档案则要从 Open 菜单进来。"
+    concept:
+      en: "Synthetic sounds are the best way to learn what an analysis parameter does: a 1000 Hz tone has an answer you already know, so a wrong window length is visible at once."
+      zh: "合成声音是学习分析参数的最佳途径：1000 Hz 的纯音，答案你早就知道，窗长设错时马上看得出来。"
+    pitfalls:
+      - {en: "New → Record mono Sound... captures from the microphone; without an input device it silently records silence.", zh: "New → Record mono Sound... 会从麦克风录音，没有输入装置时会静默录到一片空白。"}
+      - {en: "New → Create TextGrid... with zero tiers gives an object you cannot type into until you add a tier.", zh: "New → Create TextGrid... 若层级数为零，物件建出来还不能输入，必须先加一层。"}
+    keywords: [new, 新增, 建立, create, 创建, 录音, record, 合成, synthesis, textgrid, 层级, tier, 表格, table]
+
+  - id: objects-menu-open
+    aliases: ["Open"]
+    control_types: [MenuItemControl]
+    title: {en: "The Open menu (Objects window)", zh: "Open 菜单（Objects 窗口）"}
+    what:
+      en: "Reads objects in from files on disk: audio files, long recordings, tables, matrices and text. The command you choose decides which kind of object appears in the list."
+      zh: "把硬盘上的档案读成物件：音档、长录音、表格、矩阵与文字。你挑哪一条指令，决定清单里出现哪一种物件。"
+    how:
+      en: "Open → Read from file... for ordinary audio (Ctrl-O), Open → Open long sound file... for hours of recording (Ctrl-L), and the Read Table from ... commands for spreadsheets. The file name becomes the object name."
+      zh: "Open → Read from file... 读一般音档（Ctrl-O），Open → Open long sound file... 读数小时的录音（Ctrl-L），Read Table from ... 系列读表格型档案。档名会成为物件名称。"
+    concept:
+      en: "Praat reads many container formats but converts them all into one internal representation: sampled samples plus a declared sampling frequency. The format you pick mostly limits what you can do afterwards."
+      zh: "Praat 能读很多种封装格式，但内部一律转成同一种表示：取样样本加上宣告的取样频率。你选的格式主要限制之后还能做什么。"
+    pitfalls:
+      - {en: "Open creates objects; it does not open windows. To look at a sound you still need View & Edit afterwards.", zh: "Open 负责产生物件，不是开窗口。要看声音，之后仍然要点 View & Edit。"}
+      - {en: "Reading the same file twice under two names gives you two objects, not two speakers.", zh: "同一份档案读两次、给了两个名字，得到的是两个物件，不是两位说话者。"}
+    keywords: [open, 打开, 读取, read, 档案, file, 长声音, long sound, 表格, table, 矩阵, matrix]
+
+  - id: objects-menu-save
+    aliases: ["Save"]
+    control_types: [MenuItemControl]
+    title: {en: "The Save menu (Objects window)", zh: "Save 菜单（Objects 窗口）"}
+    what:
+      en: "Writes the selected object out to a file on disk, so that the data survives after Praat is closed. The commands it offers depend on the type of the selected object."
+      zh: "把选中的物件写成硬盘上的档案，让资料在关闭 Praat 之后仍然存在。它提供的指令随选中物件的类型而变。"
+    how:
+      en: "Select the object first, then pick a command such as Save as WAV file... for a Sound or Save as text file... for a Table or a TextGrid. With nothing selected the Save menu is empty."
+      zh: "先选中物件，再挑指令：声音用 Save as WAV file...，表格或 TextGrid 用 Save as text file...。没有选中任何物件时，Save 菜单是空的。"
+    concept:
+      en: "Praat's own text format is plain ASCII, so annotations and tables stay readable in any text editor, while sound is written as binary WAV that keeps the sampling frequency."
+      zh: "Praat 的原生文字格式是纯 ASCII，所以标注与表格在任何文字编辑器里都读得懂；声音则写成二进位的 WAV，并保留取样频率。"
+    pitfalls:
+      - {en: "Saving is per object: a Table you derived from a Sound is not saved when you save the Sound.", zh: "存档是逐一物件做的：从声音算出来的表格，不会因为你存了声音就一起被存下来。"}
+      - {en: "Save as text file... writes the numbers of a Table or the labels of a TextGrid, not a sound wave.", zh: "Save as text file... 写出来的是表格的数字或 TextGrid 的标签，不是声音波形。"}
+    keywords: [save, 储存, 存盘, 导出, export, wav, 文字档, text file, 档案, file]
+
+  - id: objects-menu-help
+    aliases: ["Help"]
+    control_types: [MenuItemControl]
+    title: {en: "The Help menu (Objects window)", zh: "Help 菜单（Objects 窗口）"}
+    what:
+      en: "Opens the built-in documentation: the guided introduction, the manual pages, the object types, the two tutorials, and the pages about the project itself."
+      zh: "打开内建文件：入门导览、手册各页、物件类型、两个教程，以及关于这个计划本身的说明页。"
+    how:
+      en: "Help → Praat Intro (Ctrl-Shift-?) for the guided tour, Help → Search Praat manual... (Ctrl-M) to look a command up, Help → Go to manual page... to jump straight to a page whose name you know."
+      zh: "Help → Praat Intro（Ctrl-Shift-?）是导览，Help → Search Praat manual...（Ctrl-M）用来查指令，Help → Go to manual page... 可直接跳到你知道名字的那一页。"
+    concept:
+      en: "The Help menu is a set of doors into the manual. Praat Intro is a tutorial built around the same order as a first lab: open a sound, look at it, analyse it, annotate it."
+      zh: "Help 菜单是一排通往手册的门。Praat Intro 是按第一堂实验课的顺序编排的教学：开声音、看声音、分析、标注。"
+    pitfalls:
+      - {en: "The manual is in English only and describes the interface precisely; it does not teach you phonetics.", zh: "手册只有英文，它把介面讲得很精确，却不会教你语音学。"}
+      - {en: "On a machine without internet access these entries may do nothing; keep a local copy of the manual.", zh: "没有网路时这些项目可能毫无反应，记得保留一份本地手册。"}
+    keywords: [help, 帮助, 说明, 手册, manual, 入门, intro, 教程, tutorial, 搜索, search]
+
+  # ------------------------------------------------------------------
+  # B. The Praat menu
+  # ------------------------------------------------------------------
+  - id: praat-menu-about
+    aliases: ["About Praat"]
+    control_types: [MenuItemControl]
+    title: {en: "About Praat", zh: "About Praat（关于）"}
+    what:
+      en: "Opens the window that names the Praat version, the author, and the licence the program was released under."
+      zh: "打开一个窗口，写明 Praat 的版本编号、作者，以及这个版本以什么授权发布。"
+    how:
+      en: "Praat → About Praat. Write the version number in your lab report, because a bug fixed in a later release is still a bug in the copy you ran."
+      zh: "Praat → About Praat。把版本编号写进实验报告，因为后来版本修掉的错，在你跑的这一版里还在。"
+    concept:
+      en: "Praat is free software released under the GNU General Public License; the About window is where you see which terms apply to the copy you are running."
+      zh: "Praat 是以 GNU General Public License 发布的自由软件，About 窗口就是看这份授权条款的地方。"
+    pitfalls:
+      - {en: "About Praat lives in the Praat menu, not in the Help menu, even though the manual page for it sits under Help.", zh: "About Praat 在 Praat 菜单里，不在 Help 菜单里，虽然它对应的手册页列在 Help 之下。"}
+      - {en: "The About window also lists the contributors; cite the manual and Praat in a report rather than only your own name.", zh: "About 窗口也列出贡献者名单，报告里引用手册与 Praat 时别只写自己的名字。"}
+    keywords: [about, 关于, 版本, version, 授权, licence, license, 版权, gnu]
+
+  - id: praat-menu-script-notebook
+    aliases: ["New Praat script", "New Praat notebook", "Open Praat script...", "Open Praat notebook..."]
+    control_types: [MenuItemControl]
+    title: {en: "Scripts and notebooks (Praat menu)", zh: "脚本与笔记本（Praat 菜单）"}
+    what:
+      en: "Four commands that work with Praat's own program files: New Praat script and New Praat notebook open empty editors, Open Praat script... and Open Praat notebook... load a file from disk."
+      zh: "四个处理 Praat 自身程式档的指令：New Praat script 与 New Praat notebook 打开空白编辑器，Open Praat script... 与 Open Praat notebook... 从硬盘读入档案。"
+    how:
+      en: "A script is a plain text file of Praat commands that you run; a notebook is a page of cells, each cell a piece of text or a formula, which is easier to teach with."
+      zh: "脚本是一个存放 Praat 指令的纯文字档，可以执行；笔记本则是一页一格的单元，每格是文字或公式，比较适合教学。"
+    concept:
+      en: "Scripting is how a repeatable analysis is made: the click sequence becomes a list of commands that anyone can rerun on the same data."
+      zh: "脚本化就是让分析变得可重复：原本要按的一串点击，变成任何人都能对同一份资料重跑的指令清单。"
+    pitfalls:
+      - {en: "A script records the commands you typed, not the data: a wrong file path is not recorded and will fail again on the next run.", zh: "脚本记的是你打下的指令，不是资料：错误的档案路径不会被记下来，下次执行还会再错一次。"}
+      - {en: "Keep the script as plain text; if your editor saves it with a different extension, Open Praat script... will not list it.", zh: "脚本要保持纯文字，如果编辑器用别的副档名存档，Open Praat script... 就不会把它列出来。"}
+    keywords: [script, 脚本, notebook, 笔记本, program, 程式, automation, 自动化, praat menu]
+
+  - id: praat-menu-goodies
+    aliases: ["Goodies"]
+    control_types: [MenuItemControl]
+    title: {en: "Goodies", zh: "Goodies（小工具）"}
+    what:
+      en: "A submenu of the Praat menu with a few small utilities: Calculator..., Report difference of two proportions..., Save Demo window as PDF file... and Stop playing sound."
+      zh: "Praat 菜单下的一个子菜单，放着几个小工具：Calculator...、Report difference of two proportions...、Save Demo window as PDF file... 以及 Stop playing sound。"
+    how:
+      en: "Praat → Goodies → Calculator... (Ctrl-U) evaluates a formula and shows the result; Stop playing sound (Esc) silences a sound that is still playing."
+      zh: "Praat → Goodies → Calculator...（Ctrl-U）可以算式子并显示结果；Stop playing sound（Esc）可让还在播放的声音立刻停下。"
+    concept:
+      en: "The calculator uses the same formula language as the rest of Praat, so it is the quickest place to test a formula before you put it into a script."
+      zh: "计算机用的是 Praat 到处都在用的公式语言，所以在把公式写进脚本之前，计算器是最快的测试场所。"
+    pitfalls:
+      - {en: "The menu is called Goodies for a reason: these items are for occasional use, not part of a normal analysis.", zh: "这个菜单叫 Goodies（杂项）是有原因的：里面的项目是偶尔用的，不是常规分析的一环。"}
+      - {en: "Stop playing sound only stops the audio; it does not clear the objects in the list.", zh: "Stop playing sound 只是停止发声，不会清掉清单里的物件。"}
+    keywords: [goodies, 小工具, 杂项, 计算器, calculator, 公式, formula, 统计, statistics]
+
+  - id: praat-menu-settings
+    aliases: ["Settings"]
+    control_types: [MenuItemControl]
+    title: {en: "Settings", zh: "Settings（设定）"}
+    what:
+      en: "A submenu of the Praat menu that opens the settings dialogues: Buttons..., Text reading settings..., Text writing settings..., CJK font style settings..., Sound recording settings..., Sound playing settings... and LongSound settings...."
+      zh: "Praat 菜单下的一个子菜单，打开各个设定对话框：Buttons...、Text reading settings...、Text writing settings...、CJK font style settings...、Sound recording settings...、Sound playing settings... 与 LongSound settings...."
+    how:
+      en: "Use Sound playing settings... to choose the audio device and the volume, LongSound settings... for the buffer length of long sound files, and Text reading settings... to repair garbled characters in text files."
+      zh: "Sound playing settings... 用来选声音装置与音量，LongSound settings... 设定长音档的缓冲长度，Text reading settings... 用来修好文字档里的乱码。"
+    concept:
+      en: "The settings are global, so a change made in one lab session is still in force in the next one; a wrong sound device is the usual reason that Praat plays nothing at all."
+      zh: "这些设定是全域的，所以在一堂实验课改过的设定，下一堂课仍然有效；最常见的「Praat 完全没声音」原因就是声音装置设错。"
+    pitfalls:
+      - {en: "Sound playing settings... changes the output device only; it does not make a recording that was too quiet louder.", zh: "Sound playing settings... 只改输出装置，不会把录得太轻的录音变大声。"}
+      - {en: "Changing the text reading settings changes how every file you open is decoded; reset them if a file suddenly looks wrong.", zh: "改文字读取设定会影响之后每个档案的解码方式，档案突然变得怪怪的就把设定改回去。"}
+    keywords: [settings, 设定, 偏好, preferences, 声音装置, sound device, 缓冲, buffer, 字体, font, 按钮, buttons]
+
+  - id: praat-menu-technical
+    aliases: ["Technical"]
+    control_types: [MenuItemControl]
+    title: {en: "Technical", zh: "Technical（技术性工具）"}
+    what:
+      en: "A submenu of the Praat menu for diagnostics and internal information: Report memory use, Report system properties, Report font properties, List readable types of objects, Create C interface... and Praat test...."
+      zh: "Praat 菜单下的一个子菜单，放诊断与内部资讯的工具：Report memory use、Report system properties、Report font properties、List readable types of objects、Create C interface... 与 Praat test...."
+    how:
+      en: "Praat → Technical → Report memory use tells you how much memory the current objects take; List readable types of objects shows which file types this build can read."
+      zh: "Praat → Technical → Report memory use 告诉你目前的物件占了多少记忆体；List readable types of objects 显示这个版本能读哪些档案类型。"
+    concept:
+      en: "These commands report on the program rather than on the linguistics, which makes them the right first stop when Praat misbehaves and the wrong stop for a phonetics question."
+      zh: "这些指令报告的是程式本身而不是语言学，所以 Praat 行为异常时它们是第一站，语音学问题则不是。"
+    pitfalls:
+      - {en: "Report memory use is a diagnostic, not a limit: Praat does not stop you from building a huge object, it only tells you the cost.", zh: "Report memory use 是诊断而不是上限：Praat 不会阻止你做出巨大的物件，它只是告诉你代价。"}
+      - {en: "Create C interface... writes files for programmers; it is not a way to export your analysis.", zh: "Create C interface... 是写给程序设计师用的档案，不是汇出分析结果的方式。"}
+    keywords: [technical, 技术, 诊断, diagnostic, 记忆体, memory, 物件类型, object types, 介面, interface]
+
+  - id: praat-menu-quit
+    aliases: ["Quit"]
+    control_types: [MenuItemControl]
+    title: {en: "Quit", zh: "Quit（离开）"}
+    what:
+      en: "Closes Praat and ends the session. Objects that were never written to a file are lost."
+      zh: "关闭 Praat，结束这次工作。从未写成档案的物件会消失。"
+    how:
+      en: "Praat → Quit (Ctrl-Q). Before you use it, save every object you want to keep: the Save menu writes them out one at a time."
+      zh: "Praat → Quit（Ctrl-Q）。用之前先把要保留的物件都存盘，Save 菜单要一个一个写出去。"
+    concept:
+      en: "Praat keeps its objects in memory, not on disk, so quitting is the one moment when unsaved annotations and unsaved measurements are definitely lost."
+      zh: "Praat 的物件放在记忆体里，不在硬盘上，所以 Quit 那一刻，没有存盘的标注与量测就一定没有了。"
+    pitfalls:
+      - {en: "Quitting does not ask whether your objects are saved; a TextGrid made in the lab can vanish without warning.", zh: "Quit 不会问你物件有没有存盘，实验课上刚做出来的 TextGrid 可能毫无预警地消失。"}
+      - {en: "Saving a TextGrid is a separate step: use Save → Save as text file... before you quit, not afterwards.", zh: "存 TextGrid 是另一个步骤，要在离开之前用 Save → Save as text file...，而不是之后。"}
+    keywords: [quit, 离开, 关闭, exit, 结束, 存档, save, 资料流失, data loss, ctrl-q]
+
+  # ------------------------------------------------------------------
+  # C. The New menu
+  # ------------------------------------------------------------------
+  - id: new-menu-record
+    aliases: ["Record mono Sound...", "Record stereo Sound..."]
+    control_types: [MenuItemControl]
+    title: {en: "Record mono Sound..., Record stereo Sound...", zh: "Record mono Sound...、Record stereo Sound...（录音）"}
+    what:
+      en: "Two commands that record from the microphone and put the result in the list as a new Sound object: one channel or two."
+      zh: "两条从麦克风录音、并把结果作为新的 Sound 物件放进清单的指令：单声道或双声道。"
+    how:
+      en: "New → Record mono Sound... (Ctrl-R) records one channel, New → Record stereo Sound... records both channels of a stereo input. Praat shows a recording window with a level meter and a stop button."
+      zh: "New → Record mono Sound...（Ctrl-R）录单声道，New → Record stereo Sound... 录双声道的左右两个输入。Praat 会显示一个有位准表与停止按钮的录音窗口。"
+    concept:
+      en: "The level meter is the recording's quality control: keep the peaks below the top of the meter, because a clipped signal has no recoverable amplitude afterwards."
+      zh: "位准表就是录音的品质管制：峰值要留在表的上限以下，因为一旦爆音，振幅事后救不回来。"
+    pitfalls:
+      - {en: "If the microphone input is not set, Praat records silence instead of complaining.", zh: "如果麦克风输入没有设定，Praat 会静默录到一片空白，而不会报错。"}
+      - {en: "Record stereo Sound... needs a stereo input; with a mono headset it gives two nearly identical channels, not a real stereo pair.", zh: "Record stereo Sound... 需要双声道输入，用单声道耳麦只会得到两个几乎一样的声道，不是真正的立体声。"}
+    keywords: [record, 录音, 麦克风, microphone, 单声道, mono, 立体声, stereo, 位准, level, 爆音, clipping]
+
+  - id: new-menu-sound
+    aliases: ["Sound"]
+    control_types: [MenuItemControl]
+    title: {en: "Sound (New menu)", zh: "Sound（New 菜单）"}
+    what:
+      en: "A submenu of the New menu that creates a Sound from a description rather than from a file: Create Sound as pure tone..., Create Sound from formula..., Create Sound as tone complex..., Create Sound as gammatone..., Create Sound as Shepard tone... and Create Sound from VowelEditor...."
+      zh: "New 菜单下的子菜单，用描述而不是档案来创造 Sound：Create Sound as pure tone...、Create Sound from formula...、Create Sound as tone complex...、Create Sound as gammatone...、Create Sound as Shepard tone... 与 Create Sound from VowelEditor...."
+    how:
+      en: "New → Sound → Create Sound as pure tone... makes a sinusoid of a given frequency, Create Sound from formula... lets you write the waveform as a formula, Create Sound from VowelEditor... builds a vowel from formant values."
+      zh: "New → Sound → Create Sound as pure tone... 产生指定频率的正弦波，Create Sound from formula... 用公式写出波形，Create Sound from VowelEditor... 用共振峰数值造出元音。"
+    concept:
+      en: "A synthetic sound has a known answer, which makes it ideal test material: a 1000 Hz tone shows a wrong window length or a wrong pitch range more clearly than any recording."
+      zh: "合成声音的答案是已知的，因此是最理想的测试材料：1000 Hz 的纯音比任何录音都更能暴露窗长或基频范围设错。"
+    pitfalls:
+      - {en: "Create Sound from formula... counts time in seconds from the start of the sound, so a formula copied from elsewhere may not match your sampling frequency.", zh: "Create Sound from formula... 的时间以秒计、从声音起点算起，从别处抄来的公式可能与你的取样频率对不上。"}
+      - {en: "Create Sound as gammatone... and Create Sound as Shepard tone... do not make vowels, so do not expect formants in them.", zh: "Create Sound as gammatone... 与 Create Sound as Shepard tone... 做出来的不是元音，别指望在里面看到共振峰。"}
+    keywords: [sound, 声音, 合成, synthesis, 纯音, pure tone, 公式, formula, 共振峰, formant, gammatone, shepard]
+
+  - id: new-menu-create-textgrid
+    aliases: ["Create TextGrid..."]
+    control_types: [MenuItemControl]
+    title: {en: "Create TextGrid...", zh: "Create TextGrid...（建立标注网格）"}
+    what:
+      en: "Creates an empty TextGrid object: a set of tiers on a time axis, with no sound attached and no labels yet."
+      zh: "建立一个空的 TextGrid 物件：时间轴上的若干层级，既没有附上声音，也还没有任何标签。"
+    how:
+      en: "New → Create TextGrid... asks for the number of tiers and their names, and whether they should be interval tiers or point tiers. For an existing recording use Annotate → To TextGrid... instead."
+      zh: "New → Create TextGrid... 会问层级的数目与名称，以及要做区间层级还是点层级。若已有录音，改用 Annotate → To TextGrid...."
+    concept:
+      en: "A TextGrid separates the time structure of an utterance from its labels, so one annotation can be checked against a new recording, and different tiers can carry different levels of description."
+      zh: "TextGrid 把语流的时间结构与标签分开，所以同一份标注可以拿去比对新的录音，不同层级也能放不同层次的描述。"
+    pitfalls:
+      - {en: "A TextGrid created here has no Sound, so the editor shows tiers without a waveform and you cannot hear what you label.", zh: "这里建立的 TextGrid 没有附上声音，编辑窗口只显示层级没有波形，你听不到自己标注的东西。"}
+      - {en: "Choosing point tiers when you meant interval tiers leaves you with a tier that cannot hold a phone label.", zh: "本来想要区间层级却选了 point tier，结果是一个放不下音段标签的层级。"}
+    keywords: [textgrid, 标注, 网格, 层级, tier, 区间, interval, 点, point, 建立, create, 空网格, empty]
+
+  - id: new-menu-tiers
+    aliases: ["Tiers"]
+    control_types: [MenuItemControl]
+    title: {en: "Tiers (New menu)", zh: "Tiers（New 菜单）"}
+    what:
+      en: "A submenu of the New menu that creates tier-like objects on their own: Create empty PointProcess..., Create Poisson process..., Create PitchTier..., Create FormantGrid..., Create IntensityTier..., Create DurationTier... and Create AmplitudeTier...."
+      zh: "New 菜单下的子菜单，单独建立各种层级式物件：Create empty PointProcess...、Create Poisson process...、Create PitchTier...、Create FormantGrid...、Create IntensityTier...、Create DurationTier... 与 Create AmplitudeTier...."
+    how:
+      en: "New → Tiers → Create PitchTier... gives a curve of pitch values over time that you can draw by hand; Create empty PointProcess... gives a list of points with no events."
+      zh: "New → Tiers → Create PitchTier... 会给你一条可手绘的基频曲线；Create empty PointProcess... 给出的是一个没有任何事件的时间点清单。"
+    concept:
+      en: "A tier is a value or an interval attached to a time span. PitchTier, IntensityTier, DurationTier and AmplitudeTier are the same idea with different physical quantities attached to it."
+      zh: "层级就是把一个数值或一个区间绑在某个时间跨度上。PitchTier、IntensityTier、DurationTier、AmplitudeTier 是同一个观念，只是挂上去的物理量不同。"
+    pitfalls:
+      - {en: "These tiers have no sound behind them, so their times are abstract numbers: build a target with them, then resynthesise.", zh: "这些层级背后没有声音，时间只是抽象的数字：通常先用它们做出目标，再重合成。"}
+      - {en: "Create Poisson process... produces random event times, which is a way to practise boundary placement rather than a phonetic model.", zh: "Create Poisson process... 产生随机的点事件时间，是练习打点位置的方法，不是语音模型。"}
+    keywords: [tiers, 层级, pitchtier, formantgrid, intensitytier, durationtier, amplitude, pointprocess, 曲线, curve, 目标, target]
+
+  - id: new-menu-create-corpus
+    aliases: ["Create Corpus..."]
+    control_types: [MenuItemControl]
+    title: {en: "Create Corpus...", zh: "Create Corpus...（建立语料物件）"}
+    what:
+      en: "Creates a Corpus object: a set of recordings together with the annotation that belongs to them, kept as one object so that a whole collection can be handled at once."
+      zh: "建立一个 Corpus 物件：把一批录音与对应的标注放在一起当成一个物件，让整份语料可以一次处理。"
+    how:
+      en: "New → Create Corpus... asks for the files that make up the corpus and how they are annotated. The result is one Corpus object in the list, not a set of separate Sounds."
+      zh: "New → Create Corpus... 会问语料由哪些档案组成、以及标注放在哪里。结果是清单里的一个 Corpus 物件，而不是一堆分开的 Sound。"
+    concept:
+      en: "A corpus bundles speech data with its labels, so a query over the corpus can ask acoustic questions across many tokens at once, which is how corpora are used in phonetics and speech technology."
+      zh: "语料把语音资料与标签绑在一起，于是可以对整个语料做声学问题的检索，这正是语音学与语音技术使用语料的方式。"
+    pitfalls:
+      - {en: "Create Corpus... expects annotation that already exists; it does not transcribe your recordings for you.", zh: "Create Corpus... 需要已经存在的标注，它不会替你转写录音。"}
+      - {en: "A corpus is a different object from a TextGrid: it holds many tokens, each with its own time axis.", zh: "Corpus 与 TextGrid 是不同的物件，它装着许多语流，每一语流有自己的时间轴。"}
+    keywords: [corpus, 语料, 语料库, collection, 集合, 建立, create, 标注, annotation]
+
+  - id: new-menu-tables
+    aliases: ["Tables"]
+    control_types: [MenuItemControl]
+    title: {en: "Tables (New menu)", zh: "Tables（New 菜单）"}
+    what:
+      en: "A submenu of the New menu that creates Table objects: Create Table with column names..., Create Table without column names..., Create TableOfReal..., Data sets from the literature, and simple statistical tables such as Create simple Confusion...."
+      zh: "New 菜单下的子菜单，建立 Table 物件：Create Table with column names...、Create Table without column names...、Create TableOfReal...、Data sets from the literature、Create simple Confusion...、Create simple Covariance...、Create simple Correlation... 与 Create empty EditCostsTable...."
+    how:
+      en: "New → Tables → Create Table with column names... gives a grid with a header row; Data sets from the literature supplies classic measurement tables such as the Peterson and Barney formant table for testing."
+      zh: "New → Tables → Create Table with column names... 给出带表头列名的表格；Data sets from the literature 提供经典量测表，例如 Peterson 与 Barney 的共振峰表，可用来测试。"
+    concept:
+      en: "A Table is a rectangular grid of numbers with named columns, the natural shape for a measurement table: one row per token, one column per variable."
+      zh: "Table 是带列名的数字方格，是量测表最自然的形式：每一列是一个语流，每一行是一个变项。"
+    pitfalls:
+      - {en: "Create Table without column names... gives numbered columns only, so keep a note of what column 3 means.", zh: "Create Table without column names... 只给编号栏名，所以要自己记着第 3 栏是什么。"}
+      - {en: "The literature data sets are old measurements with their own conventions; they are test material, not evidence about your own speakers.", zh: "文献数据集是旧测量，各有自己的约定，它是测试材料，不是关于你自己说话者的证据。"}
+    keywords: [table, 表格, data, 数据, column, 栏, literature, 文献, formant table, 共振峰表, confusion, 混淆, correlation, 相关]
+
+  - id: new-menu-stats-generics
+    aliases: ["Stats", "Generics"]
+    control_types: [MenuItemControl]
+    title: {en: "Stats, Generics (New menu)", zh: "Stats、Generics（New 菜单）"}
+    what:
+      en: "Two submenus of the New menu. Stats holds statistical tools such as Multidimensional scaling; Generics creates the generic data structures: Matrix, Photo, Polygon, Strings, Create Permutation... and Polynomial."
+      zh: "New 菜单下的两个子菜单。Stats 放统计工具，例如 Multidimensional scaling；Generics 建立通用资料结构：Matrix、Photo、Polygon、Strings、Create Permutation... 与 Polynomial。"
+    how:
+      en: "New → Generics → Matrix creates a grid of numbers from a formula, New → Generics → Strings creates a list of text lines; New → Stats → Multidimensional scaling opens the tutorial for placing items in a map of similarity."
+      zh: "New → Generics → Matrix 用公式建立数字方格，New → Generics → Strings 建立文字列清单；New → Stats → Multidimensional scaling 是把项目摆到相似度地图上的教学。"
+    concept:
+      en: "Multidimensional scaling turns a table of dissimilarities into a map, which is how phonological features are often pictured as distances between vowels."
+      zh: "Multidimensional scaling 把一张不相似度表变成一张地图，语言学音韵特征常这样画成元音之间的距离。"
+    pitfalls:
+      - {en: "Both submenus build data structures rather than analyse a sound; analysis lives in the dynamic buttons of the Objects window.", zh: "这两个子菜单都是建立资料结构，不是分析声音，分析在 Objects 窗口的动态按钮里。"}
+      - {en: "Generic objects such as Matrix and Strings carry no time axis, so nothing can be plotted against a recording.", zh: "Matrix、Strings 这类通用物件没有时间轴，没法拿来和录音对照作图。"}
+    keywords: [stats, 统计, generics, 通用, multidimensional scaling, mds, matrix, 矩阵, strings, 字符串, permutation, polynomial, 多项式]
+
+  - id: new-menu-synthesis
+    aliases: ["Acoustic synthesis (Klatt)", "Articulatory synthesis", "Text-to-speech synthesis"]
+    control_types: [MenuItemControl]
+    title: {en: "The three synthesis menus (New menu)", zh: "三个合成菜单（New 菜单）"}
+    what:
+      en: "Three submenus of the New menu that build speech from a model. Acoustic synthesis (Klatt) creates a KlattGrid or a KlattGrid from a vowel; Articulatory synthesis creates an articulation, a speaker, an artword or a vocal tract; Text-to-speech synthesis creates a SpeechSynthesizer."
+      zh: "New 菜单下三个用模型造语音的子菜单。Acoustic synthesis (Klatt) 建立 KlattGrid 或由元音得到 KlattGrid；Articulatory synthesis 建立发音动作、发音人、artword 或声道；Text-to-speech synthesis 建立 SpeechSynthesizer。"
+    how:
+      en: "New → Acoustic synthesis (Klatt) → Create KlattGrid... makes a source-filter model with formant targets; New → Articulatory synthesis → Create Articulation... starts from vocal tract shape; New → Text-to-speech synthesis → Create SpeechSynthesizer... is the full text-to-speech route."
+      zh: "New → Acoustic synthesis (Klatt) → Create KlattGrid... 会做出带共振峰目标的源滤模型；New → Articulatory synthesis → Create Articulation... 从声道形状开始；New → Text-to-speech synthesis → Create SpeechSynthesizer... 则是完整的文字转语音路径。"
+    concept:
+      en: "Klatt synthesis is a cascade of resonators driven by a glottal source: change a formant target and the vowel changes, which is why it is the classic tool for teaching what formants are."
+      zh: "Klatt 合成是一串由声门源驱动的共振器，改动共振峰目标元音就跟着变，所以它是教「共振峰是什么」最经典的工具。"
+    pitfalls:
+      - {en: "Synthesised vowels are artefacts of the model, not recordings, so a formant measured on them is only as good as the model.", zh: "合成的元音是模型的产物而不是录音，在它上面量到的共振峰，好坏只等同于模型的好坏。"}
+      - {en: "KlattGrid, Articulation and SpeechSynthesizer are different object types; the commands of one do not accept the others.", zh: "KlattGrid、Articulation 与 SpeechSynthesizer 是不同的物件类型，一个的指令不能接受另一个。"}
+    keywords: [synthesis, 合成, klatt, klattgrid, 共振峰, formant, vocal tract, 声道, tts, 语音合成, phone, 音素, source filter, 源滤]
+
+  - id: new-menu-constraint-grammars
+    aliases: ["Constraint grammars"]
+    control_types: [MenuItemControl]
+    title: {en: "Constraint grammars", zh: "Constraint grammars（约束文法）"}
+    what:
+      en: "A submenu of the New menu that creates Optimality Theory grammars: an OT learning tutorial, Create NoCoda grammar, Create place assimilation grammar, Create place assimilation distribution, Create tongue-root grammar..., Create metrics grammar... and Create multi-level metrics grammar...."
+      zh: "New 菜单下的子菜单，建立最优性理论（OT）文法：一个 OT learning 教学、Create NoCoda grammar、Create place assimilation grammar、Create place assimilation distribution、Create tongue-root grammar...、Create metrics grammar... 与 Create multi-level metrics grammar...."
+    how:
+      en: "New → Constraint grammars → Create NoCoda grammar gives a ready-made OT grammar to experiment with; the OT learning tutorial explains how the ranked constraints produce the possible outputs."
+      zh: "New → Constraint grammars → Create NoCoda grammar 直接给你一个可以改的 OT 文法；OT learning 教学说明排序过的限制如何产生可能的输出。"
+    concept:
+      en: "Optimality Theory models a language as a ranking of constraints: the winner is the candidate that violates the highest ranked constraint least, which is a formal way of stating what phonology prefers."
+      zh: "最优性理论把语言表述成一套有排序的限制，胜出者是违反最高排序限制最少的那一个，这是把语音学偏好写成形式化的方式。"
+    pitfalls:
+      - {en: "An OT grammar generates possible forms; it does not tell you which form a speaker actually produced.", zh: "OT 文法生成的是可能的形式，并不告诉你说话人实际说出了哪一个。"}
+      - {en: "Changing the constraint ranking changes the whole output, so keep the ranking visible when you report a result.", zh: "改动限制排序就会改变整份输出，所以报告结果时要把排序写出来。"}
+    keywords: [ot, optimality, 约束, constraint, 文法, grammar, 音系, phonology, tutorial, 教学, assimilation, 同化]
+
+  - id: new-menu-neural-networks
+    aliases: ["Symmetric neural networks", "Feedforward neural networks"]
+    control_types: [MenuItemControl]
+    title: {en: "Symmetric and feedforward neural networks", zh: "对称式与前馈式神经网络"}
+    what:
+      en: "Two submenus of the New menu that create neural networks. The symmetric kind: Create empty Network..., Create rectangular Network..., Create rectangular Network (vertical)... and Create Net as deep belief network.... The feedforward kind: Create FFNet..., Create iris example... and Advanced."
+      zh: "New 菜单下两个建立神经网络的子菜单。对称式有 Create empty Network...、Create rectangular Network...、Create rectangular Network (vertical)... 与 Create Net as deep belief network....；前馈式有 Create FFNet...、Create iris example... 与 Advanced。"
+    how:
+      en: "New → Feedforward neural networks → Create FFNet... builds a network with input and output layers that you can train; New → Symmetric neural networks → Create rectangular Network... builds the symmetric, auto-associative kind."
+      zh: "New → Feedforward neural networks → Create FFNet... 建立有输入层与输出层、可加以训练的网路；New → Symmetric neural networks → Create rectangular Network... 建立对称式（自联想）网路。"
+    concept:
+      en: "A feedforward network maps an input vector to an output vector through hidden layers; a symmetric network instead reconstructs its own input, which is why it appears in unsupervised and speech-encoding work."
+      zh: "前馈式网路把输入向量经隐藏层映射成输出向量，对称式网路反而重建自己的输入，因此在无监督学习与语音编码的研究里常见。"
+    pitfalls:
+      - {en: "These are advanced research objects and are outside a first-year phonetics lab; the iris example is a teaching example, not a language sample.", zh: "这些是进阶的研究物件，超出第一年语音学实验课的范围，iris 例子是教学示例而不是语言样本。"}
+      - {en: "A network needs data in a very specific shape, so a Table with the wrong column layout cannot be used directly.", zh: "网路需要特定形状的资料，栏位配置不对的表格不能直接丢进去。"}
+    keywords: [neural network, 神经网络, ffnet, symmetric, 对称, feedforward, 前馈, train, 训练, deep belief, 深度学习]
+
+  # ------------------------------------------------------------------
+  # D. The Open menu
+  # ------------------------------------------------------------------
+  - id: open-menu-read-from-file
+    aliases: ["Read from file..."]
+    control_types: [MenuItemControl]
+    title: {en: "Read from file...", zh: "Read from file...（从档案读入）"}
+    what:
+      en: "Reads a sound file into memory and puts a Sound object in the list. It recognises the common audio formats, including WAV, AIFF, MP3 and FLAC."
+      zh: "把音档读进记忆体，在清单里放一个 Sound 物件。它认得常见的音档格式，包括 WAV、AIFF、MP3 与 FLAC。"
+    how:
+      en: "Open → Read from file... (Ctrl-O), choose the file, and Praat asks for the name of the new object. The file name becomes the object name by default."
+      zh: "Open → Read from file...（Ctrl-O），选择档案，Praat 会问新物件要叫什么名字，默认会用档名作为物件名。"
+    concept:
+      en: "A Sound holds samples, a sampling frequency and a start time. The sampling frequency is not a quality setting but the number of samples per second, and it fixes the highest frequency you can analyse."
+      zh: "Sound 装着样本、取样频率与起始时间。取样频率不是品质设定，而是每秒多少样本，它决定你能分析到的最高频率。"
+    pitfalls:
+      - {en: "For a long recording this loads everything into memory and Praat may freeze; use Open long sound file... instead.", zh: "长录音用这一条会把全部内容载入记忆体，Praat 可能当机，要改用 Open long sound file...。"}
+      - {en: "Reading a file twice under two names gives you two objects, not two speakers.", zh: "同一份档案读两次、给了两个名字，得到的是两个物件，不是两位说话者。"}
+    keywords: [read from file, 读取, 读档, wav, aiff, mp3, flac, 音档, sound, ctrl-o, 取样频率, sampling frequency]
+
+  - id: open-menu-long-sound
+    aliases: ["Open long sound file..."]
+    control_types: [MenuItemControl]
+    title: {en: "Open long sound file...", zh: "Open long sound file...（开启长声音档）"}
+    what:
+      en: "Creates a LongSound object that stays on disk. Praat reads only a short window into memory each time it plays or draws the sound."
+      zh: "建立留在硬盘上的 LongSound 物件。Praat 每次播放或绘制时只把一小段读进记忆体。"
+    how:
+      en: "Open → Open long sound file... (Ctrl-L), pick the file. The editor looks like the Sound editor but cannot be edited, and analyses are computed on the fly."
+      zh: "Open → Open long sound file...（Ctrl-L），选择档案。编辑窗口看起来像声音编辑窗口，但不能编辑，分析则是即时算出来的。"
+    concept:
+      en: "The buffer length is set by LongSound settings... (Praat menu → Settings) and defaults to 60 seconds. LongSound suits a whole conversation, but it cannot be turned into Pitch or Formant objects."
+      zh: "缓冲长度由 Praat 菜单 → Settings 里的 LongSound settings... 决定，预设是 60 秒。LongSound 适合整段对话，但无法再转成 Pitch 或 Formant 物件。"
+    pitfalls:
+      - {en: "LongSound and Sound look alike but are not: the type name in the list tells them apart, and Analyse periodicity cannot make a Pitch object from a LongSound.", zh: "LongSound 与 Sound 看起来像却不是同一回事，看清单里的类型名就知道，而且 Analyse periodicity 无法从 LongSound 产生 Pitch 物件。"}
+      - {en: "You cannot cut and paste in a LongSound editor; use Extract part... on a copy instead.", zh: "LongSound 编辑窗口不能剪贴，要截片段请改用 Copy... 之后的 Extract part...。"}
+    keywords: [long sound, 长声音, longsound, 长音档, 记忆体, memory, 缓冲, buffer, 串流, streaming, ctrl-l]
+
+  - id: open-menu-separate-channels
+    aliases: ["Read separate channels from sound file..."]
+    control_types: [MenuItemControl]
+    title: {en: "Read separate channels from sound file...", zh: "Read separate channels from sound file...（分别读取声道）"}
+    what:
+      en: "Reads a multi-channel audio file and creates one Sound object per channel instead of one combined stereo Sound."
+      zh: "读取多声道音档，每个声道各建立一个 Sound 物件，而不是合成一个立体声 Sound。"
+    how:
+      en: "Open → Read separate channels from sound file..., choose the file, and Praat creates a separate Sound for each channel it finds."
+      zh: "Open → Read separate channels from sound file...，选择档案，Praat 会为侦测到的每个声道各建一个 Sound。"
+    concept:
+      en: "Channel separation is effectively a high-pass filter: what the microphone hears equally in both channels cancels out, so rumble and room noise are attenuated."
+      zh: "声道分离其实是一个高通滤波，左右声道听到一样的成分会互相抵消，所以低频隆隆声与房间杂音都被削弱。"
+    pitfalls:
+      - {en: "For a genuine stereo recording the two microphones were in different places, so the channels are not interchangeable.", zh: "真正的立体声录音里两个麦克风位置不同，左右声道并不可互换。"}
+      - {en: "This gives you two Sound objects, not a stereo one; Combine is the command that puts two mono sounds back together as stereo.", zh: "这条指令给你两个 Sound 物件而不是一个立体声物件，要合成立体声得用 Combine。"}
+    keywords: [separate channels, 声道, 分别, stereo, 立体声, channel, 分离, 合并, combine, 高通, high pass]
+
+  - id: open-menu-special-files
+    aliases: ["Read from special sound file", "Read from special tier file..."]
+    control_types: [MenuItemControl]
+    title: {en: "Read from special sound file, Read from special tier file...", zh: "特殊格式档案（Read from special ...）"}
+    what:
+      en: "Two submenus for formats that Read from file... cannot recognise: raw audio data (Read Sound from raw Alaw file..., and the raw 16-bit Little Endian and Big Endian files) and Xwaves tier files (Read TextTier from Xwaves..., Read IntervalTier from Xwaves...)."
+      zh: "两个子菜单，给 Read from file... 认不出的格式用：原始音讯资料（Read Sound from raw Alaw file...、Read Sound from raw 16-bit Little Endian file...、Read Sound from raw 16-bit Big Endian file...），以及 Xwaves 的层级档（Read TextTier from Xwaves...、Read IntervalTier from Xwaves...）。"
+    how:
+      en: "Use these only when you know the exact format of the file. Each command asks for the details it needs, such as the number of channels and the sampling frequency, and a wrong answer gives noise."
+      zh: "只有在确实知道档案格式时才用这些。每个指令都会问它需要的细节，例如声道数与取样频率，答错就会得到杂讯。"
+    concept:
+      en: "A raw file has no header, so its structure has to be supplied by hand; the sampling frequency in particular cannot be recovered from the data and must be known in advance."
+      zh: "原始档案没有档头，结构只能靠人手提供，取样频率尤其无法从资料本身还原，必须事先知道。"
+    pitfalls:
+      - {en: "A raw file read with the wrong endianness or the wrong sampling frequency sounds like noise, not like a damaged recording.", zh: "原始档案若用错位元组或错取样频率读进来，听起来就是杂讯，而不是受损的录音。"}
+      - {en: "Each item reads only the format named in it; they are not a general raw-import tool.", zh: "每个项目只读它所指的格式，并不是通用的原始档案汇入工具。"}
+    keywords: [special, 特殊, 格式, format, raw, 原始, alaw, endian, 位元组, xwaves, 层级, tier, 杂讯, noise]
+
+  - id: open-menu-table-tab
+    aliases: ["Read Table from tab-separated file..."]
+    control_types: [MenuItemControl]
+    title: {en: "Read Table from tab-separated file...", zh: "Read Table from tab-separated file...（读表格型文字档）"}
+    what:
+      en: "Reads a text file whose columns are separated by tab characters into a Table object, with one row per line of the file."
+      zh: "把以定位字元分栏的文字档读成 Table 物件，档案的每一行对应表格的一列。"
+    how:
+      en: "Open → Read Table from tab-separated file..., pick the file, and the numbers are read column by column. Use it for files that came out of a spreadsheet with tab separators."
+      zh: "Open → Read Table from tab-separated file...，选择档案，数字会逐栏读进来。电子表格汇出成定位字元分栏的档案就用这一条。"
+    concept:
+      en: "A Table is the bridge between a spreadsheet and an analysis: once the numbers are in a Table, Praat's statistics and drawing commands can work on them column by column."
+      zh: "Table 是电子表格与分析之间的桥，数字进了 Table 之后，Praat 的统计与绘图指令就能逐栏处理。"
+    pitfalls:
+      - {en: "Text before the first number is taken as the header, so a file whose first line is data loses that line.", zh: "第一个数字之前的文字会被当作表头，若档案第一行就是资料，这一行就丢了。"}
+      - {en: "A decimal comma instead of a decimal point makes the column unreadable, and Praat will complain about non-numeric text.", zh: "若用小数逗号而不是小数点，整栏会读不出来，Praat 会抱怨出现非数字的文字。"}
+    keywords: [table, 表格, tab, 定位字元, 分隔, separated, 读取, read, csv, 栏, column, 表头, header, 电子表格, spreadsheet]
+
+  - id: open-menu-table-comma
+    aliases: ["Read Table from comma-separated file...", "Read Table from semicolon-separated file...", "Read Table from whitespace-separated file..."]
+    control_types: [MenuItemControl]
+    title: {en: "The other delimited Table readers", zh: "其他三种分隔格式的表格读入"}
+    what:
+      en: "Three commands that read a text file into a Table using the separator named in them: comma, semicolon, or whitespace. They differ only in what they treat as the divider between columns."
+      zh: "三条把文字档读成 Table 的指令，分隔符写在名称里：逗号、分号或空白，三者的差别只在用什么当栏与栏的分界。"
+    how:
+      en: "Open → Read Table from comma-separated file... for a comma-separated export, Read Table from semicolon-separated file... when the file uses semicolons, Read Table from whitespace-separated file... when columns are separated by spaces or tabs."
+      zh: "Open → Read Table from comma-separated file... 读逗号分隔的汇出档，Read Table from semicolon-separated file... 读分号分隔的档，Read Table from whitespace-separated file... 读以空白分栏的档。"
+    concept:
+      en: "The separator has to match the file, and the decimal separator is a separate matter: a European spreadsheet writes 0,5 and separates columns with a semicolon, which is why Praat offers both."
+      zh: "分隔符必须与档案一致，而小数点是另一回事：欧洲版电子表格会写 0,5 并用分号分栏，所以 Praat 两种都给了。"
+    pitfalls:
+      - {en: "Choosing the wrong separator gives one column instead of many, or an error about non-numeric text.", zh: "选错分隔符的结果是整份档案变成一栏，或是出现非数字文字的报错。"}
+      - {en: "In a comma-separated file the decimal point and the thousands separator both use the comma, so the numbers must be cleaned first.", zh: "逗号分隔的档案里小数点与千分位都占用逗号，数字必须先清理过。"}
+    keywords: [table, 表格, csv, 逗号, comma, 分号, semicolon, 空白, whitespace, 分隔, separated, 小数点, decimal]
+
+  - id: open-menu-tableofreal
+    aliases: ["Read TableOfReal from headerless spreadsheet file..."]
+    control_types: [MenuItemControl]
+    title: {en: "Read TableOfReal from headerless spreadsheet file...", zh: "Read TableOfReal from headerless spreadsheet file...（读无表头表格）"}
+    what:
+      en: "Reads a spreadsheet file that has no header row into a TableOfReal object: a table of numbers in which each column carries a label of its own."
+      zh: "把没有表头的电子表格档读成 TableOfReal 物件，一份数字表格，每一栏都有自己的名称。"
+    how:
+      en: "Open → Read TableOfReal from headerless spreadsheet file..., pick the file; Praat asks how many rows and columns it has and what the column names should be."
+      zh: "Open → Read TableOfReal from headerless spreadsheet file...，选择档案；Praat 会问它有几行几栏，以及各栏要叫什么名字。"
+    concept:
+      en: "A TableOfReal is a Table whose columns are labelled vectors of numbers, so it holds one variable per column with a name attached, exactly the shape of a formant table or an F1 and F2 measurement table."
+      zh: "TableOfReal 是每一栏都带名称的数字向量表，也就是一栏一个变项，这正是共振峰表或 F1、F2 量测表的形状。"
+    pitfalls:
+      - {en: "You must supply the row and column counts yourself, and a wrong count silently truncates the data.", zh: "行数与栏数要自己填，填错会让资料被悄悄截掉。"}
+      - {en: "The files it expects are numbers only, so a column of labels has to be typed in afterwards.", zh: "它要的是纯数字的无表头档案，标签那一栏得事后自己补上。"}
+    keywords: [tableofreal, 表格, 无表头, headerless, spreadsheet, 电子表格, 变项, variable, 共振峰表, formant table, f1, f2]
+
+  - id: open-menu-raw-text-objects
+    aliases: ["Read Matrix from raw text file...", "Read Strings from raw text file..."]
+    control_types: [MenuItemControl]
+    title: {en: "Read Matrix from raw text file..., Read Strings from raw text file...", zh: "从原始文字档建立 Matrix 与 Strings"}
+    what:
+      en: "Two low-level readers. Read Matrix from raw text file... makes a Matrix object, a rectangular grid of numbers; Read Strings from raw text file... makes a Strings object, a list of text lines."
+      zh: "两个低阶的读入指令。Read Matrix from raw text file... 建立 Matrix 物件，也就是数字方格；Read Strings from raw text file... 建立 Strings 物件，也就是一列文字列。"
+    how:
+      en: "Open → Read Matrix from raw text file... for numbers arranged in rows and columns; Open → Read Strings from raw text file... for one text item per line, such as a list of file names."
+      zh: "Open → Read Matrix from raw text file... 适合按行列排好的数字；Open → Read Strings from raw text file... 适合一行一个文字项目，例如一串档名。"
+    concept:
+      en: "These two objects carry no time axis and no sampling frequency: they are the containers Praat uses for data that is not speech, such as a table of measurements or a list of files."
+      zh: "这两种物件不带时间轴，也不带取样频率，它们是 Praat 用来装非语音资料的容器，例如量测表或档案清单。"
+    pitfalls:
+      - {en: "A Matrix is numbers only, so text in the file makes the command stop with an error.", zh: "Matrix 只放数字，档案里出现文字会让指令报错停下。"}
+      - {en: "Strings keeps the lines as they are, including empty ones, so a trailing blank line becomes an empty item.", zh: "Strings 会原样保留每一行，空行也算一项，所以档案结尾的换行会变成一个空项目。"}
+    keywords: [matrix, 矩阵, strings, 字符串, raw, 原始, text file, 文字档, numbers, 数字, line, 行, 方格, grid]
+
+  # ------------------------------------------------------------------
+  # E. The Help menu
+  # ------------------------------------------------------------------
+  - id: help-menu-praat-intro
+    aliases: ["Praat Intro"]
+    control_types: [MenuItemControl]
+    title: {en: "Praat Intro", zh: "Praat Intro（官方入门）"}
+    what:
+      en: "Opens Praat's built-in introductory course: a sequence of short lessons that walk through opening a sound, looking at it, analysing it and annotating it."
+      zh: "打开 Praat 内建的入门课程：一连串短课，带你从开启声音、看它、分析它到标注它。"
+    how:
+      en: "Help → Praat Intro (Ctrl-Shift-?). Follow the lessons in order the first time, because each one assumes the previous one."
+      zh: "Help → Praat Intro（Ctrl-Shift-?）。第一次请照顺序做，每一课都以上一课为前提。"
+    concept:
+      en: "Intro is the same material as the first laboratory sessions, in Praat's own words, so it is the fastest way to see the intended order of operations."
+      zh: "Intro 就是实验课前半段的内容，只是换成 Praat 自己的说法，所以它是看清正确操作顺序最快的途径。"
+    pitfalls:
+      - {en: "The lessons are in English and quite dense, so a student who reads them once will miss the settings each step asks for.", zh: "这些课是英文而且密度很高，只读一遍的同学会漏掉每一步要填的设定。"}
+      - {en: "The small Demo window that Intro uses is separate from the Objects window and does not replace it.", zh: "Intro 用到的 Demo window 是一个独立的小窗口，不会取代 Objects 窗口。"}
+    keywords: [praat intro, 入门, 导览, tutorial, 教学, 课程, lesson, 练习, 示范, demonstration]
+
+  - id: help-menu-objects-window
+    aliases: ["Objects window", "Editors"]
+    control_types: [MenuItemControl]
+    title: {en: "Objects window, Editors (Help menu)", zh: "Objects window、Editors（Help 菜单）"}
+    what:
+      en: "Two manual pages. Objects window explains the window that lists your data and the dynamic buttons that follow the selection; Editors describes the windows in which you look at and change the data."
+      zh: "两个手册页。Objects window 说明列出资料的窗口，以及随选择而变的动态按钮；Editors 介绍你检视与修改资料所用的各种编辑窗口。"
+    how:
+      en: "Help → Objects window is worth reading early, because it explains why the buttons on the right of the window change as soon as you select something else."
+      zh: "Help → Objects window 值得早点读，它解释了为什么换个选中物件，右边的按钮就跟着变。"
+    concept:
+      en: "Praat separates the list of data (the Objects window) from the views on that data (the editors), so one object can be seen as a waveform, a spectrogram or a table without being copied."
+      zh: "Praat 把资料清单（Objects 窗口）与资料的视图（编辑窗口）分开，所以同一个物件可以分别用波形、频谱图或表格来看，不必复制。"
+    pitfalls:
+      - {en: "These pages describe the interface, not the analysis; the object-type pages tell you what each object can do.", zh: "这些页讲的是介面而不是分析，物件类型那几页才告诉你每种物件能做什么。"}
+      - {en: "The passage about the dynamic buttons is where beginners learn that the buttons are not broken, only different.", zh: "动态按钮那一段正是初学者学会「按钮不是坏了，只是变了」的地方。"}
+    keywords: [objects window, objects 窗口, editor, 编辑窗口, dynamic button, 动态按钮, manual, 手册, list, 清单]
+
+  - id: help-menu-types-of-objects
+    aliases: ["Types of objects"]
+    control_types: [MenuItemControl]
+    title: {en: "Types of objects", zh: "Types of objects（物件类型总览）"}
+    what:
+      en: "A manual page listing every object type in Praat, what it contains, and which commands apply to it."
+      zh: "一个手册页，列出 Praat 的每一种物件类型、它装什么资料，以及哪些指令可以用在它身上。"
+    how:
+      en: "Help → Types of objects. Read the entries for Sound, TextGrid, Pitch, Formant and Intensity, which are the five you will use all term."
+      zh: "Help → Types of objects。重点读 Sound、TextGrid、Pitch、Formant、Intensity 这五项，它们是你整学期都会用到的。"
+    concept:
+      en: "Each object type fixes what can be asked of the data: a Pitch object carries a fundamental frequency per frame, a Formant object carries formant frequencies and bandwidths, and neither is edited like a Sound."
+      zh: "每种物件类型都限定了可以对资料问什么：Pitch 物件存每一帧的基频，Formant 物件存共振峰频率与频宽，两者都不像 Sound 那样可以直接编辑。"
+    pitfalls:
+      - {en: "The page is a reference, not a course: read the entry for the object you are holding rather than the whole list.", zh: "这一页是参考工具而不是课程，读你手上那一种物件的说明就好，不必整页读完。"}
+      - {en: "Object types are not interchangeable; a Formant object cannot be drawn on a waveform.", zh: "物件类型不能互换，Formant 物件没法画在波形上。"}
+    keywords: [types of objects, 物件类型, object type, 手册, manual, sound, textgrid, pitch, formant, intensity, 基频]
+
+  - id: help-menu-faq-reporting
+    aliases: ["Frequently asked questions", "Reporting a problem?"]
+    control_types: [MenuItemControl]
+    title: {en: "Frequently asked questions, Reporting a problem?", zh: "常见问题与问题回报"}
+    what:
+      en: "Two support pages. Frequently asked questions collects the questions students ask most often; Reporting a problem? explains how to report a bug to the Praat author."
+      zh: "两个支持用的页面。Frequently asked questions 收集学生最常问的问题；Reporting a problem? 说明怎样把程式错误回报给 Praat 的作者。"
+    how:
+      en: "Help → Frequently asked questions when something behaves oddly; Help → Reporting a problem? when you are sure it is a bug. A report needs the Praat version, the exact steps and the smallest example that shows it."
+      zh: "行为怪异时先看 Help → Frequently asked questions，确定是程式错误再打开 Help → Reporting a problem?。回报时要给版本、准确的步骤，以及能重现问题的最小例子。"
+    concept:
+      en: "Most cases of 'Praat does not work' are settings, not bugs: the sound device, the decimal separator and a stale selection explain a large share of them."
+      zh: "大部分「Praat 坏了」其实是设定问题而不是错误：声音装置、小数点符号、以及残留的选区，就能解释很大一部分。"
+    pitfalls:
+      - {en: "Check the Frequently asked questions first, because reporting a bug that is already documented takes longer to help you than reading the answer.", zh: "先看常见问题，回报一个已经被记录在案的错误，比自己读解答花的时间更长。"}
+      - {en: "A report without the version number and the exact steps cannot be reproduced, so it cannot be fixed.", zh: "没有版本编号与确切步骤的报告无法重现，也就无法修复。"}
+    keywords: [faq, 常见问题, questions, 回报, report, 错误, bug, 支持, support, version, 版本, 重现, reproduce]
+
+  - id: help-menu-project-pages
+    aliases: ["What’s new?", "What's new?", "Acknowledgments", "License"]
+    control_types: [MenuItemControl]
+    title: {en: "What’s new?, Acknowledgments, License", zh: "What’s new?、Acknowledgments、License（计划相关页面）"}
+    what:
+      en: "Three pages about the project itself: What’s new? lists the changes in recent Praat versions, Acknowledgments credits the people who contributed, and License states the terms under which Praat is free software."
+      zh: "三个关于这个计划本身的页面：What’s new? 列出近几个版本的变化，Acknowledgments 致谢贡献者，License 说明 Praat 作为自由软件的授权条款。"
+    how:
+      en: "Help → What’s new? before a new term, to see which commands have changed; Help → License to see that Praat may be used freely in your teaching."
+      zh: "新学期开始前看看 Help → What’s new?，就知道哪些指令变了；Help → License 可以看到 Praat 在教学中可以自由使用。"
+    concept:
+      en: "Praat is free and open software, and the licence page is the formal statement of that; the acknowledgements page lists the linguists and phoneticians whose work the methods rest on."
+      zh: "Praat 是自由开放软件，License 页就是这件事的正式声明；Acknowledgments 页则列出这些方法所依赖的语言学家与语音学家。"
+    pitfalls:
+      - {en: "What’s new? describes the newest release, which may be newer than the copy you are running.", zh: "What’s new? 讲的是最新的版本，可能比你手上这一版还新。"}
+      - {en: "Cite the Praat manual and the version in your report, which is the convention in phonetics.", zh: "在报告里引用 Praat 手册与版本编号，这是语音学的惯例。"}
+    keywords: [whats new, 更新, 版本, version, acknowledgments, 致谢, license, 授权, 自由软件, free software, 引用, cite]
+
+  - id: help-menu-privacy-updates
+    aliases: ["Privacy and security", "Checking for updates?"]
+    control_types: [MenuItemControl]
+    title: {en: "Privacy and security, Checking for updates?", zh: "Privacy and security、Checking for updates?（隐私与版本检查）"}
+    what:
+      en: "Two pages about Praat and the internet. Privacy and security explains what Praat does with your data and with what it sends out; Checking for updates? asks the Praat website whether a newer release exists."
+      zh: "两个关于 Praat 与网路的页面。Privacy and security 说明 Praat 怎么对你的资料与对外传送的内容；Checking for updates? 会向 Praat 网站询问有没有更新的版本。"
+    how:
+      en: "Help → Checking for updates? tells you whether a newer Praat exists. Read Help → Privacy and security if you handle sensitive recordings in a lab."
+      zh: "Help → Checking for updates? 可以知道有没有更新的 Praat。若你在实验室处理敏感的录音，先读 Help → Privacy and security。"
+    concept:
+      en: "Praat is a local program, so your recordings are analysed on your own machine; the pages that mention the internet are about version checks and about what you yourself send to other programs."
+      zh: "Praat 是本地程式，录音在你自己的机器上分析；谈到网路的那几页，讲的是版本检查，以及你自己传给其他程式的内容。"
+    pitfalls:
+      - {en: "On a machine without internet access these pages may show nothing useful; the version is on the Praat → About Praat window too.", zh: "没有网路时这些页面可能什么都看不到，版本编号在 Praat → About Praat 窗口里也有。"}
+      - {en: "Sending sensitive recordings to an online service and calling it analysis in Praat means the data has left your machine.", zh: "把敏感录音送到线上服务再当成是用 Praat 做分析，资料已经离开你的机器了。"}
+    keywords: [privacy, 隐私, security, 安全, updates, 更新, 版本检查, internet, 网路, 数据, data, 资料保护]
+
+  - id: help-menu-tutorials
+    aliases: ["Formulas tutorial", "Scripting tutorial"]
+    control_types: [MenuItemControl]
+    title: {en: "Formulas tutorial, Scripting tutorial", zh: "Formulas tutorial、Scripting tutorial（两个教程）"}
+    what:
+      en: "Two tutorials. Formulas tutorial teaches the formula language used in the calculator, in commands and in the settings windows; Scripting tutorial teaches how to write Praat scripts that run a whole analysis."
+      zh: "两个教程。Formulas tutorial 教你公式语言，它用在计算机、指令与设定窗口里；Scripting tutorial 教你写 Praat 脚本，让整套分析自动跑起来。"
+    how:
+      en: "Help → Formulas tutorial when a formula gives an error; Help → Scripting tutorial when you want to turn your click sequence into a repeatable script."
+      zh: "公式出错时看 Help → Formulas tutorial；想把一串点击变成可重复的脚本时，看 Help → Scripting tutorial。"
+    concept:
+      en: "Formulas are the small language Praat uses to compute numbers from numbers, and the same syntax works in the calculator, in the formula editor and inside a script."
+      zh: "公式是 Praat 用来由数字算数字的小语言，同一套语法在计算机、公式编辑器与脚本里都能用。"
+    pitfalls:
+      - {en: "The scripting tutorial assumes the formula language, so read the formulas tutorial first.", zh: "脚本教学预设你已经懂公式语言，所以先读公式教学。"}
+      - {en: "A script is plain text, so an editor that adds smart quotes or changes the encoding will break it.", zh: "脚本是纯文字，用会自动换引号或改变编码的编辑器存档会破坏脚本。"}
+    keywords: [formulas, 公式, tutorial, 教学, scripting, 脚本, calculator, 计算器, 自动化, automation, 语法, syntax]
+
+  - id: help-menu-functions
+    aliases: ["Functions"]
+    control_types: [MenuItemControl]
+    title: {en: "Functions", zh: "Functions（函数清单）"}
+    what:
+      en: "Opens the manual's list of built-in functions: every function that can appear in a formula, with its syntax and an example."
+      zh: "打开手册里的内建函数清单，所有能用在公式里的函数，附上语法与范例。"
+    how:
+      en: "Help → Functions, then look up the function you need. The same list is reachable from the formula editor, but this page is the reference version."
+      zh: "Help → Functions，然后查你要的函数。公式编辑器里也有同一份清单，但这一页是参考版本。"
+    concept:
+      en: "This is where you check the exact name and the argument order of a function, for example whether a logarithm takes one value or two."
+      zh: "在这里查函数的准确名称与参数顺序，例如对数是接受一个值还是两个。"
+    pitfalls:
+      - {en: "Function names are English and case-sensitive: abs works, Abs does not.", zh: "函数名称是英文而且大小写敏感，abs 可以，Abs 不行。"}
+      - {en: "Not every function that exists can be used everywhere; some work only inside scripts.", zh: "不是每个存在的函数都能到处用，有些只能在脚本里用。"}
+    keywords: [functions, 函数, list, 清单, formula, 公式, reference, 参考, syntax, 语法, 内建, built-in]
+
+  - id: help-menu-demo-window
+    aliases: ["Demo window"]
+    control_types: [MenuItemControl]
+    title: {en: "Demo window", zh: "Demo window（演示窗口）"}
+    what:
+      en: "Opens the manual section about Praat's Demo window: a small window in which a script can draw and ask the user for input, used for demonstrations, presentations and experiments."
+      zh: "打开手册中关于 Praat Demo window 的一节：一个小窗口，脚本可以在里面画图并向使用者提问，用来演示、报告与实验。"
+    how:
+      en: "Help → Demo window explains what the Demo window can do. The same window is created by a script, so this page is mainly useful if you want to build a small listening experiment."
+      zh: "Help → Demo window 说明 Demo window 能做什么。同样的窗口由脚本产生，所以这一页主要在想做小型听觉实验时才有用。"
+    concept:
+      en: "A Demo window can play a sound and collect a key press or a click position, which turns Praat into an experimental apparatus: the same sound can be played again and again with different responses."
+      zh: "Demo window 可以播放声音并收集按键或点击位置，于是 Praat 变成一套实验装置，同一段声音可以反复播放，收集不同反应。"
+    pitfalls:
+      - {en: "The Demo window is not the Objects window and not an editor; it is a separate window that a script controls.", zh: "Demo window 不是 Objects 窗口，也不是编辑窗口，它是由脚本控制的另一个窗口。"}
+      - {en: "It needs a script to be of any use; opening the page alone does not create one.", zh: "它需要脚本才有用，单纯打开这一页不会产生一个 Demo window。"}
+    keywords: [demo window, 演示, 窗口, experiment, 实验, script, 脚本, input, 输入, 听觉实验, listening test, 互动, interactive]
+
+  - id: help-menu-interoperability
+    aliases: ["Interoperability", "Programming"]
+    control_types: [MenuItemControl]
+    title: {en: "Interoperability, Programming", zh: "Interoperability、Programming（与外部软体整合）"}
+    what:
+      en: "Two pages for people who need Praat to work with other software. Interoperability explains how Praat talks to other programs and languages; Programming describes how to use Praat as a library or from a program."
+      zh: "两个写给需要 Praat 与其他软体一起工作的人的页面。Interoperability 说明 Praat 如何与其他程式和语言沟通；Programming 介绍如何把 Praat 当成套件或从程式里调用。"
+    how:
+      en: "Help → Interoperability when you want to move data between Praat and R, Python or MATLAB; Help → Programming when you want to call Praat from your own code."
+      zh: "想在 Praat 与 R、Python 或 MATLAB 之间搬资料时看 Help → Interoperability，想从自己的程式呼叫 Praat 时看 Help → Programming。"
+    concept:
+      en: "Praat keeps its data in plain text formats on purpose, so the easiest way to analyse speech with another tool is usually to save the data and read it in there."
+      zh: "Praat 刻意把资料存成纯文字格式，所以要与其他工具一起分析语音，最简单的做法通常就是把资料存出来，在那边读进去。"
+    pitfalls:
+      - {en: "These pages are for programmers; they are not needed for the ordinary analysis work of the lab.", zh: "这两页是给程序设计师看的，实验课的常规分析不需要它们。"}
+      - {en: "Calling Praat from another program means starting a new process, so the two do not share memory.", zh: "从别的程式呼叫 Praat 意味着启动一个新行程，两边并不共享记忆体。"}
+    keywords: [interoperability, 整合, programming, 程式设计, python, r, matlab, api, 呼叫, call, interface, 介面, 套件, library]
+
+  - id: help-menu-manual-navigation
+    aliases: ["Go to manual page...", "Search Praat manual..."]
+    control_types: [MenuItemControl]
+    title: {en: "Go to manual page..., Search Praat manual...", zh: "Go to manual page...、Search Praat manual...（查询手册）"}
+    what:
+      en: "The two ways into the manual: Go to manual page... opens the page whose name you type, and Search Praat manual... (Ctrl-M) searches the whole manual for a word."
+      zh: "进入手册的两条路：Go to manual page... 打开你输入名称的那一页，Search Praat manual...（Ctrl-M）在整本手册里搜寻一个字。"
+    how:
+      en: "Use Ctrl-M and type a menu label such as spectrogram to find the page that describes it; use Go to manual page... when you already know the page name."
+      zh: "按 Ctrl-M 并输入一个菜单名称，例如 spectrogram，就能找到说明它的那一页；已经知道页名时就用 Go to manual page...。"
+    concept:
+      en: "The manual is organised by command and by topic, so the fastest way to understand a command is to read the page named after it and follow the links at the bottom of that page for the theory behind it."
+      zh: "手册同时按指令与主题编排，所以要理解一条指令，最快的路是读与它同名的那一页，再用页底连结跳到背后的理论。"
+    pitfalls:
+      - {en: "Search Praat manual... searches the online manual, so without internet access neither command has anything to open.", zh: "Search Praat manual... 搜寻的是线上手册，没有网路时这两条指令都无处可去。"}
+      - {en: "Go to manual page... wants the exact page name, so a wrong spelling silently opens nothing.", zh: "Go to manual page... 要的是准确的页面名称，拼错就会什么也没打开。"}
+    keywords: [manual, 手册, search, 搜索, page, 页面, go to, ctrl-m, 查询, lookup, 检索, 索引]
