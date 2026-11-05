@@ -87,8 +87,52 @@ class SingleInstanceTests(unittest.TestCase):
         second.release()
 
 
+class CardScrollTests(unittest.TestCase):
+    """A long card has to be readable.
+
+    The wheel scrolls it and the scroll bar can be dragged; neither may
+    make the card disappear.
+    """
+
+    def setUp(self) -> None:
+        try:
+            from PySide6 import QtWidgets
+        except Exception:  # pragma: no cover - no Qt
+            self.skipTest("PySide6 is not installed")
+        self.app = QtWidgets.QApplication.instance() or QtWidgets.QApplication([])
+
+    def test_the_card_has_a_scroll_bar_and_knows_where_it_is(self) -> None:
+        from praatao.ui.qt.hover import QtHoverCard
+
+        card = QtHoverCard(None, lang="zh")
+        self.addCleanup(card.destroy)
+        body = "现在 已选中 Sound demo_vowel\n" + (
+            "这是一段很长的说明文字，用来把卡片撑出滚动条。" * 12
+        )
+        card.show("测试标题", body, anchor=(100, 100), rect=(0, 0, 800, 600))
+        self.app.processEvents()
+        bar = card.body.verticalScrollBar()
+        self.assertTrue(bar.isVisible(), "the card should have a scroll bar")
+        rect = card.scroll_rect()
+        self.assertIsNotNone(rect, "the card should know where its scroll bar is")
+        self.assertGreater(rect[2] - rect[0], 0)
+
+    def test_the_body_keeps_its_mouse_events(self) -> None:
+        # The body has to get the wheel, so it may not be transparent for
+        # the mouse.
+        from PySide6 import QtCore
+
+        from praatao.ui.qt.hover import QtHoverCard
+
+        card = QtHoverCard(None, lang="zh")
+        self.addCleanup(card.destroy)
+        transparent = card.body.testAttribute(
+            QtCore.Qt.WidgetAttribute.WA_TransparentForMouseEvents
+        )
+        self.assertFalse(transparent, "the body has to receive the wheel")
+
+
 class ClosingTheWindowTests(unittest.TestCase):
-    """Closing a window of the coach ends the coach."""
 
     def setUp(self) -> None:
         try:

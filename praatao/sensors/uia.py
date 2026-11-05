@@ -347,18 +347,40 @@ def _menu_popup_windows() -> list[int]:
 
 
 def _praat_owned_popup(hwnd: int) -> bool:
-    """Is this menu popup a visible one that belongs to Praat?"""
+    """Is this menu popup a visible one that belongs to Praat?
+
+    A submenu is owned by the menu above it and not by the Praat window,
+    so the owner chain is walked: the submenu of a Praat menu is a Praat
+    menu as well.  Without this the coach ran its state probe while the
+    student was choosing something from a submenu, and the probe closed
+    the submenu under their pointer.
+    """
 
     try:
         if not win32gui.IsWindowVisible(hwnd):
             return False
-        owner = win32gui.GetWindow(hwnd, _GW_OWNER)
-        if not owner:
-            return False
-        owner_class = (win32gui.GetClassName(owner) or "")
     except Exception:
         return False
-    return "praat" in owner_class.casefold()
+
+    owner = int(hwnd)
+    for _level in range(4):
+        try:
+            owner = int(win32gui.GetWindow(owner, _GW_OWNER) or 0)
+        except Exception:
+            return False
+        if not owner:
+            return False
+        try:
+            owner_class = (win32gui.GetClassName(owner) or "")
+        except Exception:
+            return False
+        if "praat" in owner_class.casefold():
+            return True
+        if owner_class == _MENU_WINDOW_CLASS:
+            # One level up: the menu this one belongs to.
+            continue
+        return False
+    return False
 
 
 def _menu_popup_open() -> bool:

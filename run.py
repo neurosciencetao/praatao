@@ -685,6 +685,11 @@ class Praatao:
         if _seconds_since_last_input() < DEEP_STATE_IDLE:
             # The user is typing (or has just typed): not the moment.
             return
+        if self._card_visible():
+            # The student is reading a card.  A script would make Praat
+            # repaint under their eyes, and a menu that is open would
+            # close.  Reading comes first.
+            return
         try:
             from praatao.sensors.uia import _menu_popup_open
 
@@ -707,6 +712,16 @@ class Praatao:
                     # do not send a script any more, it would close a menu
                     # long after the coach is gone.
                     return
+                # One more look at the menus, right before the script goes
+                # out: the student may have opened one in the meantime,
+                # and a script closes whatever menu is open.
+                try:
+                    from praatao.sensors.uia import _menu_popup_open
+
+                    if _menu_popup_open():
+                        return
+                except Exception:  # noqa: BLE001
+                    pass
                 snapshot = self.probe.snapshot(require_focus=True)
             except Exception:
                 snapshot = None
@@ -1376,6 +1391,16 @@ class Praatao:
                         self.card.set_pinned(not self.card.pinned)
                     else:
                         self._dismiss_hover()
+                    return
+            # A click on the scroll bar means the student is reading on,
+            # not that they want the card to go away.
+            scroll = getattr(self.card, "scroll_rect", None)
+            if scroll is not None:
+                try:
+                    rect = scroll()
+                except Exception:  # noqa: BLE001
+                    rect = None
+                if rect and rect[0] <= x < rect[2] and rect[1] <= y < rect[3]:
                     return
             # A click on the card itself dismisses it.
             if not self.card.pinned:

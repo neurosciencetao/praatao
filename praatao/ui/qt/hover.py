@@ -646,10 +646,15 @@ class QtHoverCard(QtCore.QObject):
         # The shadow lives on the frame itself.
         self.win.hide()
         self.win.installEventFilter(self)
-        # The body must not swallow clicks: they have to reach the window so
-        # that the event filter below can turn them into "dismiss".  The pin
-        # and close buttons keep their own events.
-        for widget in (self.title_label, self.body, self.source_label,
+        # The title, the picture and the footer must not swallow clicks:
+        # they have to reach the window so that the event filter below can
+        # turn them into "dismiss".
+        #
+        # The body is the exception: it keeps its mouse events, so that
+        # the wheel scrolls it and the scroll bar can be dragged.  The
+        # application polls the mouse anyway, so a click on the text
+        # still dismisses the card.
+        for widget in (self.title_label, self.source_label,
                        self.image_label):
             widget.setAttribute(
                 QtCore.Qt.WidgetAttribute.WA_TransparentForMouseEvents, True
@@ -673,6 +678,21 @@ class QtHoverCard(QtCore.QObject):
         """The close button's rectangle on screen."""
 
         return self._widget_rect(self.close_button)
+
+    def scroll_rect(self) -> tuple[int, int, int, int] | None:
+        """The scroll bar's rectangle on screen.
+
+        A click on the scroll bar is a click on the card, but it is not a
+        click that means "go away": the student is reading on.
+        """
+
+        try:
+            bar = self.body.verticalScrollBar()
+            if not bar.isVisible():
+                return None
+            return self._widget_rect(bar)
+        except Exception:  # noqa: BLE001
+            return None
 
     @staticmethod
     def _widget_rect(widget: Any) -> tuple[int, int, int, int] | None:

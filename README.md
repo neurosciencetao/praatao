@@ -24,6 +24,9 @@ usually go wrong.
   no process stays behind. Double-clicking the shortcut twice does not start
   a second coach either; the second copy brings the running one forward and
   then leaves.
+- **The card scrolls.** When the text is long, the wheel scrolls it and the
+  scroll bar can be dragged, and dragging the scroll bar does not make the
+  card disappear (only a click on the card itself does).
 - **The key finding:** we do **not** need OCR, a vision model, or hard-coded
   screen coordinates. Praat's Windows GUI is drawn by a Motif emulator that
   maps its widgets onto real HWNDs, so Windows UI Automation exposes every
@@ -377,7 +380,9 @@ explains that kind of view.
   student should see the error message before it disappears.
 - **Praat closes an open menu as soon as a script runs.** The state refresh
   therefore uses UI Automation rather than a script, and a script is only
-  sent now and then while the user is visibly idle (see above).
+  sent now and then while the user is visibly idle (see above). A submenu
+  counts as well: it is owned by the menu above it, so the owner chain is
+  walked when the coach looks for a Praat menu.
 - **UI strings are Praat 6.4.12.** Newer Praat versions rename things (the
   content pack carries both old and new spellings for the known cases).
 - **Praat must not steal your keyboard.** The coach only touches Praat while

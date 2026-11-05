@@ -118,7 +118,7 @@
       <div class="tile"><b>288</b><span>知识库条目（中英双语）</span></div>
       <div class="tile"><b>352</b><span>可查找的界面标签</span></div>
       <div class="tile"><b>6</b><span>课程包（49 步）</span></div>
-      <div class="tile"><b>283</b><span>自动化测试</span></div>
+      <div class="tile"><b>289</b><span>自动化测试</span></div>
       <div class="tile"><b>312 ms</b><span>悬停到出卡片（实测中位数）</span></div>
       <div class="tile"><b>5.5 %</b><span>空闲时的 CPU 占用</span></div>
       <div class="tile"><b>6.4.12</b><span>实测通过的 Praat 版本</span></div>
@@ -331,10 +331,11 @@
       <div class="rule"><div class="mark">1</div><div><b>Praat 不能抢键盘</b><p>只有当 Praat 是前台应用时，讲解层才碰它：不做命中测试、不抓图、不发脚本。</p></div></div>
       <div class="rule"><div class="mark">2</div><div><b>Praat 在后台就不出声</b><p>学生跑到别的程序去了，卡片就收起来。判断靠的是「前台窗口属不属于 Praat.exe」，不是看标题：别的程序也可能叫「Praat 什么」。</p></div></div>
       <div class="rule"><div class="mark">3</div><div><b>关掉窗口就是退出</b><p>欢迎窗、侧栏、设置窗口，任何一个的 X 都要掉，整个讲解层就退出了：托盘图标消失，后台不留进程。重复双击快捷方式也只会有一个讲解层。</p></div></div>
-      <div class="rule"><div class="mark">4</div><div><b>打开的菜单不能被抢走</b><p>菜单开着时只读菜单自己的树，绝不做命中测试，也不发脚本。</p></div></div>
+      <div class="rule"><div class="mark">4</div><div><b>打开的菜单不能被抢走</b><p>菜单开着时只读菜单自己的树，绝不做命中测试，也不发脚本。二级菜单也算数：判断时把「主人链」往上走一层。</p></div></div>
       <div class="rule"><div class="mark">5</div><div><b>对话框盖住绘图区时，讲对话框</b><p>模态对话框（例如「Formant settings」）压在图画上面时，指针下面就是对话框里的控件，不是背后的波形。</p></div></div>
       <div class="rule"><div class="mark">6</div><div><b>没把握就不出声</b><p>标签没有对着真的 Praat 核对过的控件，讲解层宁可沉默，也不编一个解释。</p></div></div>
-      <div class="rule"><div class="mark">7</div><div><b>隐私由学生决定</b><p>大模型、绘图区截图都可以在设置窗口里关掉；关掉之后完全离线。</p></div></div>
+      <div class="rule"><div class="mark">7</div><div><b>卡片要能读完</b><p>内容长了的时候滚轮能滑、滚动条能拖；点滚动条不会让卡片消失。</p></div></div>
+      <div class="rule"><div class="mark">8</div><div><b>隐私由学生决定</b><p>大模型、绘图区截图都可以在设置窗口里关掉；关掉之后完全离线。</p></div></div>
     </div>
   </section>
 
@@ -365,7 +366,7 @@ python prototypes\v1\acceptance_capture.py</div>
 
   <footer>
     Praatao · 架构看板 · 2026-11-05 · 数字都来自这台机器上的实测<br>
-    离线知识库 288 条 · 课程包 6 个 · 自动化测试 283 项 · 代码在 GitHub：neurosciencetao/praatao
+    离线知识库 288 条 · 课程包 6 个 · 自动化测试 289 项 · 代码在 GitHub：neurosciencetao/praatao
   </footer>
 </div>
 </body>
