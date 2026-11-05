@@ -55,7 +55,7 @@ def main() -> int:
     for item in praat_windows():
         print("   ", item)
 
-    script = 'writeFileLine: "C:/Users/rantao/AppData/Local/Temp/praatao_fg2.txt", "x"'
+    script = 'writeFileLine: "C:/TEMP/praatao_fg2.txt", "x"'
 
     print(f"foreground before : {foreground()}")
     start = time.perf_counter()

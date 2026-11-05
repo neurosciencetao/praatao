@@ -65,7 +65,7 @@ def main() -> int:
     time.sleep(0.8)
     print(f"foreground before : {foreground()}")
 
-    script = 'writeFileLine: "C:/Users/rantao/AppData/Local/Temp/praatao_fg3.txt", "x"'
+    script = 'writeFileLine: "C:/TEMP/praatao_fg3.txt", "x"'
     start = time.perf_counter()
     ok = probe.send(script, timeout=8.0)
     time.sleep(1.0)

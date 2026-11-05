@@ -33,7 +33,7 @@ def foreground() -> str:
 def main() -> int:
     exe = ROOT / "Praat.exe"
     SCRIPT.write_text(
-        'writeFileLine: "C:/Users/rantao/AppData/Local/Temp/praatao_fg.txt", "x"\n',
+        'writeFileLine: "C:/TEMP/praatao_fgg.txt", "x"\n',
         encoding="ascii",
     )
 
