@@ -3,6 +3,10 @@ build/
 dist/
 *.egg-info/
 
+# The packaged zip: it lives on the GitHub release page, not in the
+# history (65 MB would weigh the repository down for nothing).
+release/
+
 # Praat itself (GPL, 54 MB): not in this repository.
 # Download Praat 6.4.12 from https://praat.org and put Praat.exe here.
 Praat.exe

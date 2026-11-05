@@ -110,6 +110,15 @@ class QtSidePanel:
         self._button(btns, self._t("设置", "Settings"), lambda: self._command("settings"))
         body.addLayout(btns)
 
+        # The way to report a problem: a small quiet button, because a
+        # beginner should find it but not be bothered by it.
+        report_row = QtWidgets.QHBoxLayout()
+        report_row.setSpacing(6)
+        report_row.addStretch(1)
+        self._button(report_row, self._t("报告问题", "Report a problem"),
+                     lambda: self._command("feedback"))
+        body.addLayout(report_row)
+
         self.lesson_picker = QtWidgets.QListWidget()
         self.lesson_picker.setStyleSheet(
             f"QListWidget{{background:{SOFT}; border:1px solid {BORDER};"

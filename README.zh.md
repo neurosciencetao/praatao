@@ -12,7 +12,16 @@
 
 - **状态：** v1 可以在 Windows 上跑，已针对 **Praat 6.4.12** 实测通过；
   内置 **288** 条中英双语知识条目、**6** 个引导式课程包。
-- **跑起来：** 先开 Praat（用这个目录里的 `Praat.exe` 也行），然后
+- **最省事的用法：下载即用。** 到
+  [**Releases**](https://github.com/neurosciencetao/praatao/releases) 下载
+  `Praatao-v1.0.0-windows-x64.zip`（约 65 MB），解压到任意文件夹，双击里面的
+  **「启动 Praatao.cmd」**（或 `Praatao.exe`）就能用：**不用装 Python，不用装
+  Praat**，zip 里自带 Praat 6.4.12。
+- **谁做的：** 想法是**陶老师**（香港理工大学语言科学与技术学系）出的，
+  实现是 **DeepSeek Harness（DSH）里的编程助手**做的，跑在 **MiniMax-M3.1-Flash**
+  模型上：感知、卡片、课程、性能优化、打包、看板、289 个测试，都是这个助手在
+  这台机器上一行一行写出来、并且逐条实测过的。想法、验收标准和取舍由陶老师定。
+- **跑起来（源码版）：**
   ```powershell
   cd D:\Documents\Playground\praatao
   python run.py
@@ -47,6 +56,7 @@
 | **课程引导** | 六个引导式课程（第一个声音、看频谱图、看基频、做 TextGrid、日常分析流程、批量处理与导出），会跟着你的 Praat 状态自动前进。 |
 | **自由提问** | 侧栏的提问框可以从知识库里回答，也可以（可选）调用大模型。 |
 | **AI 配图** | 知识库答不上来的时候，可以让生图模型画一张示意图放进卡片。 |
+| **报告问题** | 侧栏底部和托盘里都有「报告问题」。写清楚发生了什么，可以留邮箱；按下之后会打开 GitHub 的新问题页面，内容**已经填好**，你看过、愿意发再发。一份副本也会存在自己电脑上（`%LOCALAPPDATA%\praatao\feedback`）。 |
 
 ![侧栏与课程](docs/screenshots/app-running.png)
 
@@ -182,7 +192,33 @@ UIA 还顺手给了键盘快捷键（Praat 把快捷键写在菜单项名字里�
 
 ## 快速上手
 
-### 日常怎么用：双击桌面上的「Praatao 助教」
+### 给别人用：下载 zip，双击就行
+
+1. 到 [**Releases**](https://github.com/neurosciencetao/praatao/releases) 下载
+   `Praatao-v1.0.0-windows-x64.zip`（约 65 MB）；
+2. 解压到任意文件夹（例如 `D:\Apps\Praatao`）；
+3. 双击里面的 **「启动 Praatao.cmd」**（或 `Praatao.exe`）。
+
+不需要装 Python，也不需要自己装 Praat：zip 里已经带了 Praat 6.4.12。
+启动以后：
+
+1. Praat 没开的话，**自动把 Praat 拉起来**（用的是自带的 `Praat.exe`）；
+2. 讲解层**不弹命令行窗口**；
+3. 屏幕右下角出现一句欢迎语，上面三个按钮：**打开侧栏 / 设置 / 退出**
+   （十二秒后自己消失）；
+4. 系统托盘里有一个橙色 P 图标，侧栏、设置、退出都在里面。
+
+> 找不到托盘图标？Windows 把它收在任务栏右下角的小箭头里，点开就看到了。
+
+想给桌面建个快捷方式，可以在这个文件夹里跑一次：
+
+```powershell
+python ..\tools\make_shortcut.py --start-menu
+```
+
+（这步需要 Python，只是方便一点；不建也能用。）
+
+### 自己机器上的日常：双击桌面上的「Praatao 助教」
 
 桌面上已经放好了一个快捷方式（开始菜单里也有一份）。**双击它**就会：
 
@@ -371,7 +407,18 @@ $env:PRAATAO_IMAGEGEN = "1"   # 让生图模型画一张教学示意图
 | [docs/CONTRACTS.md](docs/CONTRACTS.md) | 模块接口 + 实测过的 Praat 脚本 API |
 | [docs/README.md](docs/README.md) | 完整索引 |
 
-## 致谢
+## 致谢与分工
 
-Praat 由 Paul Boersma 与 David Weenink 编写。`docs/10-sensing-strategy.md`
-里的 UIA 实测数据是在本机对 Praat 6.4.12 测得的。内容部分见 `praatao/content/`。
+- **想法、验收标准、取舍：陶老师**（香港理工大学语言科学与技术学系）。
+  需求是他提的，例如「悬停就讲解」「中英双语」「离线可用」「关掉就要真的退出」，
+  每一个 bug 都是他实际用的时候发现的。
+- **实现：DeepSeek Harness（DSH）里的编程助手**，跑在 **MiniMax-M3.1-Flash**
+  模型上。它在这台机器上完成了全部代码：Windows UI Automation 感知层、
+  六层讲解卡片、288 条双语知识库与 6 个课程包、MiniMax 兜底问答、性能优化
+  （悬停到出卡片 312 毫秒、空闲 CPU 5.5 %）、PyInstaller 打包、架构看板、
+  以及 289 个自动化测试与几十个实测脚本。所有数字都是在这台机器上量出来的。
+- **Praat** 由 Paul Boersma 与 David Weenink 编写（GPL）。
+  `docs/10-sensing-strategy.md` 里的 UIA 实测数据是在本机对 Praat 6.4.12
+  测得的。内容部分见 `praatao/content/`。
+- **知识库里每个数字都用 Parselmouth 重算过**（Praat 自己的 C/C++ 代码），
+  抓出 8 条写错的并改好，见 [docs/17-parselmouth-checks.md](docs/17-parselmouth-checks.md)。

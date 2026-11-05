@@ -13,7 +13,18 @@ usually go wrong.
 
 - **Status:** v1 runnable on Windows, tested against Praat **6.4.12** with
   **288** bilingual knowledge entries and **6** guided lesson packs.
-- **Run it:** start Praat (the `Praat.exe` in this folder is fine), then
+- **The easy way: download and run.** Get
+  `Praatao-v1.0.0-windows-x64.zip` (about 65 MB) from the
+  [**Releases**](https://github.com/neurosciencetao/praatao/releases) page,
+  unpack it anywhere, and double-click **"启动 Praatao.cmd"** (or
+  `Praatao.exe`). No Python, no Praat to install: the zip carries Praat 6.4.12.
+- **Who did what:** the idea and the acceptance criteria are
+  **Tao Ran's** (Dept. of Linguistics and Speech Sciences, PolyU); the
+  implementation is the **coding agent inside DeepSeek Harness (DSH)**,
+  running on **MiniMax-M3.1-Flash**. The sensing layer, the card, the
+  courses, the performance work, the package, the architecture board and the
+  289 tests were written and measured on this machine by that agent.
+- **Run it from the source:**
   ```powershell
   cd D:\Documents\Playground\praatao
   python run.py
@@ -51,6 +62,7 @@ usually go wrong.
 | **Lessons** | Six guided tours (first sound, spectrogram, pitch, TextGrid, the everyday analysis workflow, batch work and export) that advance themselves as your Praat state changes. |
 | **Ask** | A free-text box in the side panel answers questions from the knowledge base, and optionally from an LLM. |
 | **AI pictures** | When the knowledge base has nothing to say, an image model can draw a small teaching diagram for the card. |
+| **Report a problem** | "Report a problem" sits at the bottom of the side panel and in the tray. Write what happened, leave an email if you want an answer, and the program opens GitHub's new-issue page with everything filled in: you read it and send it yourself. A copy is kept on your own computer (`%LOCALAPPDATA%\praatao\feedback`). |
 
 ![The side panel with a lesson](docs/screenshots/app-running.png)
 
@@ -203,6 +215,31 @@ and swallow your keystrokes.  The moment you click back into Praat the
 coach resumes.
 
 ## Quick start
+
+### For anyone else: download the zip, double-click, done
+
+1. Download `Praatao-v1.0.0-windows-x64.zip` (about 65 MB) from the
+   [**Releases**](https://github.com/neurosciencetao/praatao/releases) page.
+2. Unpack it anywhere, for example `D:\Apps\Praatao`.
+3. Double-click **"启动 Praatao.cmd"** (or `Praatao.exe`).
+
+No Python and no Praat to install: the zip carries Praat 6.4.12. After the
+start it
+
+1. starts Praat for you when it is not running yet (the `Praat.exe` sits next
+   to the program),
+2. starts the coach **without a console window**,
+3. says hello in a small window in the corner that carries three buttons
+   (**open the panel / settings / quit**) and fades away by itself,
+4. leaves an icon in the system tray, where the panel, the settings and
+   the way out live.
+
+To put a shortcut on the desktop, run this once inside the unpacked folder
+(it needs Python, and is only a convenience):
+
+```powershell
+python ..\tools\make_shortcut.py --start-menu
+```
 
 ### Every day: double-click "Praatao 助教" on the desktop
 
@@ -416,8 +453,23 @@ explains that kind of view.
 | [docs/CONTRACTS.md](docs/CONTRACTS.md) | module interfaces + the verified Praat scripting API |
 | [docs/README.md](docs/README.md) | full index |
 
-## Credits
+## Credits and who did what
 
-Praat is by Paul Boersma and David Weenink. The UI Automation measurements
-in `docs/10-sensing-strategy.md` were taken on this machine against Praat
-6.4.12. Content: `praatao/content/`.
+- **The idea, the acceptance criteria and the trade-offs: Tao Ran** (Dept. of
+  Linguistics and Speech Sciences, PolyU). The requirements are his — hover
+  and get an explanation, bilingual, offline, and "closing it has to really
+  close it" — and every bug in this file was found by him using it.
+- **The implementation: the coding agent inside DeepSeek Harness (DSH)**,
+  running on **MiniMax-M3.1-Flash**. It wrote all of the code on this
+  machine: the Windows UI Automation sensing layer, the six-layer card, the
+  288 bilingual entries and 6 lesson packs, the MiniMax fallback, the
+  performance work (312 ms from hover to card, 5.5 % idle CPU), the
+  PyInstaller package, the architecture board, and 289 automated tests plus
+  dozens of measurement scripts. Every number in this file was measured
+  here.
+- **Praat** is by Paul Boersma and David Weenink (GPL). The UI Automation
+  measurements in `docs/10-sensing-strategy.md` were taken on this machine
+  against Praat 6.4.12. Content: `praatao/content/`.
+- **Every number in the knowledge base was recomputed with Parselmouth**
+  (Praat's own C/C++ code); eight wrong claims were found and fixed. See
+  [docs/17-parselmouth-checks.md](docs/17-parselmouth-checks.md).

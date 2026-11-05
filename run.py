@@ -381,6 +381,9 @@ class Praatao:
         self.settings_window = self._make_settings_window()
         if hasattr(self.settings_window, "on_close"):
             self.settings_window.on_close = self._quit_from_tray
+        self.feedback_window = self._make_feedback_window()
+        if hasattr(self.feedback_window, "on_close"):
+            self.feedback_window.on_close = self._quit_from_tray
         self.toast = None
         self.tray = None
 
@@ -424,6 +427,11 @@ class Praatao:
         except Exception:  # pragma: no cover
             return "tk"
 
+    def _t(self, zh: str, en: str) -> str:
+        """The text in the language the student chose."""
+
+        return zh if self.lang == "zh" else en
+
     def _make_card(self):
         if self.backend == "qt":
             from praatao.ui.qt.hover import QtHoverCard
@@ -463,6 +471,118 @@ class Praatao:
             on_apply=self._apply_settings,
         )
         return window
+
+    def _make_feedback_window(self):
+        """The window where a student reports a problem.
+
+        The Qt front-end has a real window; with the Tk fallback the
+        questions are asked in two small dialogs.
+        """
+
+        if self.backend != "qt":
+            return None
+        try:
+            from praatao.ui.qt.feedback import QtFeedbackWindow
+        except Exception:  # pragma: no cover - PySide6 missing
+            return None
+        window = QtFeedbackWindow(
+            self.root,
+            lang=self.lang,
+            on_submit=self._submit_feedback,
+            on_save=self._save_feedback,
+        )
+        if hasattr(window, "on_close"):
+            window.on_close = self._quit_from_tray
+        return window
+
+    # -- feedback ----------------------------------------------------
+    def _open_feedback(self) -> None:
+        """Let the student write down what happened."""
+
+        window = getattr(self, "feedback_window", None)
+        if window is not None:
+            try:
+                window.show()
+                return
+            except Exception:  # noqa: BLE001
+                pass
+        # The Tk fallback: two small questions.
+        try:
+            from praatao.ui.feedback import ask_feedback
+
+            answer = ask_feedback(self.root, self.lang)
+        except Exception:  # noqa: BLE001
+            answer = None
+        if answer is None:
+            return
+        feedback, email = answer
+        self._submit_feedback(feedback, email)
+
+    def _submit_feedback(self, feedback: str, email: str = "") -> None:
+        """Open GitHub's new-issue page with the report filled in."""
+
+        from praatao import feedback as feedback_module
+
+        body = feedback_module.build_body(
+            feedback, email, praat_version=self._praat_version()
+        )
+        title = feedback_module.build_title(feedback)
+        url = feedback_module.issue_url(title, body)
+        saved = feedback_module.save_locally(body, title)
+        opened = feedback_module.open_in_browser(url)
+        message = self._t(
+            "已经打开 GitHub 的新问题页面，你确认之后再发。"
+            "一份副本存在 %s。",
+            "GitHub's new-issue page is open; send it when you are ready. "
+            "A copy was saved in %s.",
+        ) % (str(saved) if str(saved) else self._t("本机", "this computer"))
+        self._toast(message)
+        if not opened:
+            # The browser did not open: at least the copy is there.
+            self._toast(self._t(
+                "浏览器没有打开，可以把 %s 里的内容发给我们。",
+                "The browser did not open; you can send us the file in %s.",
+            ) % (str(saved) if str(saved) else self._t("本机", "this computer")))
+
+    def _save_feedback(self, feedback: str, email: str = "") -> None:
+        """Keep the report on this machine only."""
+
+        from praatao import feedback as feedback_module
+
+        body = feedback_module.build_body(
+            feedback, email, praat_version=self._praat_version()
+        )
+        title = feedback_module.build_title(feedback)
+        saved = feedback_module.save_locally(body, title)
+        self._toast(self._t(
+            "反馈已经存在 %s，谢谢！",
+            "The report was saved in %s. Thank you!",
+        ) % (str(saved) if str(saved) else self._t("本机", "this computer")))
+
+    def _praat_version(self) -> str:
+        try:
+            state = self.state
+            if state is not None and state.version:
+                return str(state.version)
+        except Exception:  # noqa: BLE001
+            pass
+        return ""
+
+    def _toast(self, text: str) -> None:
+        """Say something in a small window."""
+
+        try:
+            from praatao.launcher import Toast
+
+            toast = getattr(self, "toast", None)
+            if toast is None:
+                toast = Toast(self.root, seconds=9.0)
+                self.toast = toast
+                if hasattr(toast, "on_close"):
+                    toast.on_close = self._quit_from_tray
+            toast.show_message(self._t("Praatao", "Praatao"), text)
+        except Exception:  # noqa: BLE001
+            print(text)
 
     def _apply_settings(self, settings: "Settings") -> None:
         """Apply the settings the student just chose."""
@@ -529,6 +649,14 @@ class Praatao:
             self.settings_window = self._make_settings_window()
             if hasattr(self.settings_window, "on_close"):
                 self.settings_window.on_close = self._quit_from_tray
+        if self.feedback_window is not None:
+            try:
+                self.feedback_window.destroy()
+            except Exception:  # noqa: BLE001
+                pass
+            self.feedback_window = self._make_feedback_window()
+            if hasattr(self.feedback_window, "on_close"):
+                self.feedback_window.on_close = self._quit_from_tray
 
     def _open_settings(self) -> None:
         if self.settings_window is None:
@@ -800,6 +928,9 @@ class Praatao:
             self.spot.hide()
         elif name == "settings":
             self._open_settings()
+        elif name == "feedback":
+            # The student wants to tell us what went wrong.
+            self._open_feedback()
         elif name == "quit":
             self.quit()
             try:
@@ -1617,7 +1748,7 @@ class Praatao:
             self.host.destroy()
         except Exception:  # noqa: BLE001
             pass
-        for extra in ("settings_window", "toast", "tray"):
+        for extra in ("settings_window", "feedback_window", "toast", "tray"):
             widget = getattr(self, extra, None)
             if widget is None:
                 continue

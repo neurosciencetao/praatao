@@ -501,6 +501,10 @@ class Tray:
             "提问 (Ctrl+Alt+Q)" if lang == "zh" else "Ask (Ctrl+Alt+Q)"
         )
         self.ask_action.triggered.connect(lambda: self._command("ask"))
+        self.feedback_action = menu.addAction(
+            "报告问题" if lang == "zh" else "Report a problem"
+        )
+        self.feedback_action.triggered.connect(lambda: self._command("feedback"))
         menu.addSeparator()
         self.quit_action = menu.addAction(
             "退出 (Ctrl+Alt+X)" if lang == "zh" else "Quit (Ctrl+Alt+X)"
