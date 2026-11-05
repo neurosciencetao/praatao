@@ -56,6 +56,7 @@ class QtSpotlight:
         self.master = master
         self.win = _RingWindow()
         self.win.setObjectName("PraataoSpotlight")
+        self.win.setWindowTitle("Praatao 高亮")
         self.win.hide()
         self._rect: tuple[int, int, int, int] | None = None
 

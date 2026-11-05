@@ -19,6 +19,11 @@ usually go wrong.
   python run.py
   ```
   Hover any button in Praat. `Ctrl+Alt+P` opens the side panel.
+- **Closing means leaving.** The X of the greeting window, of the side panel
+  and of the settings window all end the coach: the tray icon goes away and
+  no process stays behind. Double-clicking the shortcut twice does not start
+  a second coach either; the second copy brings the running one forward and
+  then leaves.
 - **The key finding:** we do **not** need OCR, a vision model, or hard-coded
   screen coordinates. Praat's Windows GUI is drawn by a Motif emulator that
   maps its widgets onto real HWNDs, so Windows UI Automation exposes every
@@ -361,7 +366,9 @@ explains that kind of view.
 - **A drawing area is not a control.** UIA gives the exact rectangle of
   Praat's canvases, but not their content. What is inside the picture is
   either guessed locally (cheap, offline, rough) or read by a model (exact,
-  but opt-in and not offline).
+  but opt-in and not offline). The pointer picks the row: Praat draws the
+  waveform in blue-green, the formants as red dots and the pitch curve in
+  blue, so the row under the pointer says what that row is.
 - **A disabled button is reported by UIA as its unnamed container.** The
   sensor works around this with a geometric fallback, but it costs a tree
   walk, so the first hover over a disabled control can take ~80 ms.

@@ -159,34 +159,71 @@ class SingleInstance:
     two tray icons and two coaches fighting over the mouse.  The second
     copy tells the first one to come forward and then leaves.
 
-    The conversation happens over a local socket (a named pipe on
-    Windows), which is part of Qt, so no extra dependency is needed.
+    Two pieces do the work:
+
+    * a Windows mutex says whether another coach is running.  On Windows
+      ``QLocalServer.listen()`` succeeds even when the pipe already
+      exists, so the socket alone cannot answer that question.
+    * a local socket (a named pipe on Windows) carries the message
+      "come forward" from the second copy to the first one.
     """
 
     SOCKET_NAME = "praatao-coach-single-instance"
+    MUTEX_NAME = "Local\\PraataoCoachSingleton"
+    _ERROR_ALREADY_EXISTS = 183
 
     def __init__(self, on_show: Any = None) -> None:
         self.on_show = on_show
         self._server: Any = None
+        self._mutex: Any = None
 
     def acquire(self) -> bool:
         """True when this process is the one and only coach."""
 
+        if not self._take_the_mutex():
+            # Another coach is running: ask it to come forward and leave.
+            self._talk_to_running()
+            return False
+        self._start_server()
+        return True
+
+    # -- the mutex ---------------------------------------------------
+    def _take_the_mutex(self) -> bool:
+        """True when we are the first coach.  False when one is running."""
+
+        try:
+            import ctypes
+
+            kernel32 = ctypes.windll.kernel32
+            kernel32.CreateMutexW.restype = ctypes.c_void_p
+            handle = kernel32.CreateMutexW(None, False, self.MUTEX_NAME)
+            if not handle:
+                # Cannot tell; carry on rather than refuse to start.
+                return True
+            already = kernel32.GetLastError() == self._ERROR_ALREADY_EXISTS
+            if already:
+                kernel32.CloseHandle(ctypes.c_void_p(handle))
+                return False
+            self._mutex = ctypes.c_void_p(handle)
+            return True
+        except Exception:  # noqa: BLE001
+            return True
+
+    # -- the socket --------------------------------------------------
+    def _start_server(self) -> None:
+        """Open the door for a second copy to knock on."""
+
         try:
             from PySide6 import QtNetwork
         except Exception:  # pragma: no cover - Qt without QtNetwork
-            return True
-
+            return
         self._server = QtNetwork.QLocalServer()
         self._server.setSocketOptions(
             QtNetwork.QLocalServer.SocketOption.UserAccessOption
         )
         if not self._server.listen(self.SOCKET_NAME):
-            # Somebody is listening already: either a running coach, or
-            # a pipe left behind by a coach that crashed.
-            if self._talk_to_running():
-                return False
-            # A stale pipe: remove it and try once more.
+            # A pipe left behind by a coach that crashed: remove it and
+            # try once more.
             try:
                 QtNetwork.QLocalServer.removeServer(self.SOCKET_NAME)
             except Exception:  # noqa: BLE001
@@ -196,9 +233,9 @@ class SingleInstance:
                 QtNetwork.QLocalServer.SocketOption.UserAccessOption
             )
             if not self._server.listen(self.SOCKET_NAME):
-                return True
+                self._server = None
+                return
         self._server.newConnection.connect(self._on_connection)
-        return True
 
     def _talk_to_running(self) -> bool:
         """Ask the running coach to show itself.  True when it answered."""
@@ -209,16 +246,21 @@ class SingleInstance:
             return False
         socket = QtNetwork.QLocalSocket()
         socket.connectToServer(self.SOCKET_NAME)
-        if not socket.waitForConnected(800):
+        if not socket.waitForConnected(2000):
             return False
         try:
             socket.write(b"show")
             socket.flush()
-            socket.waitForBytesWritten(800)
+            socket.waitForBytesWritten(1000)
+            # Wait for the answer, so the message really arrived before
+            # this copy leaves.  Without the answer the pipe can close
+            # too early and the running coach never hears the news.
+            socket.waitForReadyRead(2000)
+            answer = bytes(socket.readAll().data())
         except Exception:  # noqa: BLE001
-            pass
+            answer = b""
         socket.disconnectFromServer()
-        return True
+        return b"ok" in answer
 
     def _on_connection(self) -> None:
         """The running coach was asked to come forward."""
@@ -248,10 +290,16 @@ class SingleInstance:
         if b"show" not in data:
             return
         callback = self.on_show
-        if callback is None:
-            return
+        if callback is not None:
+            try:
+                callback()
+            except Exception:  # noqa: BLE001
+                pass
+        # Say that the news arrived, so the other copy can leave.
         try:
-            callback()
+            socket.write(b"ok")
+            socket.flush()
+            socket.waitForBytesWritten(1000)
         except Exception:  # noqa: BLE001
             pass
 
@@ -260,18 +308,26 @@ class SingleInstance:
 
         server = self._server
         self._server = None
-        if server is None:
-            return
-        try:
-            server.close()
-        except Exception:  # noqa: BLE001
-            pass
-        try:
-            from PySide6 import QtNetwork
+        if server is not None:
+            try:
+                server.close()
+            except Exception:  # noqa: BLE001
+                pass
+            try:
+                from PySide6 import QtNetwork
 
-            QtNetwork.QLocalServer.removeServer(self.SOCKET_NAME)
-        except Exception:  # noqa: BLE001
-            pass
+                QtNetwork.QLocalServer.removeServer(self.SOCKET_NAME)
+            except Exception:  # noqa: BLE001
+                pass
+        mutex = self._mutex
+        self._mutex = None
+        if mutex is not None:
+            try:
+                import ctypes
+
+                ctypes.windll.kernel32.CloseHandle(mutex)
+            except Exception:  # noqa: BLE001
+                pass
 
 
 class Toast:

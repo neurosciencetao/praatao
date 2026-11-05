@@ -1209,6 +1209,12 @@ class Praatao:
         if self.advisor is None:
             return
         key = f"canvas:{region.window_title}:{region.rect}"
+        # The pointer can be on another row of the same picture (the
+        # waveform above, the pitch curve below), so the row is part of
+        # the key: the card has to change with it.
+        span = max(1, region.rect[3] - region.rect[1])
+        row = int(max(0.0, min(1.0, (y - region.rect[1]) / float(span))) * 8)
+        key = f"{key}:row{row}"
         stamp = self._state_stamp()
         if key == self._last_key and (key, stamp) == self._shown_signature \
                 and self._card_visible():
@@ -1241,10 +1247,17 @@ class Praatao:
                     self.pump()
                 panel_hidden = self._hide_panel_over(region)
                 rect = region.rect if panel_hidden else self._capture_rect(region)
-                image = self.canvas.capture(region, rect=rect)
+                # The pointer says which row of the picture is meant, so
+                # the row under it is the one that gets classified.
+                image, guess = self.canvas.capture_and_classify(
+                    region, x, y, rect=rect
+                )
                 if panel_hidden:
                     self.panel.show()
-                guess = self.canvas.classify(image)
+                if guess.kind == "unknown":
+                    # Nothing clear under the pointer: fall back on the
+                    # whole picture.
+                    guess = self.canvas.classify(image)
         except Exception:
             image = None
 

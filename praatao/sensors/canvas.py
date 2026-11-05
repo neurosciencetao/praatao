@@ -313,6 +313,119 @@ class CanvasSensor:
             return None
         return self._shrink(shot)
 
+    def classify_at(self, image: "Image.Image | None", y_fraction: float) -> CanvasGuess:
+        """Classify the *row* the pointer is on, not the whole picture.
+
+        Praat stacks several views in one picture: the waveform on top,
+        then the spectrogram, then the pitch curve and the formants.  The
+        pointer says which one the student means, so only that row is
+        looked at.
+
+        Praat draws the waveform in blue-green, the pitch curve in green,
+        the formants in red and the intensity in blue.  That is what the
+        row is told apart by.
+        """
+
+        if image is None:
+            return CanvasGuess()
+        try:
+            import colorsys
+
+            width, height = image.size
+            band = max(4, int(height * 0.03))
+            centre = int(max(0.0, min(1.0, y_fraction)) * height)
+            top = max(0, centre - band)
+            bottom = min(height, centre + band)
+            if bottom <= top:
+                return CanvasGuess()
+            crop = image.crop((0, top, width, bottom)).convert("RGB")
+        except Exception:
+            return CanvasGuess()
+
+        total = 0
+        dark = 0
+        bright = 0
+        hues = {"red": 0, "green": 0, "blue": 0, "teal": 0}
+        for r, g, b in crop.getdata():
+            total += 1
+            level = (r + g + b) / 3.0
+            if level < 90:
+                dark += 1
+            elif level > 200:
+                bright += 1
+            h, s, v = colorsys.rgb_to_hsv(r / 255.0, g / 255.0, b / 255.0)
+            if s > 0.3 and v > 0.3:
+                deg = h * 360.0
+                if deg < 20 or deg >= 330:
+                    hues["red"] += 1
+                elif deg < 160:
+                    hues["green"] += 1
+                elif deg < 200:
+                    hues["teal"] += 1
+                else:
+                    hues["blue"] += 1
+        if not total:
+            return CanvasGuess()
+
+        dark_ratio = dark / total
+        coloured = sum(hues.values())
+        coloured_ratio = coloured / total
+        saturated = max(1, coloured)
+        shares = {key: hues[key] / saturated for key in hues}
+
+        if shares["teal"] > 0.75:
+            # The waveform: a filled band, blue-green.
+            return CanvasGuess("waveform", min(0.9, 0.45 + shares["teal"]),
+                               coloured_ratio, dark_ratio, bright / total)
+        if coloured_ratio < 0.002:
+            # Nothing but white paper and axes: the student is not over
+            # a curve at all.
+            return CanvasGuess("unknown", 0.2, coloured_ratio, dark_ratio,
+                               bright / total)
+        if shares["red"] > 0.5:
+            # The formants are red dots.
+            return CanvasGuess("formants", min(0.9, 0.45 + shares["red"]),
+                               coloured_ratio, dark_ratio, bright / total)
+        if shares["blue"] > 0.25:
+            # Praat draws the pitch curve (and the intensity curve) in
+            # blue; the red dots are the formants.
+            return CanvasGuess("pitch", min(0.9, 0.45 + shares["blue"]),
+                               coloured_ratio, dark_ratio, bright / total)
+        return CanvasGuess("unknown", 0.25, coloured_ratio, dark_ratio,
+                           bright / total)
+
+    def capture_and_classify(
+        self,
+        region: CanvasRegion,
+        x: int,
+        y: int,
+        *,
+        activate: bool = False,
+        rect: tuple[int, int, int, int] | None = None,
+    ) -> tuple["Image.Image | None", CanvasGuess]:
+        """Grab the drawing area and say what is under the pointer."""
+
+        if ImageGrab is None or Image is None:
+            return None, CanvasGuess()
+        if activate:
+            self.ui._activate(_WindowShim(region.hwnd))
+            time.sleep(0.35)
+        bbox = self._visible_bbox(rect or region.rect)
+        if bbox is None:
+            return None, CanvasGuess()
+        try:
+            shot = ImageGrab.grab(bbox=bbox, all_screens=True)
+        except Exception:
+            return None, CanvasGuess()
+        if shot is None:
+            return None, CanvasGuess()
+        # The row is classified on the *full* picture: a one-pixel curve
+        # would disappear in the smaller picture that goes to the model.
+        span = max(1, bbox[3] - bbox[1])
+        fraction = (y - bbox[1]) / float(span)
+        guess = self.classify_at(shot, fraction)
+        return self._shrink(shot), guess
+
     def _visible_bbox(
         self, rect: tuple[int, int, int, int]
     ) -> tuple[int, int, int, int] | None:

@@ -542,6 +542,9 @@ class QtHoverCard(QtCore.QObject):
 
         self.win = _CardFrame()
         self.win.setObjectName("PraataoHoverCard")
+        # Its own title, so the student can tell the card, the panel and
+        # the settings apart in the task bar.
+        self.win.setWindowTitle("Praatao 讲解卡" if self.lang == "zh" else "Praatao card")
 
         layout = QtWidgets.QVBoxLayout(self.win)
         layout.setContentsMargins(
